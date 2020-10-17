@@ -1,4 +1,5 @@
-import Router from './router';
+import Router from "./router";
+
 
 new Router();
 
@@ -8,7 +9,6 @@ if((<any>module).hot) {
     for(let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
     }
-    console.log('worling....');
     new Router();
   })
 }

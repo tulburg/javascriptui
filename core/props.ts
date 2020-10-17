@@ -1,10 +1,49 @@
 import Parser from './parser';
 
 
-const parseStyleValue = Parser.parseStyleValue;
-const parseNativeStyle = Parser.parseNativeStyle;
+const parseStyleValue = function (value: any) : any {
+  if(value == null) {
+    return 'unset';
+  }else if(typeof value == 'string') {
+    return value;
+  }else if (typeof value == 'number') {
+    return value + 'px';
+  } else if (value instanceof Array) {
+    return value.map(v => Parser.parseStyleValue(v)).join(' ');
+  }
+  return value;
+}
 
-const Props = {
+const parseNativeStyle = function (obj: any, styles?: string[]) {
+  let objStyles = '';
+  for (let prop in obj) {
+    prop = '$' + prop;
+    if (Props.props.hasOwnProperty(prop)) {
+      const f = Props.props[prop];
+      if (typeof f === 'string') {
+        if (f.match('css.')) {
+          objStyles += f.split('.')[1] + ': '
+          + Parser.parseStyleValue(obj[prop.slice(1)]) + '; ';
+        }
+      } else if (typeof f === 'function') {
+        const fnc = f(obj[prop]);
+        const parsed = Parser.parseFncStyles(fnc, obj, styles);
+        if (parsed != undefined) objStyles += parsed;
+      }
+    } else {
+      if (Props.excludes.indexOf(prop.toLowerCase()) < 0 && obj.$level != 0) {
+        throw new Error('Invalid css property ' + prop);
+      }
+    }
+  }
+  return objStyles;
+}
+
+
+const Props: { 
+  props: any,
+  excludes: string[]
+} = {
   props: {
     // css styling
     '$alignContent': 'css.align-content',
@@ -386,79 +425,79 @@ const Props = {
     "attrFor": 'attr.for',
 
     // functional attributes
-    '$globalStyle': (v) => {
+    '$globalStyle': (v: any) => {
       return `
         & * { ${parseNativeStyle(v)} }
       `;
     },
-    '$pseudoFirstChild': (v) => {
+    '$pseudoFirstChild': (v: any) => {
       return `
         &::first-child { ${parseNativeStyle(v)} }
       `;
     },
-    '$pseudoLastChild': (v) => {
+    '$pseudoLastChild': (v: any) => {
       return `
         &::last-child { ${parseNativeStyle(v)} }
       `;
     },
-    '$pseudoBefore': (v) => {
+    '$pseudoBefore': (v: any) => {
       return `
         &::before { ${parseNativeStyle(v)} }
       `;
     },
-    '$pseudoAfter': (v) => {
+    '$pseudoAfter': (v: any) => {
       return `
         &::after { ${parseNativeStyle(v)} }
       `;
     },
-    '$pseudoSelection': (v) => {
+    '$pseudoSelection': (v: any) => {
       return `
         & > ::selection { ${parseNativeStyle(v)} }
       `;
     },
-    '$show': (v, c) => {
+    '$show': (v: any, c: any) => {
       if(!v) return `display: none;`;
       else return (c.$display) ? `display: ${c.$display};` : `display: block;`;
     },
-    '$fontSizeRem': (v) => {
+    '$fontSizeRem': (v: any) => {
       return `font-size: ${v[0]}; font-size: (${v[0]} / ${v[1]}) * 1rem;`;
     },
-    '$centerBlock': (v) => {
+    '$centerBlock': (v: any) => {
       if (v) return `display: block; margin-left: auto; margin-right: auto; `;
     },
 
     // pseudos
-    '$hover': (v) => {
+    '$hover': (v: any) => {
       if (typeof v === 'function') return v();
       let value = '';
       for (const a in v) {
         value += `${Props.props['$' + a].split('.')[1]}: ${parseStyleValue(v[a])}; `; }
       return `&:hover { ${value} }`;
     },
-    '$focus': (v) => {
+    '$focus': (v: any) => {
       if (typeof v === 'function') return v();
       let value = '';
       for (const a in v) {
         value += `${Props.props['$' + a].split('.')[1]}: ${parseStyleValue(v[a])}; `; }
       return `&:focus { ${value} }`;
     },
-    '$active': (v) => {
+    '$active': (v: any) => {
       if (typeof v === 'function') return v();
       let value = '';
       for (const a in v) { value += `${Props.props['$' + a].split('.')[1]}: ${v[a]}; `; }
       return `&:active { ${value} }`;
     },
-    '$before': (v) => {
+    '$before': (v: any) => {
       let value = '';
       for (const a in v) { value += `${Props.props['$' + a].split('.')[1]}: ${v[a]}; `; }
       return `&::before { ${value} }`;
     },
-    '$after': (v) => {
+    '$after': (v: any) => {
       let value = '';
       for (const a in v) { value += `${Props.props['$' + a].split('.')[1]}: ${v[a]}; `; }
       return `&::after { ${value} }`;
     },
-    '$disabledCSS': (v) => {
+    '$disabledCSS': (v: any) => {
       let value = '';
       for (const a in v) { value += `${Props.props['$' + a].split('.')[1]}: ${v[a]}; `; }
       return `&::disabled { ${value} }`;
@@ -506,17 +545,7 @@ const Props = {
     '$flexCenter',
     '$responsiveness',
     '$styles'
-  ],
-  anims: {
-    '$timingFunction': 'animation-timing-function',
-    '$direction': 'animation-direction',
-    '$fillMode': 'animation-fill-mode',
-    '$iterationCount': 'animation-iteration-count',
-    '$delay': 'animation-delay',
-    '$duration': 'animation-duration',
-    '$name': 'animation-name',
-    '$playState': 'animation-play-state'
-  }
+  ] 
 }
 
 

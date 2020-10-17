@@ -49,15 +49,15 @@ const Parser = {
     }
   },
 
-  parseProperties: function (component: $RxElement, styles: string[]) {
-    const properties = {};
+  parseProperties: function (component: $RxElement | any, styles: string[]) {
+    const properties: any = {};
     let componentStyles = component.$tagName+'.'
       + component.$className.split(' ')[0] + ' { ';
     const props = Object.getOwnPropertyNames(component);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i];
       if (Props.props.hasOwnProperty(prop)) {
-        const f = Props.props[prop];
+        const f: any = Props.props[prop];
         if (type(f) === 'string') {
           if (f.match('attr.')) {
             properties[f.split('.')[1]] = component[prop];
@@ -87,7 +87,7 @@ const Parser = {
     return properties;
   },
 
-  parseNativeStyle: function (obj: $RxElement, styles: string[]) {
+  parseNativeStyle: function (obj: $RxElement | any, styles?: string[]) {
     let objStyles = '';
     for (let prop in obj) {
       prop = '$' + prop;
@@ -112,7 +112,7 @@ const Parser = {
     return objStyles;
   },
 
-  parseStyleValue: function (value: any) {
+  parseStyleValue: function (value: any) : any {
     if(value == null) {
       return 'unset';
     }else if(typeof value == 'string') {

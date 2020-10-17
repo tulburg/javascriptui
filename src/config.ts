@@ -1,5 +1,7 @@
+import App from './app';
+
 export default {
   routes: [
-    { path: '/', component: {}, name: 'Home' }
+    { path: '/', component: App, name: 'Home' }
   ]
 }
