@@ -33,25 +33,26 @@ export const createRules = function(object: any, rules: string[]) {
     try {
       const length = sheet.cssRules.length;
       sheet.insertRule(css, length);
-      object.$styles = object.$styles || [];
-      object.$styles.push(<any>sheet.cssRules[length]);
+      object.$rules = object.$rules || [];
+      object.$rules.push(sheet.cssRules[length]);
     }catch(e) {
       throw new Error('Rule not applied: ' + css + e.message);
     }
   });
 }
 
-export const updateRules = function (object: any, rules: string[]) {
-  if(!object.$styles || object.$styles.length === 0) return createRules(object, rules);
-  rules.forEach(rule => {
-    const selector = rule.substring(0, rule.indexOf('{')).trim();
-    for(let i = 0; i < object.$styles.length; i++) {
-      const css = object.$styles[i];
-      if((<any>css).selectorText === selector) {
-        console.log("found >", css, object.$node);
-      }
-    }
-  });
+export const updateRules = function (object: any, rules: CSSStyleRule[]) {
+  console.log('updateRules called', object, rules);
+  // if(!object.$rules || object.$rules.length === 0) return createRules(object, <any>rules);
+  // rules.forEach(rule => {
+  //   const selector = rule.substring(0, rule.indexOf('{')).trim();
+  //   for(let i = 0; i < object.$rules.length; i++) {
+  //     const css = object.$rules[i];
+  //     if((<any>css).selectorText === selector) {
+  //       console.log("found >", css, object.$node);
+  //     }
+  //   }
+  // });
 };
 
 export const updateClassRules = function(object: Element, rules: string[]) {

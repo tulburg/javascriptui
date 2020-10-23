@@ -20,6 +20,7 @@ export default class Router {
     // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
     new Native(this);
+    this.window.Native.writeGlobals(Config.theme || {});
 
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
@@ -52,13 +53,9 @@ export default class Router {
                 configurable: true
               });
               if('${key}' === 'css') {
-                this.$styles = this.$styles || [];
-                const selector = (this.$tagName || '') + '.' + this.$className.split(' ')[0];
-                for(let i = 0; i < this.$styles.length; i++) {
-                  const css = this.$styles[i];
-                  if(css.selectorText === selector) {
-                    css.style.setProperty('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
-                  }
+                this.$rules = this.$rules || [];
+                if(this.$rules.length > 0) {
+                  this.$rules[0].style.setProperty('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
                 }
               }
               if('${key}' === 'attr') {

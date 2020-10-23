@@ -1,5 +1,5 @@
 import Parser from './parser';
-import { createSheet, createRules, updateRules, updateClassRules } from './styles';
+import { createSheet, createRules, updateRules } from './styles';
 import { $RxElement, Component } from './components';
 import Router from './router';
 import {NativeEventData, NativeEventType, TConfig, RxElement} from './types';
@@ -26,9 +26,10 @@ class Native {
 
   writeGlobals (theme: any) {
     const styles = [];
-    if (theme.Globals) {
-      for(const key in theme.Globals) {
-        styles.push(key +' { ' + Parser.parseNativeStyle(theme.Globals[key]) + ' } ');
+    const globals = theme.globals || theme.Globals;
+    if (globals) {
+      for(const key in globals) {
+        styles.push(key +' { ' + Parser.parseNativeStyle(globals[key]) + ' } ');
       }
       return createRules(this, styles);
     }
@@ -88,11 +89,11 @@ class Native {
     } else if (type == NativeEventType.update) {
       // if (!Util.props.hasOwnProperty(data.key)) {
         // if(!data.newObj.cssRules) {
-          const styles: string[] = [];
+          // const styles: string[] = [];
           // if(data.newObj instanceof $RxElement) {
-            Parser.parseProperties(data.new, styles);
+            Parser.parseProperties(data.new);
           // }
-          data.new.$styles = styles;
+          // data.new.$rules = styles;
           // console.log(data.newObj, styles);
         // }
 
@@ -100,7 +101,8 @@ class Native {
         this.patchProps(data.old, data.new);
         // this.patchCSSRules(data.oldObj, data.newObj);
 
-        updateRules(data.old, updateClassRules(data.old.$node, styles));
+        //-- !important  updateRules(data.old, updateClassRules(data.old.$node, styles));
+
         // if(node) node.parentNode.replaceChild(newNode, node);
       // }
 
@@ -284,7 +286,8 @@ class Native {
   }
 
   patchCSSRules(_: $RxElement, newObject: $RxElement) {
-    updateRules(newObject, newObject.$styles);
+    // updateRules(newObject, newObject.$rules);
+    console.log(newObject, 'needs rule update');
   }
 
   updateState(name: string, nid: string) {
@@ -346,11 +349,10 @@ class Native {
   }
 
   createElement(object: $RxElement | Component, updateState?: any) {
-    let rules: string[] = [];
+    // let rules: string[] = [];
     const create = (parent: Element, item: RxElement) => {
       const c = document.createElement(item.$tagName);
-      let rule: string[] = [];
-      const parsedProperties = Parser.parseProperties(item, rule);
+      const parsedProperties = Parser.parseProperties(item);
       // if(item.$animation) {
       //   rule = rule.concat(Parser.parseAnimation(item.$animation));
       // }
@@ -368,9 +370,8 @@ class Native {
         }
       }
       item.$node = c;
-      item.$styles = rule;
       // rules = rules.concat(rule);
-      createRules(item, rule);
+      // createRules(item, rule);
       if(parent) parent.appendChild(c);
       if(item.$level === 0 && parent != undefined) {
         const oldServing = this.serving;
@@ -428,7 +429,7 @@ class Native {
       return c;
     };
     const result = create(undefined, object);
-    object.$styles = rules;
+    // object.$rules = rules;
     return result;
   }
 

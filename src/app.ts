@@ -10,6 +10,10 @@ export default class App extends PageComponent {
     this.backgroundColor('red');
 
     
-    this.addChild(new Button().text('test button'));
+    this.addChild(new Button().text('test button').on({
+      click: function() {
+        this.padding(10).backgroundColor('green');
+      }
+    }).fontSize(18));
   }
 }

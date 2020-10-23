@@ -11,13 +11,13 @@ export class $RxElement {
   $root: RxElement = undefined;
   $events: any = undefined;
   $className: string = undefined;
-  $addStyle: Style[] = [];
+  $styles: Style[] = [];
 
   // -- Render properties
   // $hostComponent = Native.serving;
   $node: Element;
   // $styles: CSSStyleRule[] = [];
-  $styles: string[] = []
+  $rules: CSSStyleRule[] = [];
 
   name = this.constructor.name;
   // get name() { return this.constructor.name };
@@ -118,24 +118,23 @@ export class $RxElement {
     return;
   }
 
-  addStyle(...styles: Style[]): RxElement | Style[] {
-    if(arguments.length == 0) return this.$addStyle;
+  styles(...styles: Style[]): RxElement | Style[] {
+    if(arguments.length == 0) return this.$styles;
     for(let i = 0; i < styles.length; i++) {
       if(styles[i].className) {
         this.$className += ' ' + styles[i].className;
-        this.$addStyle.push(styles[i]);
+        this.$styles.push(styles[i]);
       }
     }
     return this;
   }
 
-  removeStyle(...styles: Style[]): RxElement {
+  removeStyle(...styles: Style[]): void {
     if(arguments.length == 0) throw 'Remove style: 0 arguments passed. Min. of 1 expected';
     for(let i = 0; i < styles.length; i++) {
-      this.$addStyle = this.$addStyle.filter(s => s.className === styles[i].className);
+      this.$styles = this.$styles.filter(s => s.className === styles[i].className);
       this.$className.replace(' ' + styles[i].className, '');
     }
-    return this;
   }
 
   // functions

@@ -14,7 +14,7 @@ const parseStyleValue = function (value: any) : any {
   return value;
 }
 
-const parseNativeStyle = function (obj: any, styles?: string[]) {
+const parseNativeStyle = function (obj: any) {
   let objStyles = '';
   for (let prop in obj) {
     prop = '$' + prop;
@@ -27,7 +27,7 @@ const parseNativeStyle = function (obj: any, styles?: string[]) {
         }
       } else if (typeof f === 'function') {
         const fnc = f(obj[prop]);
-        const parsed = Parser.parseFncStyles(fnc, obj, styles);
+        const parsed = Parser.parseFncStyles(fnc, obj);
         if (parsed != undefined) objStyles += parsed;
       }
     } else {
@@ -298,7 +298,7 @@ const Props: {
     '$checked': 'attr.checked',
     '$cite': 'attr.cite',
     '$classId': 'attr.classid',
-    '$className': 'attr.className',
+    '$className': 'attr.class',
     '$clearAttr': 'attr.clear',
     '$code': 'attr.code',
     '$codeBase': 'attr.codebase',
@@ -390,7 +390,6 @@ const Props: {
     '$reversed': 'attr.reversed',
     '$rows': 'attr.rows',
     '$rowSpan': 'attr.rowspan',
-    '$rules': 'attr.rules',
     '$sandBox': 'attr.sandbox',
     '$scope': 'attr.scope',
     '$scrolling': 'attr.scrolling',
@@ -432,12 +431,12 @@ const Props: {
     },
     '$pseudoFirstChild': (v: any) => {
       return `
-        &::first-child { ${parseNativeStyle(v)} }
+        &:first-child { ${parseNativeStyle(v)} }
       `;
     },
     '$pseudoLastChild': (v: any) => {
       return `
-        &::last-child { ${parseNativeStyle(v)} }
+        &:last-child { ${parseNativeStyle(v)} }
       `;
     },
     '$pseudoBefore': (v: any) => {
@@ -460,10 +459,12 @@ const Props: {
       else return (c.$display) ? `display: ${c.$display};` : `display: block;`;
     },
     '$fontSizeRem': (v: any) => {
+      if(!v) return '';
       return `font-size: ${v[0]}; font-size: (${v[0]} / ${v[1]}) * 1rem;`;
     },
     '$centerBlock': (v: any) => {
-      if (v) return `display: block; margin-left: auto; margin-right: auto; `;
+      if(!v) return '';
+      return `display: block; margin-left: auto; margin-right: auto; `;
     },
 
     // pseudos
@@ -500,7 +501,7 @@ const Props: {
     '$disabledCSS': (v: any) => {
       let value = '';
       for (const a in v) { value += `${Props.props['$' + a].split('.')[1]}: ${v[a]}; `; }
-      return `&::disabled { ${value} }`;
+      return `&:disabled { ${value} }`;
     }
   },
   excludes: [
@@ -512,6 +513,7 @@ const Props: {
     'id',
     'tagName',
     '$animation',
+    '$rules',
     'cssRules',
     'options',
     '$events',

@@ -1,5 +1,6 @@
 import Props from './props';
 import { $RxElement } from './components';
+import {createRules} from './styles';
 
 function type(object: any) {
   return Object.prototype.toString.apply(object).split(' ')[1].slice(0, -1).toLowerCase();
@@ -7,12 +8,10 @@ function type(object: any) {
 
 const Parser = {
   render: function (component: $RxElement) {
-    const styles: string[] = [];
-    this.parseProperties(component, styles);
-    component.$styles = styles;
+    this.parseProperties(component);
   },
 
-  parseFncStyles: function (fnc: string, comp: $RxElement, styles: string[]) {
+  parseFncStyles: function (fnc: string, comp: $RxElement) {
     if (fnc.match(/(&|>)/)) {
       fnc = fnc.trim();
       const start = fnc.indexOf('&');
@@ -21,11 +20,11 @@ const Parser = {
       const cssRule = rule.replace('&', comp.$tagName + '.'
         + comp.$className.split(' ')[0]).trim();
       if(cssRule.length > 20) {
-        styles.push(cssRule);
+        createRules(comp, [cssRule]);
       }
       const rem = fnc.replace(rule, '');
       if (rem.trim().length > 0) {
-        Parser.parseFncStyles(rem, comp, styles);
+        Parser.parseFncStyles(rem, comp);
       }
     } else if(fnc.match(/</)) {
       const start = fnc.indexOf('<');
@@ -42,14 +41,14 @@ const Parser = {
       // }
       const rem = fnc.replace(rule, '');
       if (rem.trim().length > 0) {
-        Parser.parseFncStyles(rem, comp, styles);
+        Parser.parseFncStyles(rem, comp);
       }
     }else {
       return fnc;
     }
   },
 
-  parseProperties: function (component: $RxElement | any, styles: string[]) {
+  parseProperties: function (component: $RxElement | any) {
     const properties: any = {};
     let componentStyles = component.$tagName+'.'
       + component.$className.split(' ')[0] + ' { ';
@@ -69,7 +68,7 @@ const Parser = {
           if(component[prop]) {
             const fnc = f(component[prop], component);
             if(fnc !== undefined) {
-              const parsed = Parser.parseFncStyles(fnc, component, styles);
+              const parsed = Parser.parseFncStyles(fnc, component);
               if (parsed !== undefined) componentStyles += parsed;
             }
           }
@@ -83,11 +82,11 @@ const Parser = {
         }
       }
     }
-    if(componentStyles.length > 20) { styles.push(componentStyles + '} '); }
+    createRules(component, [componentStyles + '} ']); 
     return properties;
   },
 
-  parseNativeStyle: function (obj: $RxElement | any, styles?: string[]) {
+  parseNativeStyle: function (obj: $RxElement | any) {
     let objStyles = '';
     for (let prop in obj) {
       prop = '$' + prop;
@@ -100,8 +99,8 @@ const Parser = {
           }
         } else if (typeof f === 'function') {
           const fnc = f(obj[prop]);
-          const parsed = Parser.parseFncStyles(fnc, obj, styles);
-          if (parsed != undefined) objStyles += parsed;
+          Parser.parseFncStyles(fnc, obj);
+          // if (parsed != undefined) objStyles += parsed;
         }
       } else {
         if (Props.excludes.indexOf(prop.toLowerCase()) < 0 && obj.$level != 0) {
