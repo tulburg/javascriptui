@@ -1,5 +1,28 @@
 import {$RxElement, Component} from './components';
 
+declare global {
+  var Theme: {
+    globals: {[key: string]: RxElement},
+    colors: {[key: string]: string},
+    fonts: {[key: string]: string}
+  } & any;
+  var Config: {
+    routes: Route[]
+  }
+  interface String {
+    watch: (_ : (v: any) => void) => void
+  }
+}
+
+
+export interface Route {
+  path: string;
+  component: RxElement;
+  name: string;
+  subs?: Route[];
+  data?: any
+}
+
 export interface NativeEventData {
   old?: $RxElement | Component;
   new?: $RxElement | Component;
@@ -8,6 +31,13 @@ export interface NativeEventData {
   key?: string;
   index?: number;
   count?: number;
+}
+
+export interface NativeLock {
+  key: string;
+  type: 'property' | 'state';
+  nid: string;
+  className: string;
 }
 
 
@@ -36,6 +66,13 @@ export namespace TConfig {
 export type RxElement = {
 
   $nid?: string;
+  state?: any;
+
+  onCreate?: Function;
+  onUpdate?: Function;
+
+  //input model
+  model?: (object: any) => RxElement
 
   alignContent: (value: string | number | string[] | number[]) => RxElement
   alignItems: (value: string | number | string[] | number[]) => RxElement
@@ -255,7 +292,7 @@ export type RxElement = {
   wordBreak: (value: string | number | string[] | number[]) => RxElement
   wordWrap: (value: string | number | string[] | number[]) => RxElement
   writingMode: (value: string | number | string[] | number[]) => RxElement
-  
+
   zIndex: (value: string | number | string[] | number[]) => RxElement
   // custom specials
   cornerRadius: (value: string | number | string[] | number[]) => RxElement

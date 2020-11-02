@@ -1,7 +1,19 @@
 import Parser from './parser';
-import {RxElement, ElementEvent} from './types';
+import { RxElement, ElementEvent, Route, NativeLock } from './types';
+import { ProxifyComponent, ProxifyState } from './proxify';
+import NativeClass from './native';
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
+const Native = function() : NativeClass {  return (<any>window).Native || undefined };
+function protoSet(base: any, chain: any, value: any) {
+  if(base.hasOwnProperty(chain[0]) && chain.length > 1) {
+    const newBase = base[chain[0]];
+    chain.shift();
+    protoSet(newBase, chain, value);
+  }else {
+    base[chain[0]] = value;
+  }
+}
 
 export class $RxElement {
 
@@ -14,7 +26,7 @@ export class $RxElement {
   $styles: Style[] = [];
 
   // -- Render properties
-  // $hostComponent = Native.serving;
+  $hostComponent = (<any>window).Native.serving;
   $node: Element;
   // $styles: CSSStyleRule[] = [];
   $rules: CSSStyleRule[] = [];
@@ -25,6 +37,7 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
+    // return Proxify(this);
   }
 
   addChild(...children: RxElement[]): RxElement {
@@ -42,7 +55,7 @@ export class $RxElement {
       return this;
     }else {
       throw `Cannot addChild: ${this.name} does not accept children`;
-    } 
+    }
   }
 
   removeChild(child: RxElement): RxElement {
@@ -68,7 +81,7 @@ export class $RxElement {
       // child doesnt exist on parent
     }
   }
-  
+
   parent(): RxElement { return this.$root; }
   children(): (RxElement | string)[] { return this.$children; }
 
@@ -106,10 +119,11 @@ export class $RxElement {
     return this;
   }
 
-  text(string: string): RxElement {
+  text(string?: string): RxElement {
     if(string != undefined) {
       if(typeof this.$children[0] == 'string') this.$children.splice(0, 1, string as any);
       else this.$children.unshift(string as any);
+      if(this.$node) (<any>this.$node).innerText = string;
       return this;
     }
     if(Object.prototype.toString.call(this.$children[0]) === '[object String]') {
@@ -522,22 +536,60 @@ export class $RxElement {
 
 export class Component extends $RxElement {
 
-  $nid: string; 
+  $nid: string;
   $level = 0;
 
   constructor(...args: any[]) {
     super('component');
     this.$nid = Math.random().toString(36).substr(2, 9);
     this.$tagName = this.name;
-    (<any>window).Native.serving = this.name + "-" + this.$nid;
-    (<any>window).Native.components[this.name] = (<any>window).Native.components[this.name] || { structure: this.constructor };
-    (<any>window).Native.components[this.name][this.$nid] = { served: false, watchlist: [] };
-    (<any>window).Native.components[this.name][this.$nid].args
-    = (<any>window).Native.components[this.name][this.$nid].args || args;
+    Native().serving = this.name + "-" + this.$nid;
+    Native().components[this.name] = Native().components[this.name] || { structure: this.constructor } as any;
+    Native().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;
+    Native().components[this.name][this.$nid].args
+    = Native().components[this.name][this.$nid].args || args;
 
     // additional styling (default div styling)?
     this.display('block');
-  } 
+
+    return ProxifyComponent(this, this.name, this.$nid) as Component;
+  }
+
+  set state(v) {
+    if(type(v) !== 'object') {
+      throw new Error('Invalid state format, state must be an object');
+    }
+    if(!Native().components[this.name][this.$nid]){
+      throw new Error('Set state: Component doesn\'t exist or has been destroy');
+    }
+    v.__state__ = true;
+    Native().components[this.name][this.$nid].state =
+      Native().components[this.name][this.$nid].state
+      || Native().components[this.name].state
+      || ProxifyState(v, this.name, this.$nid);
+  }
+
+  get state() {
+    if(!Native().components[this.name][this.$nid]){
+      throw new Error('Get state: Component doesn\'t exist or has been destroy');
+    }
+    return Native().components[this.name][this.$nid].state;
+  }
+
+  get route() {
+    if(!Native().components[this.name][this.$nid]) {
+      throw new Error('Get route: Component doesn\'t exist or has been destroy');
+    }
+    return Native().components[this.name][this.$nid].route;
+  }
+
+  parent() {
+    return this.$root;
+  }
+
+  children() {
+    return this.$children;
+  }
 }
 
 export class PageComponent extends Component {
@@ -553,8 +605,20 @@ export class Button extends $RxElement {
   }
 }
 
+export class Container extends $RxElement {
+  constructor() { super('div'); }
+
+  host(route: Route) {
+    if(this.$children.length > 0) {
+      throw new Error('Host container must be empty!');
+    }
+    Native().router.host(this.$node, route);
+    return this;
+  }
+}
+
 export class Style {
-  
+
   $className: string;
 
   constructor(className: string, parent?: Style) {
@@ -565,4 +629,414 @@ export class Style {
   }
 
   get className() { return this.$className; }
+}
+
+export class A extends $RxElement {
+  constructor() { super('a'); }
+}
+
+export class Abbr extends $RxElement {
+  constructor() { super('abbr'); }
+}
+
+export class Applet extends $RxElement {
+  constructor() { super('applet'); }
+}
+
+export class Area extends $RxElement {
+  constructor() { super('area'); }
+}
+
+export class Article extends $RxElement {
+  constructor() { super('article'); }
+}
+
+export class Aside extends $RxElement {
+  constructor() { super('aside'); }
+}
+
+export class Audio extends $RxElement {
+  constructor() { super('audio'); }
+}
+
+export class Base extends $RxElement {
+  constructor() { super('base'); }
+}
+
+export class BaseFont extends $RxElement {
+  constructor() { super('basefont'); }
+}
+
+export class BDO extends $RxElement {
+  constructor() { super('bdo'); }
+}
+
+export class BlockQuote extends $RxElement {
+  constructor() { super('blockquote'); }
+}
+
+export class Body extends $RxElement {
+  constructor() { super('body'); }
+}
+
+export class BR extends $RxElement {
+  constructor() { super('br'); }
+}
+
+export class Canvas extends $RxElement {
+  constructor() { super('canvas'); }
+}
+
+export class Caption extends $RxElement {
+  constructor() { super('caption'); }
+}
+
+export class Code extends $RxElement {
+  constructor() { super('code'); }
+}
+
+export class Col extends $RxElement {
+  constructor() { super('col'); }
+}
+
+export class ColGroup extends $RxElement {
+  constructor() { super('colgroup'); }
+}
+
+export class Data extends $RxElement {
+  constructor() { super('data'); }
+}
+
+export class Details extends $RxElement {
+  constructor() { super('details'); }
+}
+
+export class DFN extends $RxElement {
+  constructor() { super('dfn'); }
+}
+
+export class Dialog extends $RxElement {
+  constructor() { super('dialog'); }
+}
+
+export class DIR extends $RxElement {
+  constructor() { super('dir'); }
+}
+
+export class Div extends $RxElement {
+  constructor() { super('div'); }
+}
+
+export class DL extends $RxElement {
+  constructor() { super('dl'); }
+}
+
+export class EM extends $RxElement {
+  constructor() { super('em'); }
+}
+
+export class Embed extends $RxElement {
+  constructor() { super('embed'); }
+}
+
+export class FieldSet extends $RxElement {
+  constructor() { super('fieldset'); }
+}
+
+export class FigCaption extends $RxElement {
+  constructor() { super('figcaption'); }
+}
+
+export class Figure extends $RxElement {
+  constructor() { super('figure'); }
+}
+
+export class Font extends $RxElement {
+  constructor() { super('font'); }
+}
+
+export class Footer extends $RxElement {
+  constructor() { super('footer'); }
+}
+
+export class Form extends $RxElement {
+  constructor() { super('form'); }
+}
+
+export class Del extends $RxElement {
+  constructor() { super('del'); }
+}
+
+export class Frame extends $RxElement {
+  constructor() { super('frame'); }
+}
+
+export class FrameSet extends $RxElement {
+  constructor() { super('frameset'); }
+}
+
+export class H1 extends $RxElement {
+  constructor() { super('h1'); }
+}
+
+export class H2 extends $RxElement {
+  constructor() { super('h2'); }
+}
+
+export class H3 extends $RxElement {
+  constructor() { super('h3'); }
+}
+
+export class H4 extends $RxElement {
+  constructor() { super('h4'); }
+}
+
+export class H5 extends $RxElement {
+  constructor() { super('h5'); }
+}
+
+export class H6 extends $RxElement {
+  constructor() { super('h6'); }
+}
+
+export class Head extends $RxElement {
+  constructor() { super('head'); }
+}
+
+export class Header extends $RxElement {
+  constructor() { super('header'); }
+}
+
+export class HR extends $RxElement {
+  constructor() { super('hr'); }
+}
+
+export class HTML extends $RxElement {
+  constructor() { super('html'); }
+}
+
+export class IFrame extends $RxElement {
+  constructor() { super('iframe'); }
+}
+
+export class Image extends $RxElement {
+  constructor() { super('img'); }
+}
+
+export class IMG extends $RxElement {
+  constructor() { super('img'); }
+}
+
+export class Input extends $RxElement {
+
+  $model: NativeLock;
+
+  constructor() { super('input'); }
+
+  model(object: any) {
+    this.$model = {
+      key: Native().lock.key,
+      type: Native().lock.type,
+      nid: Native().lock.nid,
+      className: Native().lock.className
+    };
+
+    const notifyWatchlist = (lock: NativeLock, value: any) => {
+      const instance = Native().components[lock.className][lock.nid];
+      if(instance && instance.served) {
+        for(let i = 0; i < instance.watchlist.length; i++) {
+          const w = instance.watchlist[i];
+          if(lock.key === w.prop) {
+            w.function(value);
+            w.oldValue = value;
+          }
+        }
+      }
+    }
+
+    if(object) this.value(object);
+    this.on({
+      input: () => {
+        const lock = this.$model;
+        if(lock.type === 'state') {
+          const chain = lock.key.replace(lock.className + '.', '').split('.');
+          protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value);
+          notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+        }else if(lock.type === 'property') {
+          const chain = lock.key.replace(lock.className + '.', '').split('.');
+          protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value);
+          notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+        }
+      }
+    });
+    return this;
+  }
+}
+
+export class Ins extends $RxElement {
+  constructor() { super('ins'); }
+}
+
+export class IsIndex extends $RxElement {
+  constructor() { super('isindex'); }
+}
+
+export class Label extends $RxElement {
+  constructor() { super('label'); }
+}
+
+export class Link extends $RxElement {
+  constructor() { super('a'); }
+}
+
+export class Legend extends $RxElement {
+  constructor() { super('legend'); }
+}
+
+export class LI extends $RxElement {
+  constructor() { super('li'); }
+}
+
+export class Main extends $RxElement {
+  constructor() { super('main'); }
+}
+
+export class Map extends $RxElement {
+  constructor() { super('map'); }
+}
+
+export class Mark extends $RxElement {
+  constructor() { super('mark'); }
+}
+
+export class Menu extends $RxElement {
+  constructor() { super('menu'); }
+}
+
+export class Meta extends $RxElement {
+  constructor() { super('meta'); }
+}
+
+export class Meter extends $RxElement {
+  constructor() { super('meter'); }
+}
+
+export class Nav extends $RxElement {
+  constructor() { super('nav'); }
+}
+
+export class ObjectElement extends $RxElement {
+  constructor() { super('object'); }
+}
+
+export class OL extends $RxElement {
+  constructor() { super('ol'); }
+}
+
+export class OptGroup extends $RxElement {
+  constructor() { super('optgroup'); }
+}
+
+export class Option extends $RxElement {
+  constructor() { super('option'); }
+}
+
+export class Output extends $RxElement {
+  constructor() { super('output'); }
+}
+
+export class P extends $RxElement {
+  constructor() { super('p'); }
+}
+
+export class Param extends $RxElement {
+  constructor() { super('param'); }
+}
+
+export class Pre extends $RxElement {
+  constructor() { super('pre'); }
+}
+
+export class Progress extends $RxElement {
+  constructor() { super('progress'); }
+}
+
+export class Q extends $RxElement {
+  constructor() { super('q'); }
+}
+
+export class Script extends $RxElement {
+  constructor() { super('script'); }
+}
+
+export class Section extends $RxElement {
+  constructor() { super('section'); }
+}
+
+export class Select extends $RxElement {
+  constructor() { super('select'); }
+}
+
+export class Slot extends $RxElement {
+  constructor() { super('slot'); }
+}
+
+export class Source extends $RxElement {
+  constructor() { super('source'); }
+}
+
+export class Span extends $RxElement {
+  constructor() { super('span'); }
+}
+
+export class Summary extends $RxElement {
+  constructor() { super('summary'); }
+}
+
+export class Table extends $RxElement {
+  constructor() { super('table'); }
+}
+
+export class TBody extends $RxElement {
+  constructor() { super('tbody'); }
+}
+
+export class TD extends $RxElement {
+  constructor() { super('td'); }
+}
+
+export class TextArea extends $RxElement {
+  constructor() { super('textarea'); }
+}
+
+export class TFoot extends $RxElement {
+  constructor() { super('tfoot'); }
+}
+
+export class TH extends $RxElement {
+  constructor() { super('th'); }
+}
+
+export class THead extends $RxElement {
+  constructor() { super('thead'); }
+}
+
+export class Time extends $RxElement {
+  constructor() { super('time'); }
+}
+
+export class TR extends $RxElement {
+  constructor() { super('tr'); }
+}
+
+export class Track extends $RxElement {
+  constructor() { super('track'); }
+}
+
+export class UL extends $RxElement {
+  constructor() { super('ul'); }
+}
+
+export class Video extends $RxElement {
+  constructor() { super('video'); }
 }

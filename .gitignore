@@ -44,11 +44,6 @@ UserInterfaceState.xcuserstate
 
 **/*.backup
 
-src/assets/anote-font/**/*
-!src/assets/anote-font/css/anote.css
-!src/assets/anote-font/config.json
-!src/assets/anote-font/font/*
-
 .editorconfig
 
 # Elastic Beanstalk Files
@@ -57,3 +52,5 @@ src/assets/anote-font/**/*
 !.elasticbeanstalk/*.global.yml
 
 .scannerwork
+
+dist/**

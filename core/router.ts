@@ -1,7 +1,7 @@
 import Config from '../src/config';
 import Props from './props';
 import { Component, Style, $RxElement } from './components';
-import {TConfig} from './types';
+import {TConfig, Route} from './types';
 import Native from './native';
 
 export default class Router {
@@ -19,6 +19,7 @@ export default class Router {
 
     // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
+    if(Config.theme) this.window.Theme = Config.theme;
     new Native(this);
     this.window.Native.writeGlobals(Config.theme || {});
 
@@ -59,9 +60,8 @@ export default class Router {
                 }
               }
               if('${key}' === 'attr') {
-                const node = this.node();
-                if(node) {
-                  node.setAttribute('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
+                if(this.$node) {
+                  this.$node.setAttribute('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
                 }
               }
               this['${prop}'] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
@@ -119,7 +119,7 @@ export default class Router {
     }
   }
 
-  host(host: Element, routes: TConfig.Route) {
+  host(host: Element, routes: Route) {
     this.current.subs = this.current.subs || [];
     this.current.subs.push({ host: host, routes: routes } as any);
   }

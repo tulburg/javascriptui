@@ -12,6 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
+    "allowJs": false,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"

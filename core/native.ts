@@ -1,23 +1,36 @@
 import Parser from './parser';
-import { createSheet, createRules, updateRules } from './styles';
+import { createSheet, createRules } from './styles';
 import { $RxElement, Component } from './components';
 import Router from './router';
-import {NativeEventData, NativeEventType, TConfig, RxElement} from './types';
+import {NativeEventData, NativeEventType, TConfig, RxElement, Route} from './types';
 
 class Native {
 
   router: Router;
-  components: any = {};
+  components: {[key: string]: { [key: string]: RxElement & {
+    served: boolean,
+    watchlist: {
+      prop: string; oldValue: any; function: Function
+    }[],
+    args: any[],
+    instance: RxElement,
+    route: Route,
+    rootNode: Element,
+    sub: Route
+  } } } & {
+    structure: Function
+  } = {} as any;
   sheet: CSSStyleSheet;
   served: boolean;
   serving: string;
   bindings: any = {};
+  lock: { key: string, className: string, nid: string, type: 'property' | 'state' };
 
   constructor (router: Router) {
     (<any>window).Native = this;
     // this.bonds = {};
     // this.bindings = {};
-    this.components = {};
+    this.components = {} as any;
     this.router = router;
     // this.createEventQueue = [];
     this.sheet = createSheet([]);
@@ -38,6 +51,7 @@ class Native {
   // data: { oldObj, newObj, oldVal, newVal, key, index, count }
   // type: MOD_TYPE
   $notify (data: NativeEventData, type: NativeEventType) {
+    // console.log(data, NativeEventType.toString());
     const $ = (id: string) => document.querySelector('.'+id);
     let newNode, node: Element; // styles: any;
     if (type == NativeEventType.insert) {
@@ -91,19 +105,28 @@ class Native {
         // if(!data.newObj.cssRules) {
           // const styles: string[] = [];
           // if(data.newObj instanceof $RxElement) {
-            Parser.parseProperties(data.new);
-          // }
-          // data.new.$rules = styles;
-          // console.log(data.newObj, styles);
-        // }
-
-        this.patchAttrs(data.old.$node, data.new.$node);
-        this.patchProps(data.old, data.new);
+        //     console.log(data);
+        //     Parser.parseProperties(data.new);
+        //   // }
+        //   // data.new.$rules = styles;
+        //   // console.log(data.newObj, styles);
+        // // }
+        //
+        //         // must patch strongly
+        //         // console.log("> must patch", props(a), props(b))
+        //         this.patchAttrs(data.old.$node, data.new.$node);
+        //         // this.patchCSS(a.$node, b.cssRules);
+                this.patchProps(data.old, data.new);
+        //         this.patchCSSRules(data.old, data.new);
+        //
+        // this.patchAttrs(data.old.$node, data.new.$node);
+        // this.patchProps(data.old, data.new);
         // this.patchCSSRules(data.oldObj, data.newObj);
 
         //-- !important  updateRules(data.old, updateClassRules(data.old.$node, styles));
-
-        // if(node) node.parentNode.replaceChild(newNode, node);
+        // const newNodey = this.createElement(data.newValue, false);
+        // console.log(newNodey);
+        // if(node) node.parentNode.replaceChild(newNodey, node);
       // }
 
     } else if(type == NativeEventType.replace) {
@@ -118,7 +141,7 @@ class Native {
       if((<RxElement>data.old.$children[data.index]).$level === 0) {
         const c = data.old.$children[data.index];
         // delete shadow
-        delete this.components[(<RxElement>c).name][(c as Component).$nid]; 
+        delete (<any>this.components)[(<RxElement>c).name][(c as Component).$nid];
       }
 
       for(let i = 0; i < data.count; i++) {
@@ -270,10 +293,9 @@ class Native {
     const oldProps = Object.getOwnPropertyNames(object);
     for(let i = 0; i < props.length; i++) {
       const p = props[i];
-      if(p != '$children' && p != 'node' && p != 'className'
-        && p != 'root' && p != '$level' && p != 'cssRules' && p != '__proto__' && p != '$model') {
-          object[p] = newObject[p];
-      }else if(p == '$model') { // update only the key
+      if(exProps.indexOf(p) === -1) {
+        object[p] = newObject[p];
+      }else if(p === '$model') { // update only the key
         object[p].key = newObject[p].key;
         object[p].type = newObject[p].type;
       }
@@ -285,9 +307,9 @@ class Native {
     }
   }
 
-  patchCSSRules(_: $RxElement, newObject: $RxElement) {
+  patchCSSRules(_: $RxElement, __: $RxElement) {
     // updateRules(newObject, newObject.$rules);
-    console.log(newObject, 'needs rule update');
+    // console.log(newObject, 'needs rule update');
   }
 
   updateState(name: string, nid: string) {
@@ -300,44 +322,44 @@ class Native {
     const oldServing = this.serving;
     const instanceNID = Math.random().toString(36).substr(2, 9);
     this.serving = name + '-' + instanceNID;
-    const newInstance = new this.components[name].structure(this.components[name][nid].args);
+    const newInstance: RxElement = new (<any>this.components[name]).structure(this.components[name][nid].args);
     // get running instance
     // fetch old instance
-    const oldInstance = this.components[name][nid].instance;
-    if(this.bindings[instanceNID]) {
-      for(let i = 0; i < this.bindings[instanceNID].length; i++) {
-        const event = this.bindings[instanceNID][i];
-        const o: any = {};
-        o[event.name] = event.event.bind(oldInstance);
-        event.object.$events.push(o);
-        this.bindings[instanceNID].splice(i, 1);
-        i--;
-      }
-      if(this.bindings[instanceNID].length < 1) {
-        delete this.bindings[instanceNID];
-      }
-    }
+    const oldInstance: RxElement = this.components[name][nid].instance;
+    // if(this.bindings[instanceNID]) {
+    //   for(let i = 0; i < this.bindings[instanceNID].length; i++) {
+    //     const event = this.bindings[instanceNID][i];
+    //     const o: any = {};
+    //     o[event.name] = event.event.bind(oldInstance);
+    //     event.object.$events.push(o);
+    //     this.bindings[instanceNID].splice(i, 1);
+    //     i--;
+    //   }
+    //   if(this.bindings[instanceNID].length < 1) {
+    //     delete this.bindings[instanceNID];
+    //   }
+    // }
 
     this.serving = oldServing;
     this.createElement(newInstance, true); // createElement(parsed.tree);
     // loop through, and throw diffs
-  
+
     this.patchAttrs(oldInstance.$node, newInstance.$node);
     this.loop(oldInstance.$children, newInstance.$children, oldInstance, newInstance, 0);
     // update rootNode
     // update the instance
-    this.components[name].instance = newInstance;
+    // this.components[name].instance = <any>newInstance;
     // update the css rules
-    updateRules(this.sheet, newInstance.cssRules);
+    // updateRules(this.sheet, newInstance.cssRules);
     //-------- why?
-    if(oldInstance.onCreate) {
-      oldInstance.onCreate();
-    }
+    // if(oldInstance.onCreate) {
+    //   oldInstance.onCreate();
+    // }
     // For the window update
     document.dispatchEvent(new Event('DOMContentLoaded'));
     window.dispatchEvent(new Event('load'));
     //
-    oldInstance.emit('update', this.components[name][nid].state);
+    // oldInstance.emit('update', this.components[name][nid].state);
     if(oldInstance.onUpdate) {
       oldInstance.onUpdate(this.components[name][nid].state);
     }
@@ -345,7 +367,7 @@ class Native {
     this.serving = undefined;
     this.components[name][nid].served = true;
     // delete the spawn
-    delete this.components[name][newInstance.nid];
+    delete this.components[name][newInstance.$nid];
   }
 
   createElement(object: $RxElement | Component, updateState?: any) {
@@ -378,7 +400,7 @@ class Native {
         // get a sub component load instance
         const component = item;
         this.components[component.name]
-          = this.components[component.name] || { structure: component.constructor };
+          = this.components[component.name] || { structure: component.constructor } as any;
         const newInstance = item;
         const nid = (newInstance as Component).$nid;
         // this.serving = component.name + '-' + nid;
@@ -411,9 +433,10 @@ class Native {
         queueMicrotask(() => {
           if(!updateState) {
             // newInstance.emit('create', true);
-            // if(newInstance.onCreate) {
+            if(newInstance.onCreate) {
+              newInstance.onCreate();
               // this.createEventQueue.push(newInstance.onCreate.bind(newInstance));
-            // }
+            }
           }
         })
         this.serving = oldServing;
@@ -433,19 +456,20 @@ class Native {
     return result;
   }
 
-  load(parentSelector: string, route: TConfig.Route, sub: string) {
+  load(parentSelector: string, route: TConfig.Route, sub: Route) {
     const parent = document.querySelector(parentSelector);
     const component = route.component;
     this.served = false;
     if(!component) {
       throw new Error('Can\'t find component '+route.name);
     }
-    this.components[component.name] = this.components[component.name] || { structure: component };
-    const newInstance: Component = new (<any>route).component();
+    this.components[component.name] = this.components[component.name] || { structure: component } as any;
+    const newInstance: RxElement = new (<any>route).component();
     const nid = newInstance.$nid;
     if(sub) this.components[component.name][nid].sub = sub;
     this.components[component.name][nid].route = this.router.current;
     this.components[component.name][nid].instance = newInstance;
+    console.log(newInstance);
 
     if(this.bindings[nid]) {
       for(let i = 0; i < this.bindings[nid].length; i++) {
@@ -490,9 +514,9 @@ class Native {
     // notify component
     queueMicrotask(() => {
       // newInstance.emit('create', true);
-      // if(newInstance.onCreate) {
-      //   newInstance.onCreate();
-      // }
+      if(newInstance.onCreate) {
+        newInstance.onCreate();
+      }
       // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
       // this.createEventQueue = [];
     });
@@ -507,9 +531,10 @@ class Native {
 
   loop(arr1: any, arr2: any, p1: any, p2: any, index: number) {
     const a: $RxElement = arr1[index], b: $RxElement = arr2[index];
-    // console.log(arr1, arr2, p1, p2);
     if(a == undefined && b == undefined) return;
-    if(type(a) == 'String' || type(b) == 'String') {
+    if(type(a) == 'string' || type(b) == 'string') {
+      // console.trace(p1);
+      // debugger;
       if(arr2.indexOf(a) < 0) {
         // setText(p1, getText(p2));
         p1.$children[index] = b;
@@ -535,7 +560,7 @@ class Native {
                 this.patchAttrs(oldInstance.$node, b.$node);
                 this.loop(oldInstance.$children, b.$children, oldInstance, b, 0);
 
-                oldInstance.emit('update', this.components[name][nid].state);
+                // oldInstance.emit('update', this.components[name][nid].state);
                 if(oldInstance.onUpdate) {
                   oldInstance.onUpdate(this.components[name][nid].state);
                 }
@@ -620,14 +645,16 @@ class Native {
   }
 }
 
-const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','');
+const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
+
+const exProps = ['$children', '$node', '$className', '$root', '$level', '$rules', '$model', '$hostComponent', '__proto__'];
 
 const same = function(a: any, b: any) {
-  if(type(a) == 'Object') {
-    if(type(b) != 'Object') return false;
-    let count = 0;
-    const objA = (Object.keys(a).length > Object.keys(b).length) ? a : b;
-    const objB = (Object.keys(a).length > Object.keys(b).length) ? b : a;
+  if(type(a) == 'object') {
+    if(type(b) != 'object') return false;
+    let count = 0; const greater = (Object.keys(a).length > Object.keys(b).length);
+    const objA = greater ? a : b;
+    const objB = greater ? b : a;
     for(const prop in props(objA)) {
       if(!objB.hasOwnProperty(prop)) return false;
       const r = same(objA[prop], objB[prop]);
@@ -635,8 +662,8 @@ const same = function(a: any, b: any) {
       else count++;
     }
     if(count == Object.keys(objA).length) return true;
-  }else if(type(a) == 'Array') {
-    if(type(b) != 'Array') return false;
+  }else if(type(a) == 'array') {
+    if(type(b) != 'array') return false;
     let count = 0;
     for(let i = 0; i < Math.max(a.length, b.length); i++) {
       const r = same(a[i], b[i]);
@@ -670,9 +697,8 @@ const props = (c: any) => {
   const ps = Object.getOwnPropertyNames(c);
   for(let i = 0; i < ps.length; i++) {
     const p = ps[i];
-    if(p != '$children' && p != 'node' && p != 'className' && p != '__proto__'
-      && p != 'root' && p != '$level' && p != 'cssRules' && p != '$events') {
-      if(type(c[p] !== 'Object') && c[p] !== undefined) all[p] = c[p];
+    if(exProps.indexOf(p) === -1 && p !== '$events') {
+      if(type(c[p] !== 'object') && c[p] !== undefined) all[p] = c[p];
     }
   }
   if(c.__proxy__ && c.$children && c.$children.length > 0){
@@ -682,7 +708,7 @@ const props = (c: any) => {
 };
 
 const getText = (c: $RxElement): string => {
-  if(Object.prototype.toString.call(c.$children[0]) === '[object String]') {
+  if(type(c.$children[0]) === 'string') {
     return <any>c.$children[0];
   }
   return undefined;
@@ -697,6 +723,7 @@ const visible = (arr: $RxElement[], child: $RxElement) => {
   }
   return false;
 };
+
 
 export default Native;
 
