@@ -173,7 +173,6 @@ const setLock = (object: any, componentName: string, name: string | number | sym
   if(object.name === componentName && type(name) !== 'symbol') {
     Native().lock.key = componentName + '.' + <string>name;
   }
-  console.log(Native().lock.key);
   Native().lock.type = 'property';
   Native().lock.className = componentName;
   Native().lock.nid = nid;

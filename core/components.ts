@@ -1,7 +1,8 @@
 import Parser from './parser';
-import { RxElement, ElementEvent, Route, NativeLock } from './types';
+import { RxElement, ElementEvent, Route, NativeLock, StyleProperties } from './types';
 import { ProxifyComponent, ProxifyState } from './proxify';
 import NativeClass from './native';
+import {createRules} from './styles';
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
 const Native = function() : NativeClass {  return (<any>window).Native || undefined };
@@ -132,11 +133,11 @@ export class $RxElement {
     return;
   }
 
-  styles(...styles: Style[]): RxElement | Style[] {
-    if(arguments.length == 0) return this.$styles;
+  styles(...styles: Style[]): RxElement {
+    if(arguments.length == 0) return <any>this.$styles;
     for(let i = 0; i < styles.length; i++) {
-      if(styles[i].className) {
-        this.$className += ' ' + styles[i].className;
+      if(styles[i].$className) {
+        this.$className += ' ' + styles[i].$className;
         this.$styles.push(styles[i]);
       }
     }
@@ -146,8 +147,8 @@ export class $RxElement {
   removeStyle(...styles: Style[]): void {
     if(arguments.length == 0) throw 'Remove style: 0 arguments passed. Min. of 1 expected';
     for(let i = 0; i < styles.length; i++) {
-      this.$styles = this.$styles.filter(s => s.className === styles[i].className);
-      this.$className.replace(' ' + styles[i].className, '');
+      this.$styles = this.$styles.filter(s => s.$className === styles[i].$className);
+      this.$className.replace(' ' + styles[i].$className, '');
     }
   }
 
@@ -608,27 +609,26 @@ export class Button extends $RxElement {
 export class Container extends $RxElement {
   constructor() { super('div'); }
 
-  host(route: Route) {
+  host(routes: Route[]) {
     if(this.$children.length > 0) {
       throw new Error('Host container must be empty!');
     }
-    Native().router.host(this.$node, route);
+    let check = 0, against: Route[] = undefined;
+    const current = Native().router.current;
+    if(current.subs && current.subs.length > 0) {
+      if((<any>current.subs[0]).host) {
+        against = current.subs.map(i => i.routes[0]);
+      }else {
+        against = current.subs;
+      }
+    }
+    routes.forEach((route: Route) => {
+      check += against.some(i => i.path === route.path) ? 1 : 0;
+    });
+    if(check === routes.length) Native().router.host(this, routes);
+    else throw new Error(`Host: You have (${routes.length - check}) unregistered routes. Please register on the config file before hosting`);
     return this;
   }
-}
-
-export class Style {
-
-  $className: string;
-
-  constructor(className: string, parent?: Style) {
-    if(parent) {
-      Object.assign(parent, this);
-    }
-    this.$className = className;
-  }
-
-  get className() { return this.$className; }
 }
 
 export class A extends $RxElement {
@@ -1038,5 +1038,273 @@ export class UL extends $RxElement {
 }
 
 export class Video extends $RxElement {
-  constructor() { super('video'); }
+  constructor() {
+    super('video');
+  }
+}
+
+
+export class Style {
+
+  $global: StyleProperties;
+  $className: string;
+  $rules: CSSStyleRule[] = [];
+
+  constructor(props: StyleProperties) {
+    this.$className = 's' + Math.random().toString(36).substr(2, 9);
+    const rules = ['.' + this.$className + '{  }'];
+    if(Native() && Native().sheet) {
+      createRules(this, rules);
+      Object.getOwnPropertyNames(props).forEach(i => {
+        (<any>this)[i]((<any>props)[i]);
+      });
+    }else {
+      (<any>window).__native_load_queue_call = (<any>window).__native_load_queue_call || [];
+      (<any>window).__native_load_queue_call.push(() => {
+        createRules(this, rules);
+        Object.getOwnPropertyNames(props).forEach(i => {
+          (<any>this)[i]((<any>props)[i]);
+        });
+      });
+    }
+  }
+
+  global(props: {[key: string]: StyleProperties}) {
+    this.$global = props;
+    const rules: string[] = [];
+    for(const key in props) {
+      rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+    }
+    if(Native() && Native().sheet) {
+      createRules(this, rules);
+    }else {
+      (<any>window).__native_load_queue_call = (<any>window).__native_load_queue_call || [];
+      (<any>window).__native_load_queue_call.push(() => {
+        createRules(this, rules);
+      });
+    }
+    return this;
+  }
+
+  alignContent: (_: string | number | string[] | number[]) => Style
+  alignItems: (_: string | number | string[] | number[]) => Style
+  alignSelf: (_: string | number | string[] | number[]) => Style
+  animationDelay: (_: string | number | string[] | number[]) => Style
+  animationDirection: (_: string | number | string[] | number[]) => Style
+  animationDuration: (_: string | number | string[] | number[]) => Style
+  animationFillMode: (_: string | number | string[] | number[]) => Style
+  animationIterationCount: (_: string | number | string[] | number[]) => Style
+  animationName: (_: string | number | string[] | number[]) => Style
+  animationPlayState: (_: string | number | string[] | number[]) => Style
+  animationTimingFunction: (_: string | number | string[] | number[]) => Style
+  backfaceVisibility: (_: string | number | string[] | number[]) => Style
+  background: (_: string | number | string[] | number[]) => Style
+  backgroundAttachment: (_: string | number | string[] | number[]) => Style
+  backgroundClip: (_: string | number | string[] | number[]) => Style
+  backgroundColor: (_: string | number | string[] | number[]) => Style
+  backgroundImage: (_: string | number | string[] | number[]) => Style
+  backgroundOrigin: (_: string | number | string[] | number[]) => Style
+  backgroundPosition: (_: string | number | string[] | number[]) => Style
+  backgroundRepeat: (_: string | number | string[] | number[]) => Style
+  backgroundSize: (_: string | number | string[] | number[]) => Style
+  border: (_: string | number | string[] | number[]) => Style
+  borderBottom: (_: string | number | string[] | number[]) => Style
+  borderBottomColor: (_: string | number | string[] | number[]) => Style
+  borderBottomLeftRadius: (_: string | number | string[] | number[]) => Style
+  borderBottomRightRadius: (_: string | number | string[] | number[]) => Style
+  borderBottomStyle: (_: string | number | string[] | number[]) => Style
+  borderBottomWidth: (_: string | number | string[] | number[]) => Style
+  borderCollapse: (_: string | number | string[] | number[]) => Style
+  borderColor: (_: string | number | string[] | number[]) => Style
+  borderImage: (_: string | number | string[] | number[]) => Style
+  borderImageOutset: (_: string | number | string[] | number[]) => Style
+  borderImageRepeat: (_: string | number | string[] | number[]) => Style
+  borderImageWidth: (_: string | number | string[] | number[]) => Style
+  borderLeft: (_: string | number | string[] | number[]) => Style
+  borderLeftColor: (_: string | number | string[] | number[]) => Style
+  borderLeftStyle: (_: string | number | string[] | number[]) => Style
+  borderLeftWidth: (_: string | number | string[] | number[]) => Style
+  borderRadius: (_: string | number | string[] | number[]) => Style
+  borderRight: (_: string | number | string[] | number[]) => Style
+  borderRightColor: (_: string | number | string[] | number[]) => Style
+  borderRightStyle: (_: string | number | string[] | number[]) => Style
+  borderRightWidth: (_: string | number | string[] | number[]) => Style
+  borderSpacing: (_: string | number | string[] | number[]) => Style
+  borderStyle: (_: string | number | string[] | number[]) => Style
+  borderTop: (_: string | number | string[] | number[]) => Style
+  borderTopColor: (_: string | number | string[] | number[]) => Style
+  borderTopLeftRadius: (_: string | number | string[] | number[]) => Style
+  borderTopRightRadius: (_: string | number | string[] | number[]) => Style
+  borderTopStyle: (_: string | number | string[] | number[]) => Style
+  borderTopWidth: (_: string | number | string[] | number[]) => Style
+  borderWidth: (_: string | number | string[] | number[]) => Style
+  bottom: (_: string | number | string[] | number[]) => Style
+  boxDecorationBreak: (_: string | number | string[] | number[]) => Style
+  boxShadow: (_: string | number | string[] | number[]) => Style
+  boxSizing: (_: string | number | string[] | number[]) => Style
+  breakAfter: (_: string | number | string[] | number[]) => Style
+  breakBefore: (_: string | number | string[] | number[]) => Style
+  breakInside: (_: string | number | string[] | number[]) => Style
+  captionSide: (_: string | number | string[] | number[]) => Style
+  caretColor: (_: string | number | string[] | number[]) => Style
+  clear: (_: string | number | string[] | number[]) => Style
+  clip: (_: string | number | string[] | number[]) => Style
+  color: (_: string | number | string[] | number[]) => Style
+  columnCount: (_: string | number | string[] | number[]) => Style
+  columnFill: (_: string | number | string[] | number[]) => Style
+  columnGap: (_: string | number | string[] | number[]) => Style
+  columnRule: (_: string | number | string[] | number[]) => Style
+  columnRuleColor: (_: string | number | string[] | number[]) => Style
+  columnRuleStyle: (_: string | number | string[] | number[]) => Style
+  columnRuleWidth: (_: string | number | string[] | number[]) => Style
+  columnSpan: (_: string | number | string[] | number[]) => Style
+  columnWidth: (_: string | number | string[] | number[]) => Style
+  columns: (_: string | number | string[] | number[]) => Style
+  content: (_: string | number | string[] | number[]) => Style
+  counterIncrement: (_: string | number | string[] | number[]) => Style
+  counterReset: (_: string | number | string[] | number[]) => Style
+  cursor: (_: string | number | string[] | number[]) => Style
+  direction: (_: string | number | string[] | number[]) => Style
+  display: (_: string | number | string[] | number[]) => Style
+  emptyCells: (_: string | number | string[] | number[]) => Style
+  filter: (_: string | number | string[] | number[]) => Style
+  flex: (_: string | number | string[] | number[]) => Style
+  flexBasis: (_: string | number | string[] | number[]) => Style
+  flexDirection: (_: string | number | string[] | number[]) => Style
+  flexFlow: (_: string | number | string[] | number[]) => Style
+  flexGrow: (_: string | number | string[] | number[]) => Style
+  flexShrink: (_: string | number | string[] | number[]) => Style
+  flexWrap: (_: string | number | string[] | number[]) => Style
+  float: (_: string | number | string[] | number[]) => Style
+  font: (_: string | number | string[] | number[]) => Style
+  fontFamily: (_: string | number | string[] | number[]) => Style
+  fontFeatureSettings: (_: string | number | string[] | number[]) => Style
+  fontKerning: (_: string | number | string[] | number[]) => Style
+  fontLanguageOverride: (_: string | number | string[] | number[]) => Style
+  fontSize: (_: string | number | string[] | number[]) => Style
+  fontSizeAdjust: (_: string | number | string[] | number[]) => Style
+  fontStretch: (_: string | number | string[] | number[]) => Style
+  fontStyle: (_: string | number | string[] | number[]) => Style
+  fontSynthesis: (_: string | number | string[] | number[]) => Style
+  fontVariant: (_: string | number | string[] | number[]) => Style
+  fontVariantAlternates: (_: string | number | string[] | number[]) => Style
+  fontVariantCaps: (_: string | number | string[] | number[]) => Style
+  fontVariantEastAsian: (_: string | number | string[] | number[]) => Style
+  fontVariantLigatures: (_: string | number | string[] | number[]) => Style
+  fontVariantNumeric: (_: string | number | string[] | number[]) => Style
+  fontVariantPosition: (_: string | number | string[] | number[]) => Style
+  fontWeight: (_: string | number | string[] | number[]) => Style
+  grid: (_: string | number | string[] | number[]) => Style
+  gridArea: (_: string | number | string[] | number[]) => Style
+  gridAutoColumns: (_: string | number | string[] | number[]) => Style
+  gridAutoFlow: (_: string | number | string[] | number[]) => Style
+  gridColumn: (_: string | number | string[] | number[]) => Style
+  gridColumnEnd: (_: string | number | string[] | number[]) => Style
+  gridColumnGap: (_: string | number | string[] | number[]) => Style
+  gridColumnStart: (_: string | number | string[] | number[]) => Style
+  gridGap: (_: string | number | string[] | number[]) => Style
+  gridRow: (_: string | number | string[] | number[]) => Style
+  gridRowEnd: (_: string | number | string[] | number[]) => Style
+  gridRowStart: (_: string | number | string[] | number[]) => Style
+  gridTemplate: (_: string | number | string[] | number[]) => Style
+  gridTemplateAreas: (_: string | number | string[] | number[]) => Style
+  gridTemplateColumns: (_: string | number | string[] | number[]) => Style
+  gridTemplateRows: (_: string | number | string[] | number[]) => Style
+  hangingPunctuation: (_: string | number | string[] | number[]) => Style
+  height: (_: string | number | string[] | number[]) => Style
+  hyphens: (_: string | number | string[] | number[]) => Style
+  isolation: (_: string | number | string[] | number[]) => Style
+  inset: (_: string | number | string[] | number[]) => Style
+  insetBottom: (_: string | number | string[] | number[]) => Style
+  insetLeft: (_: string | number | string[] | number[]) => Style
+  insetRight: (_: string | number | string[] | number[]) => Style
+  insetTop: (_: string | number | string[] | number[]) => Style
+  justifyContent: (_: string | number | string[] | number[]) => Style
+  justifySelf: (_: string | number | string[] | number[]) => Style
+  justifyItems: (_: string | number | string[] | number[]) => Style
+  left: (_: string | number | string[] | number[]) => Style
+  letterSpacing: (_: string | number | string[] | number[]) => Style
+  lineBreak: (_: string | number | string[] | number[]) => Style
+  lineHeight: (_: string | number | string[] | number[]) => Style
+  lineStyle: (_: string | number | string[] | number[]) => Style
+  lineStyleImage: (_: string | number | string[] | number[]) => Style
+  lineStylePosition: (_: string | number | string[] | number[]) => Style
+  lineStyleType: (_: string | number | string[] | number[]) => Style
+  margin: (_: string | number | string[] | number[]) => Style
+  marginBottom: (_: string | number | string[] | number[]) => Style
+  marginLeft: (_: string | number | string[] | number[]) => Style
+  marginRight: (_: string | number | string[] | number[]) => Style
+  marginTop: (_: string | number | string[] | number[]) => Style
+  maxHeight: (_: string | number | string[] | number[]) => Style
+  maxWidth: (_: string | number | string[] | number[]) => Style
+  minHeight: (_: string | number | string[] | number[]) => Style
+  minWidth: (_: string | number | string[] | number[]) => Style
+  mixBlendMode: (_: string | number | string[] | number[]) => Style
+  objectFit: (_: string | number | string[] | number[]) => Style
+  objectPosition: (_: string | number | string[] | number[]) => Style
+  opacity: (_: string | number | string[] | number[]) => Style
+  order: (_: string | number | string[] | number[]) => Style
+  orphans: (_: string | number | string[] | number[]) => Style
+  outline: (_: string | number | string[] | number[]) => Style
+  outlineColor: (_: string | number | string[] | number[]) => Style
+  outlineOffset: (_: string | number | string[] | number[]) => Style
+  outlineStyle: (_: string | number | string[] | number[]) => Style
+  outlineWidth: (_: string | number | string[] | number[]) => Style
+  overflow: (_: string | number | string[] | number[]) => Style
+  overflowWrap: (_: string | number | string[] | number[]) => Style
+  overflowX: (_: string | number | string[] | number[]) => Style
+  overflowY: (_: string | number | string[] | number[]) => Style
+  padding: (_: string | number | string[] | number[]) => Style
+  paddingBottom: (_: string | number | string[] | number[]) => Style
+  paddingLeft: (_: string | number | string[] | number[]) => Style
+  paddingRight: (_: string | number | string[] | number[]) => Style
+  paddingTop: (_: string | number | string[] | number[]) => Style
+  pageBreakAfter: (_: string | number | string[] | number[]) => Style
+  pageBreakBefore: (_: string | number | string[] | number[]) => Style
+  pageBreakInside: (_: string | number | string[] | number[]) => Style
+  perspective: (_: string | number | string[] | number[]) => Style
+  perspectiveOrigin: (_: string | number | string[] | number[]) => Style
+  pointerEvents: (_: string | number | string[] | number[]) => Style
+  position: (_: string | number | string[] | number[]) => Style
+  quotes: (_: string | number | string[] | number[]) => Style
+  resize: (_: string | number | string[] | number[]) => Style
+  right: (_: string | number | string[] | number[]) => Style
+  scrollBehavior: (_: string | number | string[] | number[]) => Style
+  tabSize: (_: string | number | string[] | number[]) => Style
+  tableLayout: (_: string | number | string[] | number[]) => Style
+  textAlign: (_: string | number | string[] | number[]) => Style
+  textAlignLast: (_: string | number | string[] | number[]) => Style
+  textCombineUpright: (_: string | number | string[] | number[]) => Style
+  textDecoration: (_: string | number | string[] | number[]) => Style
+  textDecorationColor: (_: string | number | string[] | number[]) => Style
+  textDecorationLine: (_: string | number | string[] | number[]) => Style
+  textDecorationStyle: (_: string | number | string[] | number[]) => Style
+  textIndent: (_: string | number | string[] | number[]) => Style
+  textJustify: (_: string | number | string[] | number[]) => Style
+  textOrientation: (_: string | number | string[] | number[]) => Style
+  textOverflow: (_: string | number | string[] | number[]) => Style
+  textShadow: (_: string | number | string[] | number[]) => Style
+  textTransform: (_: string | number | string[] | number[]) => Style
+  textUnderlinePosition: (_: string | number | string[] | number[]) => Style
+  top: (_: string | number | string[] | number[]) => Style
+  transform: (_: string | number | string[] | number[]) => Style
+  transformOrigin: (_: string | number | string[] | number[]) => Style
+  transformStyle: (_: string | number | string[] | number[]) => Style
+  transition: (_: string | number | string[] | number[]) => Style
+  transitionDelay: (_: string | number | string[] | number[]) => Style
+  transitionDuration: (_: string | number | string[] | number[]) => Style
+  transitionProperty: (_: string | number | string[] | number[]) => Style
+  transitionTimingFunction: (_: string | number | string[] | number[]) => Style
+  unicodeBidi: (_: string | number | string[] | number[]) => Style
+  userSelect: (_: string | number | string[] | number[]) => Style
+  verticalAlign: (_: string | number | string[] | number[]) => Style
+  visibility: (_: string | number | string[] | number[]) => Style
+  whiteSpace: (_: string | number | string[] | number[]) => Style
+  width: (_: string | number | string[] | number[]) => Style
+  wordBreak: (_: string | number | string[] | number[]) => Style
+  wordWrap: (_: string | number | string[] | number[]) => Style
+  writingMode: (_: string | number | string[] | number[]) => Style
+  zIndex: (_: string | number | string[] | number[]) => Style
+  // custom specials
+  cornerRadius: (_: string | number | string[] | number[]) => Style
 }

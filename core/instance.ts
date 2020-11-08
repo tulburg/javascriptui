@@ -9,7 +9,7 @@ if((<any>module).hot) {
     for(let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
     }
-    
+
     const NewRouter = require('./router').default;
     new NewRouter();
   })

@@ -1,4 +1,5 @@
-import {$RxElement, Component} from './components';
+import {$RxElement, Component, PageComponent} from './components';
+import NSRouter from './router';
 
 declare global {
   var Theme: {
@@ -9,6 +10,7 @@ declare global {
   var Config: {
     routes: Route[]
   }
+  var Router: NSRouter
   interface String {
     watch: (_ : (v: any) => void) => void
   }
@@ -17,7 +19,7 @@ declare global {
 
 export interface Route {
   path: string;
-  component: RxElement;
+  component: any;
   name: string;
   subs?: Route[];
   data?: any
@@ -55,12 +57,237 @@ export namespace TConfig {
 
   export interface Route {
     path: string;
-    component: Component;
+    component: PageComponent;
     name: string;
     subs?: Route[];
     routes: any;
     data: any;
   }
+}
+
+export interface StyleProperties {
+  alignContent?: string | number | string[] | number[];
+  alignItems?: string | number | string[] | number[];
+  alignSelf?: string | number | string[] | number[];
+  animationDelay?: string | number | string[] | number[];
+  animationDirection?: string | number | string[] | number[];
+  animationDuration?: string | number | string[] | number[];
+  animationFillMode?: string | number | string[] | number[];
+  animationIterationCount?: string | number | string[] | number[];
+  animationName?: string | number | string[] | number[];
+  animationPlayState?: string | number | string[] | number[];
+  animationTimingFunction?: string | number | string[] | number[];
+  backfaceVisibility?: string | number | string[] | number[];
+  background?: string | number | string[] | number[];
+  backgroundAttachment?: string | number | string[] | number[];
+  backgroundClip?: string | number | string[] | number[];
+  backgroundColor?: string | number | string[] | number[];
+  backgroundImage?: string | number | string[] | number[];
+  backgroundOrigin?: string | number | string[] | number[];
+  backgroundPosition?: string | number | string[] | number[];
+  backgroundRepeat?: string | number | string[] | number[];
+  backgroundSize?: string | number | string[] | number[];
+  border?: string | number | string[] | number[];
+  borderBottom?: string | number | string[] | number[];
+  borderBottomColor?: string | number | string[] | number[];
+  borderBottomLeftRadius?: string | number | string[] | number[];
+  borderBottomRightRadius?: string | number | string[] | number[];
+  borderBottomStyle?: string | number | string[] | number[];
+  borderBottomWidth?: string | number | string[] | number[];
+  borderCollapse?: string | number | string[] | number[];
+  borderColor?: string | number | string[] | number[];
+  borderImage?: string | number | string[] | number[];
+  borderImageOutset?: string | number | string[] | number[];
+  borderImageRepeat?: string | number | string[] | number[];
+  borderImageWidth?: string | number | string[] | number[];
+  borderLeft?: string | number | string[] | number[];
+  borderLeftColor?: string | number | string[] | number[];
+  borderLeftStyle?: string | number | string[] | number[];
+  borderLeftWidth?: string | number | string[] | number[];
+  borderRadius?: string | number | string[] | number[];
+  borderRight?: string | number | string[] | number[];
+  borderRightColor?: string | number | string[] | number[];
+  borderRightStyle?: string | number | string[] | number[];
+  borderRightWidth?: string | number | string[] | number[];
+  borderSpacing?: string | number | string[] | number[];
+  borderStyle?: string | number | string[] | number[];
+  borderTop?: string | number | string[] | number[];
+  borderTopColor?: string | number | string[] | number[];
+  borderTopLeftRadius?: string | number | string[] | number[];
+  borderTopRightRadius?: string | number | string[] | number[];
+  borderTopStyle?: string | number | string[] | number[];
+  borderTopWidth?: string | number | string[] | number[];
+  borderWidth?: string | number | string[] | number[];
+  bottom?: string | number | string[] | number[];
+  boxDecorationBreak?: string | number | string[] | number[];
+  boxShadow?: string | number | string[] | number[];
+  boxSizing?: string | number | string[] | number[];
+  breakAfter?: string | number | string[] | number[];
+  breakBefore?: string | number | string[] | number[];
+  breakInside?: string | number | string[] | number[];
+  captionSide?: string | number | string[] | number[];
+  caretColor?: string | number | string[] | number[];
+  clear?: string | number | string[] | number[];
+  clip?: string | number | string[] | number[];
+  color?: string | number | string[] | number[];
+  columnCount?: string | number | string[] | number[];
+  columnFill?: string | number | string[] | number[];
+  columnGap?: string | number | string[] | number[];
+  columnRule?: string | number | string[] | number[];
+  columnRuleColor?: string | number | string[] | number[];
+  columnRuleStyle?: string | number | string[] | number[];
+  columnRuleWidth?: string | number | string[] | number[];
+  columnSpan?: string | number | string[] | number[];
+  columnWidth?: string | number | string[] | number[];
+  columns?: string | number | string[] | number[];
+  content?: string | number | string[] | number[];
+  counterIncrement?: string | number | string[] | number[];
+  counterReset?: string | number | string[] | number[];
+  cursor?: string | number | string[] | number[];
+  direction?: string | number | string[] | number[];
+  display?: string | number | string[] | number[];
+  emptyCells?: string | number | string[] | number[];
+  filter?: string | number | string[] | number[];
+  flex?: string | number | string[] | number[];
+  flexBasis?: string | number | string[] | number[];
+  flexDirection?: string | number | string[] | number[];
+  flexFlow?: string | number | string[] | number[];
+  flexGrow?: string | number | string[] | number[];
+  flexShrink?: string | number | string[] | number[];
+  flexWrap?: string | number | string[] | number[];
+  float?: string | number | string[] | number[];
+  font?: string | number | string[] | number[];
+  fontFamily?: string | number | string[] | number[];
+  fontFeatureSettings?: string | number | string[] | number[];
+  fontKerning?: string | number | string[] | number[];
+  fontLanguageOverride?: string | number | string[] | number[];
+  fontSize?: string | number | string[] | number[];
+  fontSizeAdjust?: string | number | string[] | number[];
+  fontStretch?: string | number | string[] | number[];
+  fontStyle?: string | number | string[] | number[];
+  fontSynthesis?: string | number | string[] | number[];
+  fontVariant?: string | number | string[] | number[];
+  fontVariantAlternates?: string | number | string[] | number[];
+  fontVariantCaps?: string | number | string[] | number[];
+  fontVariantEastAsian?: string | number | string[] | number[];
+  fontVariantLigatures?: string | number | string[] | number[];
+  fontVariantNumeric?: string | number | string[] | number[];
+  fontVariantPosition?: string | number | string[] | number[];
+  fontWeight?: string | number | string[] | number[];
+  grid?: string | number | string[] | number[];
+  gridArea?: string | number | string[] | number[];
+  gridAutoColumns?: string | number | string[] | number[];
+  gridAutoFlow?: string | number | string[] | number[];
+  gridColumn?: string | number | string[] | number[];
+  gridColumnEnd?: string | number | string[] | number[];
+  gridColumnGap?: string | number | string[] | number[];
+  gridColumnStart?: string | number | string[] | number[];
+  gridGap?: string | number | string[] | number[];
+  gridRow?: string | number | string[] | number[];
+  gridRowEnd?: string | number | string[] | number[];
+  gridRowStart?: string | number | string[] | number[];
+  gridTemplate?: string | number | string[] | number[];
+  gridTemplateAreas?: string | number | string[] | number[];
+  gridTemplateColumns?: string | number | string[] | number[];
+  gridTemplateRows?: string | number | string[] | number[];
+  hangingPunctuation?: string | number | string[] | number[];
+  height?: string | number | string[] | number[];
+  hyphens?: string | number | string[] | number[];
+  isolation?: string | number | string[] | number[];
+  inset?: string | number | string[] | number[];
+  insetBottom?: string | number | string[] | number[];
+  insetLeft?: string | number | string[] | number[];
+  insetRight?: string | number | string[] | number[];
+  insetTop?: string | number | string[] | number[];
+  justifyContent?: string | number | string[] | number[];
+  justifySelf?: string | number | string[] | number[];
+  justifyItems?: string | number | string[] | number[];
+  left?: string | number | string[] | number[];
+  letterSpacing?: string | number | string[] | number[];
+  lineBreak?: string | number | string[] | number[];
+  lineHeight?: string | number | string[] | number[];
+  lineStyle?: string | number | string[] | number[];
+  lineStyleImage?: string | number | string[] | number[];
+  lineStylePosition?: string | number | string[] | number[];
+  lineStyleType?: string | number | string[] | number[];
+  margin?: string | number | string[] | number[];
+  marginBottom?: string | number | string[] | number[];
+  marginLeft?: string | number | string[] | number[];
+  marginRight?: string | number | string[] | number[];
+  marginTop?: string | number | string[] | number[];
+  maxHeight?: string | number | string[] | number[];
+  maxWidth?: string | number | string[] | number[];
+  minHeight?: string | number | string[] | number[];
+  minWidth?: string | number | string[] | number[];
+  mixBlendMode?: string | number | string[] | number[];
+  objectFit?: string | number | string[] | number[];
+  objectPosition?: string | number | string[] | number[];
+  opacity?: string | number | string[] | number[];
+  order?: string | number | string[] | number[];
+  orphans?: string | number | string[] | number[];
+  outline?: string | number | string[] | number[];
+  outlineColor?: string | number | string[] | number[];
+  outlineOffset?: string | number | string[] | number[];
+  outlineStyle?: string | number | string[] | number[];
+  outlineWidth?: string | number | string[] | number[];
+  overflow?: string | number | string[] | number[];
+  overflowWrap?: string | number | string[] | number[];
+  overflowX?: string | number | string[] | number[];
+  overflowY?: string | number | string[] | number[];
+  padding?: string | number | string[] | number[];
+  paddingBottom?: string | number | string[] | number[];
+  paddingLeft?: string | number | string[] | number[];
+  paddingRight?: string | number | string[] | number[];
+  paddingTop?: string | number | string[] | number[];
+  pageBreakAfter?: string | number | string[] | number[];
+  pageBreakBefore?: string | number | string[] | number[];
+  pageBreakInside?: string | number | string[] | number[];
+  perspective?: string | number | string[] | number[];
+  perspectiveOrigin?: string | number | string[] | number[];
+  pointerEvents?: string | number | string[] | number[];
+  position?: string | number | string[] | number[];
+  quotes?: string | number | string[] | number[];
+  resize?: string | number | string[] | number[];
+  right?: string | number | string[] | number[];
+  scrollBehavior?: string | number | string[] | number[];
+  tabSize?: string | number | string[] | number[];
+  tableLayout?: string | number | string[] | number[];
+  textAlign?: string | number | string[] | number[];
+  textAlignLast?: string | number | string[] | number[];
+  textCombineUpright?: string | number | string[] | number[];
+  textDecoration?: string | number | string[] | number[];
+  textDecorationColor?: string | number | string[] | number[];
+  textDecorationLine?: string | number | string[] | number[];
+  textDecorationStyle?: string | number | string[] | number[];
+  textIndent?: string | number | string[] | number[];
+  textJustify?: string | number | string[] | number[];
+  textOrientation?: string | number | string[] | number[];
+  textOverflow?: string | number | string[] | number[];
+  textShadow?: string | number | string[] | number[];
+  textTransform?: string | number | string[] | number[];
+  textUnderlinePosition?: string | number | string[] | number[];
+  top?: string | number | string[] | number[];
+  transform?: string | number | string[] | number[];
+  transformOrigin?: string | number | string[] | number[];
+  transformStyle?: string | number | string[] | number[];
+  transition?: string | number | string[] | number[];
+  transitionDelay?: string | number | string[] | number[];
+  transitionDuration?: string | number | string[] | number[];
+  transitionProperty?: string | number | string[] | number[];
+  transitionTimingFunction?: string | number | string[] | number[];
+  unicodeBidi?: string | number | string[] | number[];
+  userSelect?: string | number | string[] | number[];
+  verticalAlign?: string | number | string[] | number[];
+  visibility?: string | number | string[] | number[];
+  whiteSpace?: string | number | string[] | number[];
+  width?: string | number | string[] | number[];
+  wordBreak?: string | number | string[] | number[];
+  wordWrap?: string | number | string[] | number[];
+  writingMode?: string | number | string[] | number[];
+
+  zIndex?: string | number | string[] | number[];
+  // custom specials
+  cornerRadius?: string | number | string[] | number[];
 }
 
 export type RxElement = {

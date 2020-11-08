@@ -48,6 +48,19 @@ class Native {
     }
   }
 
+  parseStyleValue(value: any): any {
+    if(value == null) {
+      return 'unset';
+    }else if(typeof value == 'string') {
+      return value;
+    }else if (typeof value == 'number') {
+      return value + 'px';
+    } else if (value instanceof Array) {
+      return value.map(v => this.parseStyleValue(v)).join(' ');
+    }
+    return value;
+  }
+
   // data: { oldObj, newObj, oldVal, newVal, key, index, count }
   // type: MOD_TYPE
   $notify (data: NativeEventData, type: NativeEventType) {
@@ -425,7 +438,7 @@ class Native {
         queueMicrotask(() => {
           // updateRules(this.sheet, newInstance.cssRules);
 
-          if(this.components[component.name][nid].rootNode == undefined) {
+          if(this.components[component.name][nid] && this.components[component.name][nid].rootNode == undefined) {
             this.components[component.name][nid].rootNode = item.$node;
           }
         })
@@ -469,7 +482,6 @@ class Native {
     if(sub) this.components[component.name][nid].sub = sub;
     this.components[component.name][nid].route = this.router.current;
     this.components[component.name][nid].instance = newInstance;
-    console.log(newInstance);
 
     if(this.bindings[nid]) {
       for(let i = 0; i < this.bindings[nid].length; i++) {
@@ -508,7 +520,7 @@ class Native {
     if(parent.childNodes.length > 2) {
       console.warn('Loading a component on a non empty container!');
     }
-    queueMicrotask(() => parent.appendChild(rootNode));
+    parent.appendChild(rootNode);
     // setup tree
     // this.components[route.name].tree = parsed.tree;
     // notify component
@@ -523,6 +535,7 @@ class Native {
     this.serving = undefined;
     this.components[component.name][nid].served = true;
     this.served = true;
+
 
     if(route.subs && route.subs.length > 0) {
       this.router.loadSubs(route.subs);

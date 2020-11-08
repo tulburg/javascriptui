@@ -1,4 +1,4 @@
-import { PageComponent, Container, Component, P, H1, Input } from "../core/components";
+import { PageComponent, Container, Component, P, H1, Input, Style, A } from "../core/components";
 import { RxElement } from "../core/types";
 
 export default class App extends PageComponent {
@@ -8,6 +8,7 @@ export default class App extends PageComponent {
   time: string;
   modelText: string;
   spec: Spec;
+  sample = { name: 'google' };
 
   constructor() {
     // initialization
@@ -19,10 +20,14 @@ export default class App extends PageComponent {
     }
     this.time = '00:00:00';
     this.padding(40).boxSizing('borderBox');
-    
-    this.mainContainer = new Grid('repeat(3, 1fr)', 10);
+
+    this.mainContainer = new Grid('repeat(3, 1fr)', 10).boxSizing('border-box');
     this.mainContainer.height('100vh').width('100vw').position('relative');
     this.addChild(this.mainContainer);
+
+    this.sample.name.watch(() => {
+      console.log('sample has changed');
+    })
 
     // state test
     this.mainContainer.addChild(new Container()
@@ -46,7 +51,7 @@ export default class App extends PageComponent {
       )
     );
 
-    // model test (State) 
+    // model test (State)
     this.mainContainer.addChild(
       new Container()
         .addChild(
@@ -54,10 +59,13 @@ export default class App extends PageComponent {
             .fontSize(20).color(Theme.color.fontColorGreyLight),
           new Input().placeholder('Enter text here').model(this.state.modelText)
             .padding([10, 20]).fontSize(14)
-        )     
+        ).styles(Theme.styles.roundButton)
     );
-
-    // model test (Property) 
+    const modelTest: RxElement = this.mainContainer.children()[2] as RxElement;
+    setTimeout(() => (<any>modelTest.styles())[0].background('red').color('white').global({'p': {
+      color: 'white'
+    }}), 1000);
+    // model test (Property)
     this.mainContainer.addChild(
       new Container()
         .addChild(
@@ -65,7 +73,7 @@ export default class App extends PageComponent {
             .fontSize(20).color(Theme.color.fontColorGreyLight),
           new Input().placeholder('Enter text here').model(this.state.modelText)
             .padding([10, 20]).fontSize(14)
-        )     
+        )
     );
 
     this.time.watch(v => {
@@ -78,11 +86,12 @@ export default class App extends PageComponent {
     });
 
     this.addChild(this.spec);
+    console.log(Router.current.data);
 
   }
 
   onCreate() {
-    setTimeout(() => {
+    setInterval(() => {
       // this.state.time = new Date().toLocaleTimeString();
       this.time = new Date().toLocaleTimeString();
       ((this.mainContainer.children()[1] as RxElement).children()[1] as RxElement).text(new Date().toLocaleTimeString());
@@ -101,10 +110,25 @@ class Grid extends Container {
 class Spec extends Component {
 
   slate: string;
+  style: Style;
 
   constructor() {
     super();
     this.slate = 'google';
+    this.style = new Style({
+      background: 'red', fontSize: 15, display: 'flex'
+    }).global({
+      '*': {
+        fontSize: 12
+      }
+    });
+
+    this.addChild(
+      new A().text('Checklist').href('javascript:void(0)')
+      .on({
+        click: () => Router.go('/checklist')
+      })
+    );
   }
 
   onCreate() {
