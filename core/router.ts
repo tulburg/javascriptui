@@ -1,28 +1,28 @@
 import Config from '../src/config';
 import Props from './props';
 import { Component, Style, $RxElement } from './components';
-import {TConfig, Route} from './types';
+import {TConfig, Route, RxElement} from './types';
 import Native from './native';
 
 export default class Router {
 
   routes: TConfig.Route[] = Config.routes as any;
-  current: TConfig.Route; 
+  current: TConfig.Route;
   get window() : any {
-    if (typeof self !== 'undefined') { return self; } 
-    if (typeof window !== 'undefined') { return window; } 
-    if (typeof global !== 'undefined') { return global; } 
+    if (typeof self !== 'undefined') { return self; }
+    if (typeof window !== 'undefined') { return window; }
+    if (typeof global !== 'undefined') { return global; }
     throw new Error('unable to locate global object');
   };
-  
+
   constructor() {
 
     // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
     if(Config.theme) this.window.Theme = Config.theme;
+    this.window.Router = this;
     new Native(this);
     this.window.Native.writeGlobals(Config.theme || {});
-
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
@@ -56,7 +56,7 @@ export default class Router {
               if('${key}' === 'css') {
                 this.$rules = this.$rules || [];
                 if(this.$rules.length > 0) {
-                  this.$rules[0].style.setProperty('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
+                  this.$rules[0].style.setProperty('${name}', Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
                 }
               }
               if('${key}' === 'attr') {
@@ -75,9 +75,12 @@ export default class Router {
       if(typeof caller !== 'function' && caller.split('.')[0] === 'css') {
         (<any>Style.prototype)[prop.slice(1)] = fn;
       }
-    } 
-    window.onpopstate = (e: any) => {
-      if(e.state) {
+    }
+    if((<any>window).__native_load_queue_call && (<any>window).__native_load_queue_call.length > 0) {
+      (<any>window).__native_load_queue_call.forEach((i: Function) => i());
+    }
+    window.onpopstate = (_: any) => {
+      // if(e.state) {
         // let loaded = false;
         for (let i = 0; i < this.routes.length; i++) {
           const route = this.routes[i];
@@ -89,8 +92,8 @@ export default class Router {
             // loaded = true;
           }
         }
-      }
-      this.loadSubs(this.current.subs);
+      // }
+      if(this.current.subs) this.loadSubs(this.current.subs);
     }
     let loaded = false;
     for (let i = 0; i < this.routes.length; i++) {
@@ -98,7 +101,7 @@ export default class Router {
       const data = this.pathData(route);
       if (data) {
         this.current = route;
-        this.current.subs = [];
+        // this.current.subs = [];
         this.current.data = data.data;
         this.window.Native.load('#app', route);
         loaded = true;
@@ -111,35 +114,36 @@ export default class Router {
           const data = this.pathData(this.routes[i].subs[j], true);
           if(data) {
             this.current.data = data.data;
-            this.current.subs = [];
-            this.window.Native.load('#app', this.routes[i]);
+            // this.current.subs = [];
+            this.window.Native.load('#app', this.current);
           }
         }
       }
     }
   }
 
-  host(host: Element, routes: Route) {
-    this.current.subs = this.current.subs || [];
+  host(host: RxElement, routes: Route[]) {
+    this.current.subs = [];
     this.current.subs.push({ host: host, routes: routes } as any);
   }
 
   loadSubs(subs: TConfig.Route[]) {
     for(let i = 0; i < subs.length; i++) {
       const routes: any = subs[i].routes;
+      if(!routes) return;
       for(let j = 0; j < routes.length; j++) {
         const route = routes[j];
         const data = this.pathData(route, true);
         if (data) {
           Object.assign(this.current.data, data.data);
-          (<any>window).Native.load('.' + (<any>subs[i]).host.className, route, true);
+          (<any>window).Native.load('.' + (<any>subs[i]).host.$className, route, true);
         }
       }
     }
   }
 
   go (path: string) {
-    window.history.pushState(Object.create(this.current), '', path);
+    window.history.pushState({'name': 'special'}, '', path);
     let loaded = false;
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
@@ -151,7 +155,7 @@ export default class Router {
         (<any>window).Native.load('#app', route);
       }
     }
-    if(!loaded) {
+    if(!loaded && this.current.subs && this.current.subs.length > 0) {
       this.loadSubs(this.current.subs);
     }
   }
@@ -169,7 +173,7 @@ export default class Router {
       }
     });
 
-    if(route.path == current) {
+    if(path == current) {
       return { path: current, data: {} };
     }
 
