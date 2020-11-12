@@ -1,0 +1,22 @@
+{
+  "name": "@js-native/core",
+  "version": "0.0.2",
+  "description": "JS Native core package",
+  "main": "instance.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jsnative/core.git"
+  },
+  "author": "jsnative",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsnative/core/issues"
+  },
+  "homepage": "https://github.com/jsnative/core#readme",
+  "dependencies": {
+    "user": "0.0.0"
+  }
+}
