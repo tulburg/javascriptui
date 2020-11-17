@@ -1,4 +1,4 @@
-import Config from '../src/config';
+import Config from '@src/config';
 import Props from './props';
 import { Component, Style, $RxElement } from './components';
 import {TConfig, Route, RxElement} from './types';
@@ -22,7 +22,7 @@ export default class Router {
     if(Config.theme) this.window.Theme = Config.theme;
     this.window.Router = this;
     new Native(this);
-    this.window.Native.writeGlobals(Config.theme || {});
+    if(this.window.Native.sheet.cssRules.length === 0) this.window.Native.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;

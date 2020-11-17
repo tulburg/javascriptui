@@ -19,7 +19,7 @@ export default class App extends PageComponent {
       modelText: ''
     }
     this.time = '00:00:00';
-    this.padding(40).boxSizing('borderBox');
+    this.padding(40).boxSizing('border-box');
 
     this.mainContainer = new Grid('repeat(3, 1fr)', 10).boxSizing('border-box');
     this.mainContainer.height('100vh').width('100vw').position('relative');
