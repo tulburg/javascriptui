@@ -20,11 +20,14 @@ export default class Checklist extends PageComponent {
           .href('javascript:void(0)')
           .on({
             click: () => Router.go('/checklist/list/2')
-          })
+          }),
+        new A().text('view costs').href('javascript:void(0)')
+          .on({ click: () => Router.go('/checklist/maps') })
       )
     );
     this.cont.host([
-      { path: '/list/:id', name: 'App', component: App }
+      { path: '/list/:id', name: 'App', component: App },
+      { path: '/maps', name: 'App', component: App }
     ]);
   }
 

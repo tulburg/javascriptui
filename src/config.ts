@@ -28,7 +28,8 @@ export default {
     {
       path: '/checklist', component: Checklist, name: 'Checklist',
       subs: [
-        { path: '/list/:id', component: App, name: 'App' }
+        { path: '/list/:id', component: App, name: 'App' },
+        { path: '/maps', component: App, name: 'App' }
       ]
     }
   ]

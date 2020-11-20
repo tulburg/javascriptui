@@ -2,7 +2,7 @@ import Parser from './parser';
 import { createSheet, createRules } from './styles';
 import { $RxElement, Component } from './components';
 import Router from './router';
-import {NativeEventData, NativeEventType, TConfig, RxElement, Route} from './types';
+import {NativeEventData, NativeEventType, ConfigType, RxElement} from './types';
 
 class Native {
 
@@ -14,9 +14,9 @@ class Native {
     }[],
     args: any[],
     instance: RxElement,
-    route: Route,
+    route: ConfigType.Route,
     rootNode: Element,
-    sub: Route
+    sub: ConfigType.Route
   } } } & {
     structure: Function
   } = {} as any;
@@ -469,7 +469,7 @@ class Native {
     return result;
   }
 
-  load(parentSelector: string, route: TConfig.Route, sub: Route) {
+  load(parentSelector: string, route: ConfigType.Route, sub: ConfigType.Route) {
     const parent = document.querySelector(parentSelector);
     const component = route.component;
     this.served = false;
@@ -536,10 +536,14 @@ class Native {
     this.components[component.name][nid].served = true;
     this.served = true;
 
-
-    if(route.subs && route.subs.length > 0) {
-      this.router.loadSubs(route.subs);
+    if(route.hosting && route.hosting.length > 0) {
+      this.router.loadSubs(route.hosting);
     }
+  }
+
+  unload(parentSelector: string) {
+    const parent = document.querySelector(parentSelector);
+    if(parent && parent.childNodes.length > 0) parent.removeChild(parent.childNodes[0]);
   }
 
   loop(arr1: any, arr2: any, p1: any, p2: any, index: number) {

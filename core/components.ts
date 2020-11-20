@@ -1,6 +1,6 @@
 import Parser from './parser';
 import {
-  RxElement, ElementEvent, Route, NativeLock, StyleProperties, flexAlignment, flexAlignmentItem,
+  RxElement, ElementEvent, NativeLock, StyleProperties, flexAlignment, flexAlignmentItem, ConfigType,
   globalValues, colorType, borderStyleType, borderWidthType, imageType, spaceType, breakType, numberType
 } from './types';
 import { ProxifyComponent, ProxifyState } from './proxify';
@@ -1135,22 +1135,19 @@ export class Button extends $RxElement {
 }
 
 export class Container extends $RxElement {
+
   constructor() { super('div'); }
 
-  host?(routes: Route[]) {
+  host?(routes: ConfigType.Route[]) {
     if(this.$children.length > 0) {
       throw new Error('Host container must be empty!');
     }
-    let check = 0, against: Route[] = undefined;
+    let check = 0, against: ConfigType.Route[];
     const current = Native().router.current;
-    if(current.subs && current.subs.length > 0) {
-      if((<any>current.subs[0]).host) {
-        against = current.subs.map(i => i.routes[0]);
-      }else {
-        against = current.subs;
-      }
-    }else throw new Error(`Host: You have (${routes.length - check}) unregistered routes. Please register on the config file before hosting`);
-    routes.forEach((route: Route) => {
+    if(current.hosting && current.hosting.length > 0) {
+      against = current.hosting;
+    }else against = current.subs;
+    routes.forEach((route: ConfigType.Route) => {
       check += against.some(i => i.path === route.path) ? 1 : 0;
     });
     if(check === routes.length) Native().router.host(this, routes);

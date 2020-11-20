@@ -1,4 +1,4 @@
-import {$RxElement, Component, PageComponent} from './components';
+import {$RxElement, Component, PageComponent, Container} from './components';
 import NSRouter from './router';
 
 declare global {
@@ -8,7 +8,7 @@ declare global {
     fonts: {[key: string]: string}
   } & any;
   var Config: {
-    routes: Route[]
+    routes: ConfigType.Route[]
   }
   var Router: NSRouter
   interface String {
@@ -16,13 +16,16 @@ declare global {
   }
 }
 
+export namespace ConfigType {
 
-export interface Route {
-  path: string;
-  component: any;
-  name: string;
-  subs?: Route[];
-  data?: any
+  export interface Route {
+    path: string;
+    component: typeof PageComponent;
+    name: string;
+    subs?: Route[];
+    data?: any,
+    hosting?: (Route & { hostComponent?: Container })[],
+  }
 }
 
 export interface NativeEventData {
@@ -53,17 +56,6 @@ export enum NativeEventType {
   state = 7
 }
 
-export namespace TConfig {
-
-  export interface Route {
-    path: string;
-    component: PageComponent;
-    name: string;
-    subs?: Route[];
-    routes: any;
-    data: any;
-  }
-}
 export type globalValues = 'inherit' | 'initial' | 'unset';
 export type flexAlignmentItem = 'auto' | 'center' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'normal' |
   'baseline' | 'first baseline' | 'last baseline' | globalValues;

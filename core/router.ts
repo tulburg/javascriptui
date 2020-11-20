@@ -1,13 +1,13 @@
 import Config from '@src/config';
 import Props from './props';
-import { Component, Style, $RxElement } from './components';
-import {TConfig, Route, RxElement} from './types';
+import { Component, Style, $RxElement, Container } from './components';
+import {ConfigType, RxElement} from './types';
 import Native from './native';
 
 export default class Router {
 
-  routes: TConfig.Route[] = Config.routes as any;
-  current: TConfig.Route;
+  routes: ConfigType.Route[] = Config.routes as ConfigType.Route[];
+  current: ConfigType.Route;
   get window() : any {
     if (typeof self !== 'undefined') { return self; }
     if (typeof window !== 'undefined') { return window; }
@@ -79,22 +79,13 @@ export default class Router {
     if((<any>window).__native_load_queue_call && (<any>window).__native_load_queue_call.length > 0) {
       (<any>window).__native_load_queue_call.forEach((i: Function) => i());
     }
-    window.onpopstate = (_: any) => {
-      // if(e.state) {
-        // let loaded = false;
-        for (let i = 0; i < this.routes.length; i++) {
-          const route = this.routes[i];
-          const data = this.pathData(route);
-          if (data) {
-            this.current = route;
-            this.current.data = data.data;
-            this.window.Native.load('#app', route);
-            // loaded = true;
-          }
-        }
-      // }
-      if(this.current.subs) this.loadSubs(this.current.subs);
-    }
+
+    this.loadRoute();
+
+    window.onpopstate = (_: any) => this.loadRoute();
+  }
+
+  private loadRoute() {
     let loaded = false;
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
@@ -116,33 +107,40 @@ export default class Router {
             this.current.data = data.data;
             // this.current.subs = [];
             this.window.Native.load('#app', this.current);
+            loaded = true;
           }
         }
       }
     }
+    if(!loaded) {
+      console.warn('Path not configured');
+      this.window.Native.unload('#app');
+    }
   }
 
-  host(host: RxElement, routes: Route[]) {
-    this.current.subs = [];
-    this.current.subs.push({ host: host, routes: routes } as any);
+  host(host: RxElement, routes: ConfigType.Route[]) {
+    this.current.hosting = [];
+    routes.forEach(route => {
+      (<ConfigType.Route & { hostComponent?: Container }>route).hostComponent = host;
+      return route;
+    });
+    this.current.hosting = this.current.hosting.concat(routes).filter(r => routes.some(i => i.path === r.path));
   }
 
-  loadSubs(subs: TConfig.Route[]) {
-    for(let i = 0; i < subs.length; i++) {
-      const routes: any = subs[i].routes;
-      if(!routes) return;
-      for(let j = 0; j < routes.length; j++) {
-        const route = routes[j];
-        const data = this.pathData(route, true);
-        if (data) {
-          Object.assign(this.current.data, data.data);
-          (<any>window).Native.load('.' + (<any>subs[i]).host.$className, route, true);
-        }
+  loadSubs(routes: (ConfigType.Route & { hostComponent?: Container })[]) {
+    for(let i = 0; i < routes.length; i++) {
+      const route = routes[i];
+      const data = this.pathData(route, true);
+      if (data) {
+        Object.assign(this.current.data, data.data);
+        if(!route.hostComponent) throw new Error('Route not properly hosted');
+        (<any>window).Native.load('.' + route.hostComponent.$className, route, true);
       }
     }
   }
 
   go (path: string) {
+    if(path === window.location.pathname) return;
     window.history.pushState({'name': 'special'}, '', path);
     let loaded = false;
     for (let i = 0; i < this.routes.length; i++) {
@@ -155,13 +153,17 @@ export default class Router {
         (<any>window).Native.load('#app', route);
       }
     }
-    if(!loaded && this.current.subs && this.current.subs.length > 0) {
-      this.loadSubs(this.current.subs);
+    if(!loaded && this.current.hosting && this.current.hosting.length > 0) {
+      this.loadSubs(this.current.hosting);
+      if(this.current.hosting.filter(r => r.path === path).length === 0) {
+        console.warn('Path not configured');
+        this.window.Native.unload('#app');
+      }
     }
   }
 
-  pathData(route: TConfig.Route, sub: boolean = false) {
-    let path = (sub) ? this.current.path + route.path : route.path;
+  pathData(route: ConfigType.Route, sub: boolean = false) {
+    let path = (sub && this.current.path !== '/') ? this.current.path + route.path : route.path;
     let current = window.location.pathname;
     if(current[current.length - 1] == '/') current = current.substring(0, current.length - 1);
     if(path[path.length - 1] == '/') path = path.substring(0, path.length - 1);
