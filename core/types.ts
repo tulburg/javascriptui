@@ -1,14 +1,17 @@
-import {$RxElement, Component, PageComponent, Container} from './components';
+import {$RxElement, Component, PageComponent, Container, Style} from './components';
 import NSRouter from './router';
 
 declare global {
   var Theme: {
-    globals: {[key: string]: RxElement},
-    colors: {[key: string]: string},
-    fonts: {[key: string]: string}
-  } & any;
+    globals?: {[key: string]: StyleProperties},
+    colors?: {[key: string]: string},
+    fonts?: {[key: string]: any},
+    dimens?: {[key: string]: any},
+    styles?: {[key: string]: Style}
+  } & {[key: string]: any};
   var Config: {
-    routes: ConfigType.Route[]
+    routes: ConfigType.Route[],
+    theme?: typeof Theme
   }
   var Router: NSRouter
   interface String {
@@ -232,8 +235,8 @@ export interface StyleProperties {
   listStyleImage?: 'none' | 'url()' | globalValues;
   listStylePosition?: 'inside' | 'outside' | globalValues;
   listStyleType?: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | globalValues;
-  margin?: numberType | string | number | string[] | number[];
-  marginBottom?: numberType | string | number;
+  margin?: 'auto' | numberType | string | number | string[] | number[];
+  marginBottom?: 'auto' | numberType | string | number;
   marginLeft?: StyleProperties['marginBottom']
   marginRight?: StyleProperties['marginBottom'];
   marginTop?: StyleProperties['marginBottom'];
@@ -734,6 +737,48 @@ export type RxElement = {
   wrap: (value: string | number | string[] | number[]) => RxElement
   attrDefault: (value: string | number | string[] | number[]) => RxElement
   attrFor: (value: string | number | string[] | number[]) => RxElement
+
+
+  // functional attributes
+  globalStyle: (value: {[key: string]: StyleProperties}) => RxElement
+  pseudoActive: (value: StyleProperties) => RxElement
+  pseudoChecked: (value: StyleProperties) => RxElement
+  pseudoDisabled: (value: StyleProperties) => RxElement
+  pseudoEmpty: (value: StyleProperties) => RxElement
+  pseudoEnabled: (value: StyleProperties) => RxElement
+  pseudoFirstOfType: (value: StyleProperties) => RxElement
+  pseudoFocus: (value: StyleProperties) => RxElement
+  pseudoHover: (value: StyleProperties) => RxElement
+  pseudoInRange: (value: StyleProperties) => RxElement
+  pseudoInvalid: (value: StyleProperties) => RxElement
+  pseudoLang: (value: StyleProperties) => RxElement
+  pseudoLastChild: (value: StyleProperties) => RxElement
+  pseudoLastOfType: (value: StyleProperties) => RxElement
+  pseudoLink: (value: StyleProperties) => RxElement
+  pseudoNot: (value: StyleProperties) => RxElement
+  pseudoNthChild: (value: StyleProperties) => RxElement
+  pseudoNthLastChild: (value: StyleProperties) => RxElement
+  pseudoNthLastOfType: (value: StyleProperties) => RxElement
+  pseudoNthOfType: (value: StyleProperties) => RxElement
+  pseudoOnlyOfType: (value: StyleProperties) => RxElement
+  pseudoOnlyChild: (value: StyleProperties) => RxElement
+  pseudoOptional: (value: StyleProperties) => RxElement
+  pseudoOutOfRange: (value: StyleProperties) => RxElement
+  pseudoReadOnly: (value: StyleProperties) => RxElement
+  pseudoReadWrite: (value: StyleProperties) => RxElement
+  pseudoRequired: (value: StyleProperties) => RxElement
+  pseudoRoot: (value: StyleProperties) => RxElement
+  pseudoTarget: (value: StyleProperties) => RxElement
+  pseudoValid: (value: StyleProperties) => RxElement
+  pseudoVisited: (value: StyleProperties) => RxElement
+
+  pseudoBefore: (value: StyleProperties) => RxElement
+  pseudoAfter: (value: StyleProperties) => RxElement
+  pseudoSelection: (value: StyleProperties) => RxElement
+  pseudoFirstLetter: (value: StyleProperties) => RxElement
+  pseudoFirstLine: (value: StyleProperties) => RxElement
+
+  hover: (value: StyleProperties) => RxElement
 } & $RxElement & LayoutFunctions;
 
 export type ElementEvent = {

@@ -1,6 +1,5 @@
 import Parser from './parser';
 
-
 const parseStyleValue = function (value: any) : any {
   if(value == null) {
     return 'unset';
@@ -40,7 +39,7 @@ const parseNativeStyle = function (obj: any) {
 }
 
 
-const Props: { 
+const Props: {
   props: any,
   excludes: string[]
 } = {
@@ -66,6 +65,8 @@ const Props: {
     '$backgroundImage': 'css.background-image',
     '$backgroundOrigin': 'css.background-origin',
     '$backgroundPosition': 'css.background-position',
+    '$backgroundPositionX': 'css.background-position-x',
+    '$backgroundPositionY': 'css.background-position-y',
     '$backgroundRepeat': 'css.background-repeat',
     '$backgroundSize': 'css.background-size',
     '$border': 'css.border',
@@ -80,6 +81,8 @@ const Props: {
     '$borderImage': 'css.border-image',
     '$borderImageOutset': 'css.border-image-outset',
     '$borderImageRepeat': 'css.border-image-repeat',
+    '$borderImageSlice': 'css.border-image-slice',
+    '$borderImageSource': 'css.border-image-source',
     '$borderImageWidth': 'css.border-image-width',
     '$borderLeft': 'css.border-left',
     '$borderLeftColor': 'css.border-left-color',
@@ -124,6 +127,7 @@ const Props: {
     '$content': 'css.content',
     '$counterIncrement': 'css.counter-increment',
     '$counterReset': 'css.counter-reset',
+    '$counterSet': 'css.counter-set',
     '$cursor': 'css.cursor',
     '$direction': 'css.direction',
     '$display': 'css.display',
@@ -144,6 +148,7 @@ const Props: {
     '$fontLanguageOverride': 'css.font-language-override',
     '$fontSize': 'css.font-size',
     '$fontSizeAdjust': 'css.font-size-adjust',
+    '$fontSmooth': 'css.font-smooth',
     '$fontStretch': 'css.font-stretch',
     '$fontStyle': 'css.font-style',
     '$fontSynthesis': 'css.font-synthesis',
@@ -155,6 +160,7 @@ const Props: {
     '$fontVariantNumeric': 'css.font-variant-numeric',
     '$fontVariantPosition': 'css.font-variant-position',
     '$fontWeight': 'css.font-weight',
+    '$gap': 'css.gap',
     '$grid': 'css.grid',
     '$gridArea': 'css.grid-area',
     '$gridAutoColumns': 'css.grid-auto-columns',
@@ -187,10 +193,10 @@ const Props: {
     '$letterSpacing': 'css.letter-spacing',
     '$lineBreak': 'css.line-break',
     '$lineHeight': 'css.line-height',
-    '$lineStyle': 'css.line-style',
-    '$lineStyleImage': 'css.line-style-image',
-    '$lineStylePosition': 'css.line-style-position',
-    '$lineStyleType': 'css.line-style-type',
+    '$listStyle': 'css.list-style',
+    '$listStyleImage': 'css.list-style-image',
+    '$listStylePosition': 'css.list-style-position',
+    '$listStyleType': 'css.list-style-type',
     '$margin': 'css.margin',
     '$marginBottom': 'css.margin-bottom',
     '$marginLeft': 'css.margin-left',
@@ -212,6 +218,8 @@ const Props: {
     '$outlineStyle': 'css.outline-style',
     '$outlineWidth': 'css.outline-width',
     '$overflow': 'css.overflow',
+    '$overflowBlock': 'css.overflow-block',
+    '$overflowHidden': 'css.overflow-hidden',
     '$overflowWrap': 'css.overflow-wrap',
     '$overflowX': 'css.overflow-x',
     '$overflowY': 'css.overflow-y',
@@ -240,6 +248,7 @@ const Props: {
     '$textDecorationColor': 'css.text-decoration-color',
     '$textDecorationLine': 'css.text-decoration-line',
     '$textDecorationStyle': 'css.text-decoration-style',
+    '$textDecorationThickness': 'css.text-decoration-thickness',
     '$textIndent': 'css.text-indent',
     '$textJustify': 'css.text-justify',
     '$textOrientation': 'css.text-orientation',
@@ -263,6 +272,7 @@ const Props: {
     '$whiteSpace': 'css.white-space',
     '$width': 'css.width',
     '$wordBreak': 'css.word-break',
+    '$wordSpacing': 'css.word-spacing',
     '$wordWrap': 'css.word-wrap',
     '$writingMode': 'css.writing-mode',
     '$zIndex': 'css.z-index',
@@ -424,48 +434,13 @@ const Props: {
     "attrFor": 'attr.for',
 
     // functional attributes
-    '$globalStyle': (v: any) => {
-      return `
-        & * { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$pseudoFirstChild': (v: any) => {
-      return `
-        &:first-child { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$pseudoLastChild': (v: any) => {
-      return `
-        &:last-child { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$pseudoBefore': (v: any) => {
-      return `
-        &::before { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$pseudoAfter': (v: any) => {
-      return `
-        &::after { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$pseudoSelection': (v: any) => {
-      return `
-        & > ::selection { ${parseNativeStyle(v)} }
-      `;
-    },
-    '$show': (v: any, c: any) => {
-      if(!v) return `display: none;`;
-      else return (c.$display) ? `display: ${c.$display};` : `display: block;`;
-    },
-    '$fontSizeRem': (v: any) => {
-      if(!v) return '';
-      return `font-size: ${v[0]}; font-size: (${v[0]} / ${v[1]}) * 1rem;`;
-    },
-    '$centerBlock': (v: any) => {
-      if(!v) return '';
-      return `display: block; margin-left: auto; margin-right: auto; `;
-    },
+    '$globalStyle': (v: {[key: string]: any}) => `&${Object.keys(v)[0]} { ${parseNativeStyle(Object.values(v)[0])} }`,
+    '$pseudoFirstChild': (v: any) => `&:first-child { ${parseNativeStyle(v)} }`,
+    '$pseudoLastChild': (v: any) => `&:last-child { ${parseNativeStyle(v)} }`,
+    '$pseudoBefore': (v: any) => `&::before { ${parseNativeStyle(v)} }`,
+    '$pseudoAfter': (v: any) => `&::after { ${parseNativeStyle(v)} }`,
+    '$pseudoSelection': (v: any) => `&::selection { ${parseNativeStyle(v)} }`,
+    '$pseudoHover': (v: any) => `&:hover { ${parseNativeStyle(v)} }`,
 
     // pseudos
     '$hover': (v: any) => {
@@ -547,7 +522,7 @@ const Props: {
     '$flexCenter',
     '$responsiveness',
     '$styles'
-  ] 
+  ]
 }
 
 

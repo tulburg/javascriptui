@@ -3,15 +3,11 @@ import Native from "./native";
 export const createSheet = function (data: string[]) {
   let style;
   const allStyles = document.head.getElementsByTagName('style');
-  for(let n = 0; n < allStyles.length; n++) {
-    if(allStyles[n].childNodes[0].nodeType == allStyles[n].TEXT_NODE
-      && allStyles[n].childNodes.length == 1) {
-      style = allStyles[n];
-    }
-  }
+  style = Array.from(allStyles).find(i => i.id === 'native-styles');
   if(!style) {
     style = document.createElement('style');
     style.appendChild(document.createTextNode(''));
+    style.setAttribute('id', 'native-styles');
     document.head.appendChild(style);
   }
   for (let i = 0; i < data.length; i++) {

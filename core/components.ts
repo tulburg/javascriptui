@@ -600,6 +600,47 @@ export class $RxElement {
   attrDefault: (_: string | number | string[] | number[]) => RxElement
   attrFor: (_: string | number | string[] | number[]) => RxElement
 
+  // Pseudo functions
+  globalStyle: (_: {[key: string]: StyleProperties}) => RxElement
+  pseudoActive: (_: StyleProperties) => RxElement
+  pseudoChecked: (_: StyleProperties) => RxElement
+  pseudoDisabled: (_: StyleProperties) => RxElement
+  pseudoEmpty: (_: StyleProperties) => RxElement
+  pseudoEnabled: (_: StyleProperties) => RxElement
+  pseudoFirstOfType: (_: StyleProperties) => RxElement
+  pseudoFocus: (_: StyleProperties) => RxElement
+  pseudoHover: (_: StyleProperties) => RxElement
+  pseudoInRange: (_: StyleProperties) => RxElement
+  pseudoInvalid: (_: StyleProperties) => RxElement
+  pseudoLang: (_: StyleProperties) => RxElement
+  pseudoLastChild: (_: StyleProperties) => RxElement
+  pseudoLastOfType: (_: StyleProperties) => RxElement
+  pseudoLink: (_: StyleProperties) => RxElement
+  pseudoNot: (_: StyleProperties) => RxElement
+  pseudoNthChild: (_: StyleProperties) => RxElement
+  pseudoNthLastChild: (_: StyleProperties) => RxElement
+  pseudoNthLastOfType: (_: StyleProperties) => RxElement
+  pseudoNthOfType: (_: StyleProperties) => RxElement
+  pseudoOnlyOfType: (_: StyleProperties) => RxElement
+  pseudoOnlyChild: (_: StyleProperties) => RxElement
+  pseudoOptional: (_: StyleProperties) => RxElement
+  pseudoOutOfRange: (_: StyleProperties) => RxElement
+  pseudoReadOnly: (_: StyleProperties) => RxElement
+  pseudoReadWrite: (_: StyleProperties) => RxElement
+  pseudoRequired: (_: StyleProperties) => RxElement
+  pseudoRoot: (_: StyleProperties) => RxElement
+  pseudoTarget: (_: StyleProperties) => RxElement
+  pseudoValid: (_: StyleProperties) => RxElement
+  pseudoVisited: (_: StyleProperties) => RxElement
+
+  pseudoBefore: (_: StyleProperties) => RxElement
+  pseudoAfter: (_: StyleProperties) => RxElement
+  pseudoSelection: (_: StyleProperties) => RxElement
+  pseudoFirstLetter: (_: StyleProperties) => RxElement
+  pseudoFirstLine: (_: StyleProperties) => RxElement
+
+  hover: (_: StyleProperties) => RxElement
+
   // Layout Functions
   absCenter(v?: boolean): RxElement | boolean {
     if(v) {
@@ -1860,4 +1901,45 @@ export class Style {
   zIndex: (_: string | globalValues) => Style
   // custom specials
   cornerRadius: (_: StyleProperties['borderRadius']) => Style
+
+  // Pseudo functions
+  globalStyle: (_: {[key: string]: StyleProperties}) => Style
+  pseudoActive: (_: StyleProperties) => Style
+  pseudoChecked: (_: StyleProperties) => Style
+  pseudoDisabled: (_: StyleProperties) => Style
+  pseudoEmpty: (_: StyleProperties) => Style
+  pseudoEnabled: (_: StyleProperties) => Style
+  pseudoFirstOfType: (_: StyleProperties) => Style
+  pseudoFocus: (_: StyleProperties) => Style
+  pseudoHover: (_: StyleProperties) => Style
+  pseudoInRange: (_: StyleProperties) => Style
+  pseudoInvalid: (_: StyleProperties) => Style
+  pseudoLang: (_: StyleProperties) => Style
+  pseudoLastChild: (_: StyleProperties) => Style
+  pseudoLastOfType: (_: StyleProperties) => Style
+  pseudoLink: (_: StyleProperties) => Style
+  pseudoNot: (_: StyleProperties) => Style
+  pseudoNthChild: (_: StyleProperties) => Style
+  pseudoNthLastChild: (_: StyleProperties) => Style
+  pseudoNthLastOfType: (_: StyleProperties) => Style
+  pseudoNthOfType: (_: StyleProperties) => Style
+  pseudoOnlyOfType: (_: StyleProperties) => Style
+  pseudoOnlyChild: (_: StyleProperties) => Style
+  pseudoOptional: (_: StyleProperties) => Style
+  pseudoOutOfRange: (_: StyleProperties) => Style
+  pseudoReadOnly: (_: StyleProperties) => Style
+  pseudoReadWrite: (_: StyleProperties) => Style
+  pseudoRequired: (_: StyleProperties) => Style
+  pseudoRoot: (_: StyleProperties) => Style
+  pseudoTarget: (_: StyleProperties) => Style
+  pseudoValid: (_: StyleProperties) => Style
+  pseudoVisited: (_: StyleProperties) => Style
+
+  pseudoBefore: (_: StyleProperties) => Style
+  pseudoAfter: (_: StyleProperties) => Style
+  pseudoSelection: (_: StyleProperties) => Style
+  pseudoFirstLetter: (_: StyleProperties) => Style
+  pseudoFirstLine: (_: StyleProperties) => Style
+
+  hover: (_: StyleProperties) => Style
 }
