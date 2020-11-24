@@ -14,6 +14,7 @@ export default class Router {
     if (typeof global !== 'undefined') { return global; }
     throw new Error('unable to locate global object');
   };
+  private events: {name: string, listener: (..._: any[]) => void}[];
 
   constructor() {
 
@@ -22,6 +23,7 @@ export default class Router {
     if(Config.theme) this.window.Theme = Config.theme;
     this.window.Router = this;
     new Native(this);
+    this.events = [];
     if(this.window.Native.sheet.cssRules.length === 0) this.window.Native.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
@@ -76,8 +78,8 @@ export default class Router {
         (<any>Style.prototype)[prop.slice(1)] = fn;
       }
     }
-    if((<any>window).__native_load_queue_call && (<any>window).__native_load_queue_call.length > 0) {
-      (<any>window).__native_load_queue_call.forEach((i: Function) => i());
+    if((<any>window).__native_load_queue && (<any>window).__native_load_queue.length > 0) {
+      (<any>window).__native_load_queue.forEach((i: Function) => i());
     }
 
     this.loadRoute();
@@ -127,7 +129,8 @@ export default class Router {
     this.current.hosting = this.current.hosting.concat(routes).filter(r => routes.some(i => i.path === r.path));
   }
 
-  loadSubs(routes: (ConfigType.Route & { hostComponent?: Container })[]) {
+  loadSubs(routes: (ConfigType.Route & { hostComponent?: Container })[], fromGo?: boolean) {
+    let loaded = false;
     for(let i = 0; i < routes.length; i++) {
       const route = routes[i];
       const data = this.pathData(route, true);
@@ -135,13 +138,19 @@ export default class Router {
         Object.assign(this.current.data, data.data);
         if(!route.hostComponent) throw new Error('Route not properly hosted');
         (<any>window).Native.load('.' + route.hostComponent.$className, route, true);
+        loaded = true;
       }
+    }
+    if(fromGo && !loaded) {
+      console.warn('Path not configured');
+      this.window.Native.unload('#app');
     }
   }
 
   go (path: string) {
     if(path === window.location.pathname) return;
     window.history.pushState({'name': 'special'}, '', path);
+    this.events.forEach(i => (i.name === 'go') && i.listener(path));
     let loaded = false;
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
@@ -154,11 +163,7 @@ export default class Router {
       }
     }
     if(!loaded && this.current.hosting && this.current.hosting.length > 0) {
-      this.loadSubs(this.current.hosting);
-      if(this.current.hosting.filter(r => r.path === path).length === 0) {
-        console.warn('Path not configured');
-        this.window.Native.unload('#app');
-      }
+      this.loadSubs(this.current.hosting, true);
     }
   }
 
@@ -193,5 +198,9 @@ export default class Router {
       }
     }
     return;
+  }
+
+  on(event: 'go' | 'load' | 'unload', listener: (..._: any) => void) {
+    this.events.push({ name: event, listener: listener });
   }
 }

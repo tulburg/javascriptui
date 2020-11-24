@@ -12,7 +12,7 @@ declare global {
   var Config: {
     routes: ConfigType.Route[],
     theme?: typeof Theme
-  }
+  } & {[key: string]: any};
   var Router: NSRouter
   interface String {
     watch: (_ : (v: any) => void) => void
