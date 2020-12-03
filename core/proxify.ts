@@ -65,7 +65,7 @@ const $observeArray = (object: any, value: any, key: string) => {
     if(Native() && Native().served) {
       if(replace) {
         Native().$notify({
-          old: oldObj.$children[index], new: replace
+          old: oldObj, new: replace, index: index
         }, NativeEventType.replace);
       }else {
         // send delete

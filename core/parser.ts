@@ -11,7 +11,7 @@ const Parser = {
     this.parseProperties(component);
   },
 
-  parseFncStyles: function (fnc: string, comp: $RxElement) {
+  parseFncStyles: function (fnc: string, comp: $RxElement, state?: boolean) {
     if (fnc.match(/(&|>)/)) {
       fnc = fnc.trim();
       const start = fnc.indexOf('&');
@@ -20,11 +20,11 @@ const Parser = {
       const cssRule = rule.replace('&', comp.$tagName + '.'
         + comp.$className.split(' ')[0]).trim();
       if(cssRule.length > 20) {
-        createRules(comp, [cssRule]);
+        if(!state) createRules(comp, [cssRule]);
       }
       const rem = fnc.replace(rule, '');
       if (rem.trim().length > 0) {
-        Parser.parseFncStyles(rem, comp);
+        Parser.parseFncStyles(rem, comp, state);
       }
     } else if(fnc.match(/</)) {
       const start = fnc.indexOf('<');
@@ -41,14 +41,14 @@ const Parser = {
       // }
       const rem = fnc.replace(rule, '');
       if (rem.trim().length > 0) {
-        Parser.parseFncStyles(rem, comp);
+        Parser.parseFncStyles(rem, comp, state);
       }
     }else {
       return fnc;
     }
   },
 
-  parseProperties: function (component: $RxElement | any) {
+  parseProperties: function (component: $RxElement | any, state?: boolean) {
     const properties: any = {};
     let componentStyles = component.$tagName+'.'
       + component.$className.split(' ')[0] + ' { ';
@@ -68,7 +68,7 @@ const Parser = {
           if(component[prop]) {
             const fnc = f(component[prop], component);
             if(fnc !== undefined) {
-              const parsed = Parser.parseFncStyles(fnc, component);
+              const parsed = Parser.parseFncStyles(fnc, component, state);
               if (parsed !== undefined) componentStyles += parsed;
             }
           }
@@ -82,7 +82,7 @@ const Parser = {
         }
       }
     }
-    createRules(component, [componentStyles + '} ']); 
+    if(!state) createRules(component, [componentStyles + '} ']);
     return properties;
   },
 

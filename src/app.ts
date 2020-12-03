@@ -86,7 +86,6 @@ export default class App extends PageComponent {
     });
 
     this.addChild(this.spec);
-    console.log(Router.current.data);
 
   }
 

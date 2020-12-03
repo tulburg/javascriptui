@@ -3,7 +3,7 @@ import {
   RxElement, ElementEvent, NativeLock, StyleProperties, flexAlignment, flexAlignmentItem, ConfigType,
   globalValues, colorType, borderStyleType, borderWidthType, imageType, spaceType, breakType, numberType
 } from './types';
-import { ProxifyComponent, ProxifyState } from './proxify';
+import { ProxifyComponent, ProxifyState, Proxify } from './proxify';
 import NativeClass from './native';
 import {createRules} from './styles';
 
@@ -78,7 +78,7 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
-    // return Proxify(this);
+    return Proxify(this);
   }
 
   addChild(...children: RxElement[]): RxElement {
@@ -90,7 +90,9 @@ export class $RxElement {
         if(children[i].$root !== undefined) {
           throw `Cannot addChild: ${children[i].name} is already attached`;
         }
-        this.$children.push(children[i]);
+        const nullIndex = this.$children.indexOf(null);
+        if(nullIndex > -1) this.$children.splice(nullIndex, 1, children[i])
+        else this.$children.push(children[i]);
         children[i].$root = this;
       }
       return this;
@@ -101,12 +103,11 @@ export class $RxElement {
 
   removeChild(child: RxElement): RxElement {
     if(this.$children.indexOf(child) > -1) {
-      this.$children.splice(this.$children.indexOf(child), 1);
-      this.$children = this.$children.filter(i => i !== undefined);
       child.$root = undefined;
+      this.$children.splice(this.$children.indexOf(child), 1, null);
       return this;
     }else {
-      throw `Cannot removeChild: ${child.name} is not a child of ${this.name}`;
+      throw new Error(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
     }
   }
 
@@ -123,6 +124,7 @@ export class $RxElement {
     }
   }
 
+  node(): Element { return this.$node; }
   parent(): RxElement { return this.$root; }
   children(): (RxElement | string)[] { return this.$children; }
 
@@ -170,7 +172,7 @@ export class $RxElement {
     if(Object.prototype.toString.call(this.$children[0]) === '[object String]') {
       return this.$children[0];
     }
-    return;
+    return this;
   }
 
   styles(...styles: Style[]): any {
@@ -202,7 +204,7 @@ export class $RxElement {
     this.$pseudo.push(props);
     const rules: string[] = [];
     for(const key in props) {
-      rules.push('.' + this.$className + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+      rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
     if(Native() && Native().sheet) {
       createRules(this, rules)
@@ -433,7 +435,7 @@ export class $RxElement {
   perspective: (_?: 'none' | numberType) => RxElement
   perspectiveOrigin: (_?: 'center' | 'top' | 'bottom' | 'right' | string | globalValues) => RxElement
   pointerEvents: (_?: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | globalValues) => RxElement
-  position: (_?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky') => RxElement
+  position: (_?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky') => RxElement | any
   quotes: (_?: 'none' | 'initial' | 'auto' | string | globalValues) => RxElement
   resize: (_?: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | globalValues) => RxElement
   right: (_?: numberType) => RxElement
@@ -523,6 +525,7 @@ export class $RxElement {
   controls: (_?: string | number | string[] | number[]) => RxElement
   coords: (_?: string | number | string[] | number[]) => RxElement
   crossOrigin: (_?: string | number | string[] | number[]) => RxElement
+  d: (_?: string) => RxElement
   data: (_?: string | number | string[] | number[]) => RxElement
   datetime: (_?: string | number | string[] | number[]) => RxElement
   declare: (_?: string | number | string[] | number[]) => RxElement
@@ -534,6 +537,7 @@ export class $RxElement {
   draggable: (_?: string | number | string[] | number[]) => RxElement
   enctype: (_?: string | number | string[] | number[]) => RxElement
   enterKeyHint: (_?: string | number | string[] | number[]) => RxElement
+  fill: (_?: string) => RxElement
   form: (_?: string | number | string[] | number[]) => RxElement
   formAction: (_?: string | number | string[] | number[]) => RxElement
   formEnctype: (_?: string | number | string[] | number[]) => RxElement
@@ -623,6 +627,7 @@ export class $RxElement {
   tabIndex: (_?: string | number | string[] | number[]) => RxElement
   target: (_?: string | number | string[] | number[]) => RxElement
   title: (_?: string | number | string[] | number[]) => RxElement
+  attrTransform: (_?: string) => RxElement
   translate: (_?: string | number | string[] | number[]) => RxElement
   type: (_?: string | number | string[] | number[]) => RxElement
   typeMustMatch: (_?: string | number | string[] | number[]) => RxElement
@@ -630,11 +635,15 @@ export class $RxElement {
   vAlign: (_?: string | number | string[] | number[]) => RxElement
   value: (_?: string | number | string[] | number[]) => RxElement
   valueType: (_?: string | number | string[] | number[]) => RxElement
+  viewBox: (_?: string) => RxElement
   vLink: (_?: string | number | string[] | number[]) => RxElement
   vSpace: (_?: string | number | string[] | number[]) => RxElement
   wrap: (_?: string | number | string[] | number[]) => RxElement
+  xmlns: (_?: string) => RxElement
   attrDefault: (_?: string | number | string[] | number[]) => RxElement
   attrFor: (_?: string | number | string[] | number[]) => RxElement
+  for: (_?: string | number) => RxElement
+  default: (_?: string | number) => RxElement
 
   // Pseudo functions
   globalStyle: (_: {[key: string]: StyleProperties}) => RxElement
@@ -1431,11 +1440,11 @@ export class IMG extends $RxElement {
 
 export class Input extends $RxElement {
 
-  $model: NativeLock;
+  $model?: NativeLock;
 
   constructor() { super('input'); }
 
-  model(object: any) {
+  model?(object: any) {
     this.$model = {
       key: Native().lock.key,
       type: Native().lock.type,
@@ -1555,6 +1564,10 @@ export class Param extends $RxElement {
   constructor() { super('param'); }
 }
 
+export class Path extends $RxElement {
+  constructor() { super('path'); }
+}
+
 export class Pre extends $RxElement {
   constructor() { super('pre'); }
 }
@@ -1593,6 +1606,13 @@ export class Span extends $RxElement {
 
 export class Summary extends $RxElement {
   constructor() { super('summary'); }
+}
+
+export class SVG extends $RxElement {
+  constructor() {
+    super('svg');
+    this.xmlns('http://www.w3.org/2000/svg');
+  }
 }
 
 export class Table extends $RxElement {
@@ -1655,10 +1675,10 @@ export class Style {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{  }'];
     if(Native() && Native().sheet) {
-      createRules(this, rules);
-      Object.getOwnPropertyNames(props).forEach(i => {
-        (<any>this)[i]((<any>props)[i]);
-      });
+      // createRules(this, rules);
+      // Object.getOwnPropertyNames(props).forEach(i => {
+      //   (<any>this)[i]((<any>props)[i]);
+      // });
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
@@ -1676,7 +1696,7 @@ export class Style {
       rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
     if(Native() && Native().sheet) {
-      createRules(this, rules);
+      // createRules(this, rules);
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
@@ -1689,10 +1709,10 @@ export class Style {
   pseudo(props: {[key: string]: StyleProperties}) {
     const rules: string[] = [];
     for(const key in props) {
-      rules.push('.' + this.$className + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+      rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
     if(Native() && Native().sheet) {
-      createRules(this, rules)
+      // createRules(this, rules)
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {

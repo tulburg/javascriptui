@@ -42,7 +42,8 @@ class Native {
     const globals = theme.globals || theme.Globals;
     if (globals) {
       for(const key in globals) {
-        styles.push(key +' { ' + Parser.parseNativeStyle(globals[key]) + ' } ');
+        if(type(globals[key]) === 'object') styles.push(key + ' { ' + Parser.parseNativeStyle(globals[key]) + ' } ');
+        else if(type(globals[key]) === 'string') styles.push(key + ' {' + globals[key] + ' } ');
       }
       return createRules(this, styles);
     }
@@ -71,7 +72,7 @@ class Native {
       if(data.key != 'animations') {
         // parsed = Parser.parse(data.newVal[data.index]);
         //styles = [];
-        newNode = this.createElement(data.newValue[data.index], true);
+        newNode = this.createElement(data.newValue[data.index], false);
       }
     } else if (type == NativeEventType.update || type == NativeEventType.replace) {
       // parsed = Parser.parse(data.newObj);
@@ -101,12 +102,8 @@ class Native {
       //     }
       //   }
       // }else if(node) {
-      const object = data.newValue[data.index];
-      for(let i = 0; i < object.cssRules.length; i++) {
-        try {
-          this.sheet.insertRule(object.cssRules[i]);
-        } catch(err) { console.error ('Could\'nt insert rule '+err); }
-      }
+      // const object = data.newValue[data.index];
+      // Parser.parseProperties(object);
       if(data.index == 0) {
         node.insertBefore(newNode, node.childNodes[0]);
       }else {
@@ -143,11 +140,11 @@ class Native {
       // }
 
     } else if(type == NativeEventType.replace) {
-
-      const node = data.old.$node;
-      this.createElement(data.new, false);
-      const newNode = data.new.$node;
-      if(node) node.parentNode.replaceChild(newNode, node);
+      if(data.new instanceof $RxElement) this.createElement(data.new, false);
+      const newNode: any = (data.new.$node) ? data.new.$node : data.new;
+      if(data.old.$children[data.index] !== null && (<any>data.old).childNodes) {
+        data.old.$node.replaceChild(newNode, (<any>data.old).childNodes[data.index]);
+      }else data.old.$node.appendChild( typeof newNode === 'string' ? document.createTextNode(newNode) : newNode);
 
     } else if (type == NativeEventType.delete) {
       // check if its a component and delete the native instance
@@ -195,26 +192,6 @@ class Native {
     return node.className;
   }
 
-  $updateObjectCSS(obj: $RxElement, css: string) {
-    const selector = obj.$tagName + '.' + obj.$className.split(' ')[0];
-    let found = false;
-    for(let i = 0; i < this.sheet.cssRules.length; i++) {
-      const selectorText = (<any>this.sheet.cssRules[i]).selectorText;
-      if(selectorText == selector) {
-        // const oldRule = this.sheet.cssRules[i].cssText;
-        const rule = this.sheet.cssRules[i].cssText;
-        const newRule = rule.replace('{', '{ '+css);
-        found = true;
-        this.sheet.deleteRule(i);
-        this.sheet.insertRule(newRule, this.sheet.cssRules.length);
-      }
-    }
-    if(!found) {
-      const newRule = selector + ' { ' + css + ' }';
-      this.sheet.insertRule(newRule, this.sheet.cssRules.length);
-    }
-  }
-
   patchAttrs(oldEl: Element, newEl: Element) {
     const patches = [];
     if(oldEl != undefined && oldEl != null) {
@@ -258,49 +235,6 @@ class Native {
     }
   }
 
-  patchCSS(oldEl: Element, rules: string) {
-    const extract = (rule: string) => {
-      return rule.trim().substring(rule.indexOf('{') + 1, rule.indexOf('}') - 2)
-        .trim().split(';').map(s => s.trim());
-    };
-    const pair = (v: string) => {
-      const value = v.split(':').map(s => s.trim());
-      return { name: value[0], value: value[1]};
-    };
-    const depair = (n: string, v: string) => {
-      return `${n}: ${v}`;
-    };
-    const selector = oldEl.tagName.toLowerCase() + '.' + oldEl.className.split(' ')[0];
-    for(let m = 0; m < rules.length; m++) {
-      const css = rules[m];
-      for(let i = 0; i < this.sheet.cssRules.length; i++) {
-        if((<any>this.sheet.cssRules[i]).selectorText == selector) {
-          const oldX = extract(this.sheet.cssRules[i].cssText);
-          const newX = extract(css);
-          for(let j = 0; j < newX.length; j++) {
-            let set = false;
-            for(let k = 0; k < oldX.length; k++) {
-              if(pair(oldX[k]).name == pair(newX[j]).name){
-                if(pair(oldX[k]).value != pair(newX[j]).value) {
-                  oldX[k] = depair(pair(oldX[k]).name, pair(newX[j]).value);
-                }
-                set = true;
-              }
-            }
-            if(!set) {
-              oldX.push(depair(pair(newX[j]).name, pair(newX[j]).value));
-            }
-          }
-          const newRule = (<any>this.sheet.cssRules[i]).selectorText + ' { ' + oldX.join('; ')+';' + ' } ';
-          try{
-            this.sheet.insertRule(newRule, i);
-            this.sheet.deleteRule(i+1);
-          }catch(e) { throw Error('Rule not applied '+newRule + '-> '+ e); }
-        }
-      }
-    }
-  }
-
   patchProps(object: any, newObject: any) {
     const props = Object.getOwnPropertyNames(newObject);
     const oldProps = Object.getOwnPropertyNames(object);
@@ -318,11 +252,6 @@ class Native {
         object[oldProps[k]] = undefined;
       }
     }
-  }
-
-  patchCSSRules(_: $RxElement, __: $RxElement) {
-    // updateRules(newObject, newObject.$rules);
-    // console.log(newObject, 'needs rule update');
   }
 
   updateState(name: string, nid: string) {
@@ -385,9 +314,10 @@ class Native {
 
   createElement(object: $RxElement | Component, updateState?: any) {
     // let rules: string[] = [];
+    const graphics = ['svg', 'path'] //... plus more
     const create = (parent: Element, item: RxElement) => {
-      const c = document.createElement(item.$tagName);
-      const parsedProperties = Parser.parseProperties(item);
+      const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$xmlns || parent.namespaceURI, item.$tagName);
+      const parsedProperties = Parser.parseProperties(item, updateState);
       // if(item.$animation) {
       //   rule = rule.concat(Parser.parseAnimation(item.$animation));
       // }
@@ -401,7 +331,13 @@ class Native {
             c.addEventListener(e.name, e.event, { capture: true });
           }
         }else {
-          c.setAttribute(prop, parsedProperties[prop]);
+          c.setAttribute(prop, parsedProperties[prop])
+          // if(graphics.indexOf(item.$tagName) < 0) {
+          //   c.setAttribute(prop, parsedProperties[prop])
+          // }else {
+          //   const namespace = item.$tagName === 'svg' ? (<any>item).$xmlns : parent.namespaceURI;
+          //   c.setAttributeNS(namespace, prop, parsedProperties[prop]);
+          // }
         }
       }
       item.$node = c;
@@ -591,7 +527,6 @@ class Native {
                 this.patchAttrs(a.$node, b.$node);
                 // this.patchCSS(a.$node, b.cssRules);
                 this.patchProps(a, b);
-                this.patchCSSRules(a, b);
                 b.$node = a.$node;
 
                 // todo: i think you should the Native instance of
