@@ -3,7 +3,7 @@ import {
   RxElement, ElementEvent, NativeLock, StyleProperties, flexAlignment, flexAlignmentItem, ConfigType,
   globalValues, colorType, borderStyleType, borderWidthType, imageType, spaceType, breakType, numberType
 } from './types';
-import { ProxifyComponent, ProxifyState, Proxify } from './proxify';
+import { ProxifyComponent, ProxifyState } from './proxify';
 import NativeClass from './native';
 import {createRules} from './styles';
 
@@ -78,7 +78,7 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
-    return Proxify(this);
+    // return Proxify(this);
   }
 
   addChild(...children: RxElement[]): RxElement {
@@ -107,7 +107,8 @@ export class $RxElement {
       this.$children.splice(this.$children.indexOf(child), 1, null);
       return this;
     }else {
-      throw new Error(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
+      console.warn(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
+      // throw new Error(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
     }
   }
 
@@ -128,7 +129,7 @@ export class $RxElement {
   parent(): RxElement { return this.$root; }
   children(): (RxElement | string)[] { return this.$children; }
 
-  on(fns: ElementEvent | {[key: string]: () => void}): RxElement {
+  on(fns: ElementEvent | {[key: string]: (e?: Event) => void }): RxElement {
     this.$events = this.$events || [];
     for(const fn in fns) {
       const event: any = {};
@@ -486,6 +487,7 @@ export class $RxElement {
 
   // attributes
   abbr: (_?: string | number | string[] | number[]) => RxElement
+  accept: (_?: string) => RxElement
   acceptCharset: (_?: string | number | string[] | number[]) => RxElement
   accessKey: (_?: string | number | string[] | number[]) => RxElement
   action: (_?: string | number | string[] | number[]) => RxElement
@@ -505,6 +507,7 @@ export class $RxElement {
   autoFocus: (_?: string | number | string[] | number[]) => RxElement
   autoPlay: (_?: string | number | string[] | number[]) => RxElement
   axis: (_?: string | number | string[] | number[]) => RxElement
+  capture: (_?: 'user' | 'environment') => RxElement
   cellPadding: (_?: string | number | string[] | number[]) => RxElement
   cellSpacing: (_?: string | number | string[] | number[]) => RxElement
   char: (_?: string | number | string[] | number[]) => RxElement
@@ -1153,6 +1156,7 @@ export class Component extends $RxElement {
 
   $nid: string;
   $level = 0;
+  $events: {[key: string]: ((..._: any) => any)[] } = {} as any;
 
   constructor(...args: any[]) {
     super('component');
@@ -1204,6 +1208,26 @@ export class Component extends $RxElement {
 
   children() {
     return this.$children;
+  }
+
+  emit(event: string, payload: any) {
+    if(this.$events.hasOwnProperty(event)) {
+      for(let i = 0; i < this.$events[event].length; i++) {
+        this.$events[event][i](payload);
+      }
+    }else {
+      return false;
+    }
+    return this;
+  }
+
+  listen(event: string, listener: (..._: any) => any) {
+    if(this.$events.hasOwnProperty(event)) {
+      this.$events[event].push(listener);
+    }else {
+      this.$events[event] = [listener];
+    }
+    return this;
   }
 }
 
@@ -1465,20 +1489,26 @@ export class Input extends $RxElement {
       }
     }
 
+    const sync = () => {
+      const lock = this.$model;
+      if((<HTMLInputElement>this.$node).value.trim().length === 0) return;
+      if (lock.type === 'state') {
+        const chain = lock.key.replace(lock.className + '.', '').split('.');
+        protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value);
+        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+      } else if (lock.type === 'property') {
+        const chain = lock.key.replace(lock.className + '.', '').split('.');
+        protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value);
+        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+      }
+    }
+
     if(object) this.value(object);
     this.on({
-      input: () => {
-        const lock = this.$model;
-        if(lock.type === 'state') {
-          const chain = lock.key.replace(lock.className + '.', '').split('.');
-          protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value);
-          notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
-        }else if(lock.type === 'property') {
-          const chain = lock.key.replace(lock.className + '.', '').split('.');
-          protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value);
-          notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
-        }
-      }
+      input: () => sync(),
+      focus: () => sync(),
+      blur: () => sync(),
+      change: () => sync()
     });
     return this;
   }

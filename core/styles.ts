@@ -30,7 +30,7 @@ export const createRules = function(object: any, rules: string[]) {
       const length = sheet.cssRules.length;
       sheet.insertRule(css, length);
       object.$rules = object.$rules || [];
-      object.$rules.push(sheet.cssRules[length]);
+      object.$rules.unshift(sheet.cssRules[length]);
     }catch(e) {
       throw new Error('Rule not applied: ' + css + e.message);
     }

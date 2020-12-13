@@ -267,6 +267,7 @@ const Props: {
     '$transitionTimingFunction': 'css.transition-timing-function',
     '$unicodeBidi': 'css.unicode-bidi',
     '$userSelect': 'css.user-select',
+    '$userDrag': 'css.user-drag',
     '$verticalAlign': 'css.vertical-align',
     '$visibility': 'css.visibility',
     '$whiteSpace': 'css.white-space',
@@ -281,6 +282,7 @@ const Props: {
 
     // attributes
     '$abbr': 'attr.abbr',
+    '$accept': 'attr.accept',
     '$acceptCharset': 'attr.accept-charset',
     '$accessKey': 'attr.accesskey',
     '$action': 'attr.action',
@@ -300,6 +302,7 @@ const Props: {
     '$autoFocus': 'attr.autofocus',
     '$autoPlay': 'attr.autoplay',
     '$axis': 'attr.axis',
+    '$capture': 'attr.capture',
     '$cellPadding': 'attr.cellpadding',
     '$cellSpacing': 'attr.cellspacing',
     '$char': 'attr.char',

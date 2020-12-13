@@ -157,13 +157,29 @@ export default class Router {
       const data = this.pathData(route);
       if (data) {
         this.current = route;
+        // this.current.subs = [];
         this.current.data = data.data;
+        this.window.Native.load('#app', route);
         loaded = true;
-        (<any>window).Native.load('#app', route);
       }
     }
     if(!loaded && this.current.hosting && this.current.hosting.length > 0) {
       this.loadSubs(this.current.hosting, true);
+    }else if(!loaded){
+      for (let i = 0; i < this.routes.length; i++) {
+        if(!loaded && this.routes[i].subs) {
+          for(let j = 0; j < this.routes[i].subs.length; j++) {
+            this.current = this.routes[i];
+            const data = this.pathData(this.routes[i].subs[j], true);
+            if(data) {
+              this.current.data = data.data;
+              // this.current.subs = [];
+              this.window.Native.load('#app', this.current);
+              loaded = true;
+            }
+          }
+        }
+      }
     }
   }
 
