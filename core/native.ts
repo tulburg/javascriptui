@@ -23,7 +23,9 @@ class Native {
   sheet: CSSStyleSheet;
   served: boolean;
   serving: string;
+  loadQueue: {[key: string]: Function[]} = {} as any;
   bindings: any = {};
+  shadowing = false;
   lock: { key: string, className: string, nid: string, type: 'property' | 'state' };
 
   constructor (router: Router) {
@@ -111,34 +113,10 @@ class Native {
       }
       // }
     } else if (type == NativeEventType.update) {
-      // if (!Util.props.hasOwnProperty(data.key)) {
-        // if(!data.newObj.cssRules) {
-          // const styles: string[] = [];
-          // if(data.newObj instanceof $RxElement) {
-        //     console.log(data);
-        //     Parser.parseProperties(data.new);
-        //   // }
-        //   // data.new.$rules = styles;
-        //   // console.log(data.newObj, styles);
-        // // }
-        //
-        //         // must patch strongly
-        //         // console.log("> must patch", props(a), props(b))
-        //         this.patchAttrs(data.old.$node, data.new.$node);
-        //         // this.patchCSS(a.$node, b.cssRules);
-                this.patchProps(data.old, data.new);
-        //         this.patchCSSRules(data.old, data.new);
-        //
-        // this.patchAttrs(data.old.$node, data.new.$node);
-        // this.patchProps(data.old, data.new);
-        // this.patchCSSRules(data.oldObj, data.newObj);
-
-        //-- !important  updateRules(data.old, updateClassRules(data.old.$node, styles));
-        // const newNodey = this.createElement(data.newValue, false);
-        // console.log(newNodey);
-        // if(node) node.parentNode.replaceChild(newNodey, node);
-      // }
-
+      this.patchProps(data.old, data.new);
+      this.patchCSS(data.old, data.new.$rules);
+      this.patchAttrs(data.old.$node, data.new.$node);
+      console.log(data);
     } else if(type == NativeEventType.replace) {
       if(data.new instanceof $RxElement) this.createElement(data.new, false);
       const newNode: any = (data.new.$node) ? data.new.$node : data.new;
@@ -235,6 +213,26 @@ class Native {
     }
   }
 
+  patchCSS(old: RxElement, rules: CSSStyleRule[]) {
+    const extract = (rule: CSSStyleRule) => {
+      return rule.cssText.trim().substring(rule.cssText.indexOf('{') + 1, rule.cssText.indexOf('}') - 2)
+        .trim().split(';').map(s => s.trim());
+    };
+    const pair = (v: string) => {
+      const value = v.split(':').map(s => s.trim());
+      return { name: value[0], value: value[1]};
+    };
+    for(let m = 0; m < rules.length; m++) {
+      const css = extract(rules[m]);
+      css.map(style => {
+        const stylePair: { name: string, value: string } = pair(style);
+        if(old.$rules[0].style.getPropertyValue(stylePair.name) !== stylePair.value) {
+          old.$rules[0].style.setProperty(stylePair.name, stylePair.value);
+        }
+      });
+    }
+  }
+
   patchProps(object: any, newObject: any) {
     const props = Object.getOwnPropertyNames(newObject);
     const oldProps = Object.getOwnPropertyNames(object);
@@ -264,6 +262,7 @@ class Native {
     const oldServing = this.serving;
     const instanceNID = Math.random().toString(36).substr(2, 9);
     this.serving = name + '-' + instanceNID;
+    this.shadowing = true;
     const newInstance: RxElement = new (<any>this.components[name]).structure(this.components[name][nid].args);
     // get running instance
     // fetch old instance
@@ -307,6 +306,7 @@ class Native {
     }
     this.served = true;
     this.serving = undefined;
+    this.shadowing = false;
     this.components[name][nid].served = true;
     // delete the spawn
     delete this.components[name][newInstance.$nid];
@@ -468,6 +468,8 @@ class Native {
       // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
       // this.createEventQueue = [];
     });
+    this.loadQueue[this.serving].forEach(i => Function.prototype.call.apply(i));
+    this.loadQueue[this.serving] = [];
     this.serving = undefined;
     this.components[component.name][nid].served = true;
     this.served = true;
@@ -525,7 +527,7 @@ class Native {
                 // must patch strongly
                 // console.log("> must patch", props(a), props(b))
                 this.patchAttrs(a.$node, b.$node);
-                // this.patchCSS(a.$node, b.cssRules);
+                this.patchCSS(a, b.$rules);
                 this.patchProps(a, b);
                 b.$node = a.$node;
 

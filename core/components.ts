@@ -67,7 +67,7 @@ export class $RxElement {
   $relCenterHorizontal: boolean
 
   // -- Render properties
-  $hostComponent = (<any>window).Native.serving;
+  $hostComponent: string = (<any>window).Native.serving;
   $node: Element;
   // $styles: CSSStyleRule[] = [];
   $rules: CSSStyleRule[] = [];
@@ -636,7 +636,7 @@ export class $RxElement {
   typeMustMatch: (_?: string | number | string[] | number[]) => RxElement
   useMap: (_?: string | number | string[] | number[]) => RxElement
   vAlign: (_?: string | number | string[] | number[]) => RxElement
-  value: (_?: string | number | string[] | number[]) => RxElement
+  value? = (_?: string | number | string[] | number[]): RxElement => { return this as RxElement; }
   valueType: (_?: string | number | string[] | number[]) => RxElement
   viewBox: (_?: string) => RxElement
   vLink: (_?: string | number | string[] | number[]) => RxElement
@@ -1157,6 +1157,7 @@ export class Component extends $RxElement {
   $nid: string;
   $level = 0;
   $events: {[key: string]: ((..._: any) => any)[] } = {} as any;
+  $loadQueue: Function[] = [];
 
   constructor(...args: any[]) {
     super('component');
@@ -1167,6 +1168,7 @@ export class Component extends $RxElement {
     Native().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;
     Native().components[this.name][this.$nid].args
     = Native().components[this.name][this.$nid].args || args;
+    Native().loadQueue[Native().serving] = [];
 
     // additional styling (default div styling)?
     this.display('block');
@@ -1465,6 +1467,7 @@ export class IMG extends $RxElement {
 export class Input extends $RxElement {
 
   $model?: NativeLock;
+  $value?: any;
 
   constructor() { super('input'); }
 
@@ -1488,29 +1491,44 @@ export class Input extends $RxElement {
         }
       }
     }
-
-    const sync = () => {
-      const lock = this.$model;
-      if((<HTMLInputElement>this.$node).value.trim().length === 0) return;
+    const lock = this.$model, chain = lock.key.replace(lock.className + '.', '').split('.'),
+    sync = () => {
       if (lock.type === 'state') {
-        const chain = lock.key.replace(lock.className + '.', '').split('.');
-        protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value);
-        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+        protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value || '');
+        notifyWatchlist(lock, this.value());
       } else if (lock.type === 'property') {
-        const chain = lock.key.replace(lock.className + '.', '').split('.');
-        protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value);
-        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
+        protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value || '');
+        notifyWatchlist(lock, this.value());
       }
     }
 
-    if(object) this.value(object);
+    if(!Native().shadowing) {
+      const watcher: { object: any, prop: string, oldValue: any, function: Function } = {
+        prop: Native().lock.key, oldValue: this.value(), function: (v: any) => {
+          console.log(v);
+          // if(v === undefined) this.value('');
+          // else this.value(v);
+        }, object: this.$model.type === 'state'
+          ? Native().components[lock.className][lock.nid].state
+          : Native().components[lock.className][lock.nid]
+      }
+      Native().components[lock.className][lock.nid].watchlist.push(watcher);
+    }
+    this.value(object);
     this.on({
-      input: () => sync(),
-      focus: () => sync(),
-      blur: () => sync(),
-      change: () => sync()
+      input: () => sync()
     });
     return this;
+  }
+
+  value? = (v?: string | number) => {
+    if(v !== undefined) {
+      if(this.$node) {
+        (<any>this.$node).value = v;
+        this.$value = v;
+      }else this.$value = v;
+      return this;
+    }else return this.$value;
   }
 }
 
@@ -1657,8 +1675,11 @@ export class TD extends $RxElement {
   constructor() { super('td'); }
 }
 
-export class TextArea extends $RxElement {
-  constructor() { super('textarea'); }
+export class TextArea extends Input {
+  constructor() {
+    super();
+    this.$tagName = 'textarea';
+  }
 }
 
 export class TFoot extends $RxElement {
