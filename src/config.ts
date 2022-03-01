@@ -1,5 +1,4 @@
 import App from './app';
-import Checklist from './checklist';
 import { Style } from '../core/components';
 
 export default {
@@ -11,6 +10,9 @@ export default {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
         fontSize: 12
       },
+      body: {
+        backgroundColor: '#202020'
+      }
     },
     color: {
       background: '#f0f0f0',
@@ -24,13 +26,6 @@ export default {
     }
   },
   routes: [
-    { path: '/', component: App, name: 'Home' },
-    {
-      path: '/checklist', component: Checklist, name: 'Checklist',
-      subs: [
-        { path: '/list/:id', component: App, name: 'App' },
-        { path: '/maps', component: App, name: 'App' }
-      ]
-    }
+    { path: '/', component: App, name: 'Home' }
   ]
 }
