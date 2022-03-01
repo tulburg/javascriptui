@@ -1106,7 +1106,9 @@ export class $RxElement {
     return this;
   }
 
-  size(_: numberType[] | numberType): RxElement | numberType[] | numberType {
+  size(): numberType[] | numberType
+  size(_: numberType[] | numberType): RxElement
+  size(_?: numberType[] | numberType): RxElement | numberType[] | numberType {
     if(arguments.length > 0) {
       const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       this.height(v[1]).width(v[0]);
@@ -1498,16 +1500,15 @@ export class Input extends $RxElement {
         notifyWatchlist(lock, this.value());
       } else if (lock.type === 'property') {
         protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value || '');
-        notifyWatchlist(lock, this.value());
+        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
       }
     }
 
     if(!Native().shadowing) {
       const watcher: { object: any, prop: string, oldValue: any, function: Function } = {
         prop: Native().lock.key, oldValue: this.value(), function: (v: any) => {
-          console.log(v);
-          // if(v === undefined) this.value('');
-          // else this.value(v);
+          if(v === undefined) this.value('');
+          else this.value(v);
         }, object: this.$model.type === 'state'
           ? Native().components[lock.className][lock.nid].state
           : Native().components[lock.className][lock.nid]

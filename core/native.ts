@@ -116,7 +116,6 @@ class Native {
       this.patchProps(data.old, data.new);
       this.patchCSS(data.old, data.new.$rules);
       this.patchAttrs(data.old.$node, data.new.$node);
-      console.log(data);
     } else if(type == NativeEventType.replace) {
       if(data.new instanceof $RxElement) this.createElement(data.new, false);
       const newNode: any = (data.new.$node) ? data.new.$node : data.new;
