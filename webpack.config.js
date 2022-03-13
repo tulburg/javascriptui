@@ -19,7 +19,7 @@ module.exports = {
     alias: {
       '@src': path.resolve(__dirname, 'src'),
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@core': path.resolve(__dirname, 'node_modules/@js-native/lib/core')
+      '@core': path.resolve(__dirname, 'node_modules/@js-native/core')
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   },

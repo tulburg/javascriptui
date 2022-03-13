@@ -1,7 +1,7 @@
 import Parser from './parser';
 import {
-  RxElement, ElementEvent, NativeLock, StyleProperties, flexAlignment, flexAlignmentItem, ConfigType,
-  globalValues, colorType, borderStyleType, borderWidthType, imageType, spaceType, breakType, numberType
+  RxElement, ElementEvent, NativeLock, StyleProperties, FlexAlignment, FlexAlignmentItem, ConfigType,
+  GlobalValues, Color, BorderStyle, BorderWidth, CSSImage, Space, Break, Number
 } from './types';
 import { ProxifyComponent, ProxifyState } from './proxify';
 import NativeClass from './native';
@@ -33,22 +33,22 @@ export class $RxElement {
 
   // Layout function keys
   $absCenter?: boolean
-  $absCenterRight?: numberType
-  $absCenterLeft?: numberType
-  $absCenterTop?: numberType
-  $absCenterBottom?: numberType
-  $absPosition?: numberType[]
-  $absTopRight?: numberType[]
-  $absTopLeft?: numberType[]
-  $absBottomRight?: numberType[]
-  $absBottomLeft?: numberType[]
+  $absCenterRight?: Number
+  $absCenterLeft?: Number
+  $absCenterTop?: Number
+  $absCenterBottom?: Number
+  $absPosition?: Number[]
+  $absTopRight?: Number[]
+  $absTopLeft?: Number[]
+  $absBottomRight?: Number[]
+  $absBottomLeft?: Number[]
   $absCenterVertical?: boolean
   $absCenterHorizontal?: boolean
   $addClassName?: boolean
   $animate?: boolean
   $animation?: boolean
   $aspectRatio?: boolean
-  $backgroundLinearGradient?: colorType[]
+  $backgroundLinearGradient?: Color[]
   $childVerticalSpacing?: boolean
   $childHorizontalSpacing?: boolean
   $clearFix?: boolean
@@ -58,7 +58,7 @@ export class $RxElement {
   $child?: boolean
   $removeClassName?: boolean
   $respond?: boolean
-  $size?: numberType[] | numberType
+  $size?: Number[] | Number
   $stack?: boolean
   $stackVertical?: boolean
   $stackHorizontal?: boolean
@@ -235,253 +235,253 @@ export class $RxElement {
     return this;
   }
 
-  alignContent: (_?: flexAlignment) => RxElement
-  alignItems: (_?: flexAlignmentItem) => RxElement
-  alignSelf: (_?: flexAlignmentItem) => RxElement
+  alignContent: (_?: FlexAlignment) => RxElement
+  alignItems: (_?: FlexAlignmentItem) => RxElement
+  alignSelf: (_?: FlexAlignmentItem) => RxElement
   animationDelay: (_?: string | string[]) => RxElement
-  animationDirection: (_?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | globalValues) => RxElement
-  animationDuration: (_?: string | string[] | globalValues) => RxElement
-  animationFillMode: (_?: 'none' | 'forwards' | 'backwards' | 'both' | string | string[] | globalValues) => RxElement
-  animationIterationCount: (_?: 'infinite' | string | string[] | globalValues) => RxElement
-  animationName: (_?: 'none' | '-specific' | 'sliding-vertically' | 'sliding' | string | string[] | globalValues) => RxElement
-  animationPlayState: (_?: 'running' | 'paused' | string | string[] | globalValues) => RxElement
-  animationTimingFunction: (_?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' |  string | string[] | globalValues) => RxElement
-  backfaceVisibility: (_?: 'visible' | 'hidden' | string | string[] | globalValues) => RxElement
-  background: (_?: string | string[] | globalValues) => RxElement
-  backgroundAttachment: (_?: 'scroll' | 'fixed' | 'local' | string | string[] | globalValues) => RxElement
-  backgroundClip: (_?: 'border-box' | 'padding-box' | 'content-box' | 'text' | string | string[] | globalValues) => RxElement
-  backgroundColor: (_?: colorType) => RxElement
-  backgroundImage: (_?: imageType) => RxElement
-  backgroundOrigin: (_?: 'border-box' | 'padding-box' | 'content-box' | string | string[] | globalValues) => RxElement
-  backgroundPosition: (_?: 'top' | 'bottom' | 'left' | 'right' | 'center' | string | number | string[] | number[] | globalValues) => RxElement
-  backgroundPositionX: (_?: 'left' | 'center' | 'right' | string | number | string[] | globalValues) => RxElement
-  backgroundPositionY: (_?: 'top' | 'center' | 'bottom' | string | number | string[] | globalValues) => RxElement
-  backgroundRepeat: (_?: 'repeat-x' | 'repeat-y' | 'repeat' | 'space' | 'round' | 'no-repeat' | string | string[] | globalValues) => RxElement
-  backgroundSize: (_?: 'cover' | 'contain' | string | number | string[] | number[] | globalValues) => RxElement
-  border: (_?: borderStyleType | borderWidthType | string | number | string[] | globalValues) => RxElement
-  borderBottom: (_?: borderStyleType | borderWidthType | string | number | string[] | globalValues) => RxElement
-  borderBottomColor: (_?: colorType) => RxElement
-  borderBottomLeftRadius: (_?: string | number | string[] | number[] | globalValues) => RxElement
-  borderBottomRightRadius: (_?: string | number | string[] | number[] | globalValues) => RxElement
-  borderBottomStyle: (_?: borderStyleType) => RxElement
-  borderBottomWidth: (_?: borderWidthType) => RxElement
-  borderCollapse: (_?: 'collapse' | 'separate' | string | globalValues) => RxElement
-  borderColor: (_?: colorType) => RxElement
-  borderImage: (_?: 'url()' | 'linear-gradient()' | string | string[] | globalValues) => RxElement
-  borderImageOutset: (_?: number | number[] | globalValues) => RxElement
-  borderImageRepeat: (_?: 'stretch' | 'repeat' | 'round' | 'space' | string | string[] | globalValues) => RxElement
-  borderImageSlice: (_?: 'fill' | string | number | string[] | number[] | globalValues) => RxElement
-  borderImageSource: (_?: imageType) => RxElement
-  borderImageWidth: (_?: 'auto' | string | number | string[] | number[] | globalValues) => RxElement
-  borderLeft: (_?: borderStyleType | borderWidthType | string | number | string[] | globalValues) => RxElement
-  borderLeftColor: (_?: colorType) => RxElement
-  borderLeftStyle: (_?: borderStyleType) => RxElement
-  borderLeftWidth: (_?: borderWidthType) => RxElement
-  borderRadius: (_?: string | number | string[] | number[] | globalValues) => RxElement
-  borderRight: (_?: borderStyleType | borderWidthType | string | number | string[] | globalValues) => RxElement
-  borderRightColor: (_?: colorType) => RxElement
-  borderRightStyle: (_?: borderStyleType) => RxElement
-  borderRightWidth: (_?: borderWidthType) => RxElement
-  borderSpacing: (_?: number | number[] | globalValues) => RxElement
-  borderStyle: (_?: borderStyleType) => RxElement
-  borderTop: (_?: borderStyleType | borderWidthType | string | number | string[] | globalValues) => RxElement
-  borderTopColor: (_?: colorType) => RxElement
-  borderTopLeftRadius: (_?: string | number | string[] | number[] | globalValues) => RxElement
-  borderTopRightRadius: (_?: string | number | string[] | number[] | globalValues) => RxElement
-  borderTopStyle: (_?: borderStyleType) => RxElement
-  borderTopWidth: (_?: borderWidthType) => RxElement
-  borderWidth: (_?: borderWidthType) => RxElement
-  bottom: (_?: spaceType) => RxElement
-  boxDecorationBreak: (_?: 'slice' | 'clone' | string | globalValues) => RxElement
-  boxShadow: (_?: 'none' | string | string[] | globalValues) => RxElement
-  boxSizing: (_?: 'border-box' | 'content-box' | globalValues) => RxElement
-  breakAfter: (_?: breakType) => RxElement
-  breakBefore: (_?: breakType) => RxElement
-  breakInside: (_?: 'auto' | 'avoid' | 'avoid-page' | 'avoid-column' | 'avoid-region' | globalValues) => RxElement
-  captionSide: (_?: 'top' | 'bottom' | 'left' | 'right' | 'top-outside' | 'bottom-outside' | globalValues) => RxElement
-  caretColor: (_?: 'auto' | colorType) => RxElement
-  clear: (_?: 'none' | 'left' | 'right' | 'both' | 'inline-start' | 'inline-end' | globalValues) => RxElement
-  clip: (_?: 'rect()' | 'auto' | string | globalValues) => RxElement
-  color: (_?: colorType) => RxElement
-  columnCount: (_?: 'auto' | string | number | globalValues) => RxElement
-  columnFill: (_?: 'auto' | 'balance' | 'balance-all' | globalValues) => RxElement
-  columnGap: (_?: 'normal' | string | number | globalValues) => RxElement
-  columnRule: (_?: borderStyleType | borderWidthType | string | number | number[]) => RxElement
-  columnRuleColor: (_?: colorType) => RxElement
-  columnRuleStyle: (_?: borderStyleType) => RxElement
-  columnRuleWidth: (_?: borderWidthType) => RxElement
-  columnSpan: (_?: 'none' | 'all' | globalValues) => RxElement
-  columnWidth: (_?: 'auto' | string | number | globalValues) => RxElement
-  columns: (_?: 'auto' | string | number | string[] | globalValues) => RxElement
-  content: (_?:  'none' | 'normal' | 'attr()' | 'open-quote | close-quote' | 'no-open-quote | no-close-quote' | string | string[] | globalValues) => RxElement
-  counterIncrement: (_?: 'none' | string | number | string[] | globalValues) => RxElement
-  counterReset: (_?: 'none' | string | number | string[] | globalValues) => RxElement
-  counterSet: (_?: 'none' | string | number | string[] | globalValues) => RxElement
+  animationDirection: (_?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | GlobalValues) => RxElement
+  animationDuration: (_?: string | string[] | GlobalValues) => RxElement
+  animationFillMode: (_?: 'none' | 'forwards' | 'backwards' | 'both' | string | string[] | GlobalValues) => RxElement
+  animationIterationCount: (_?: 'infinite' | string | string[] | GlobalValues) => RxElement
+  animationName: (_?: 'none' | '-specific' | 'sliding-vertically' | 'sliding' | string | string[] | GlobalValues) => RxElement
+  animationPlayState: (_?: 'running' | 'paused' | string | string[] | GlobalValues) => RxElement
+  animationTimingFunction: (_?: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' |  string | string[] | GlobalValues) => RxElement
+  backfaceVisibility: (_?: 'visible' | 'hidden' | string | string[] | GlobalValues) => RxElement
+  background: (_?: string | string[] | GlobalValues) => RxElement
+  backgroundAttachment: (_?: 'scroll' | 'fixed' | 'local' | string | string[] | GlobalValues) => RxElement
+  backgroundClip: (_?: 'border-box' | 'padding-box' | 'content-box' | 'text' | string | string[] | GlobalValues) => RxElement
+  backgroundColor: (_?: Color) => RxElement
+  backgroundImage: (_?: CSSImage) => RxElement
+  backgroundOrigin: (_?: 'border-box' | 'padding-box' | 'content-box' | string | string[] | GlobalValues) => RxElement
+  backgroundPosition: (_?: 'top' | 'bottom' | 'left' | 'right' | 'center' | string | number | string[] | number[] | GlobalValues) => RxElement
+  backgroundPositionX: (_?: 'left' | 'center' | 'right' | string | number | string[] | GlobalValues) => RxElement
+  backgroundPositionY: (_?: 'top' | 'center' | 'bottom' | string | number | string[] | GlobalValues) => RxElement
+  backgroundRepeat: (_?: 'repeat-x' | 'repeat-y' | 'repeat' | 'space' | 'round' | 'no-repeat' | string | string[] | GlobalValues) => RxElement
+  backgroundSize: (_?: 'cover' | 'contain' | string | number | string[] | number[] | GlobalValues) => RxElement
+  border: (_?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => RxElement
+  borderBottom: (_?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => RxElement
+  borderBottomColor: (_?: Color) => RxElement
+  borderBottomLeftRadius: (_?: string | number | string[] | number[] | GlobalValues) => RxElement
+  borderBottomRightRadius: (_?: string | number | string[] | number[] | GlobalValues) => RxElement
+  borderBottomStyle: (_?: BorderStyle) => RxElement
+  borderBottomWidth: (_?: BorderWidth) => RxElement
+  borderCollapse: (_?: 'collapse' | 'separate' | string | GlobalValues) => RxElement
+  borderColor: (_?: Color) => RxElement
+  borderImage: (_?: 'url()' | 'linear-gradient()' | string | string[] | GlobalValues) => RxElement
+  borderImageOutset: (_?: number | number[] | GlobalValues) => RxElement
+  borderImageRepeat: (_?: 'stretch' | 'repeat' | 'round' | 'space' | string | string[] | GlobalValues) => RxElement
+  borderImageSlice: (_?: 'fill' | string | number | string[] | number[] | GlobalValues) => RxElement
+  borderImageSource: (_?: CSSImage) => RxElement
+  borderImageWidth: (_?: 'auto' | string | number | string[] | number[] | GlobalValues) => RxElement
+  borderLeft: (_?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => RxElement
+  borderLeftColor: (_?: Color) => RxElement
+  borderLeftStyle: (_?: BorderStyle) => RxElement
+  borderLeftWidth: (_?: BorderWidth) => RxElement
+  borderRadius: (_?: string | number | string[] | number[] | GlobalValues) => RxElement
+  borderRight: (_?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => RxElement
+  borderRightColor: (_?: Color) => RxElement
+  borderRightStyle: (_?: BorderStyle) => RxElement
+  borderRightWidth: (_?: BorderWidth) => RxElement
+  borderSpacing: (_?: number | number[] | GlobalValues) => RxElement
+  borderStyle: (_?: BorderStyle) => RxElement
+  borderTop: (_?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => RxElement
+  borderTopColor: (_?: Color) => RxElement
+  borderTopLeftRadius: (_?: string | number | string[] | number[] | GlobalValues) => RxElement
+  borderTopRightRadius: (_?: string | number | string[] | number[] | GlobalValues) => RxElement
+  borderTopStyle: (_?: BorderStyle) => RxElement
+  borderTopWidth: (_?: BorderWidth) => RxElement
+  borderWidth: (_?: BorderWidth) => RxElement
+  bottom: (_?: Space) => RxElement
+  boxDecorationBreak: (_?: 'slice' | 'clone' | string | GlobalValues) => RxElement
+  boxShadow: (_?: 'none' | string | string[] | GlobalValues) => RxElement
+  boxSizing: (_?: 'border-box' | 'content-box' | GlobalValues) => RxElement
+  breakAfter: (_?: Break) => RxElement
+  breakBefore: (_?: Break) => RxElement
+  breakInside: (_?: 'auto' | 'avoid' | 'avoid-page' | 'avoid-column' | 'avoid-region' | GlobalValues) => RxElement
+  captionSide: (_?: 'top' | 'bottom' | 'left' | 'right' | 'top-outside' | 'bottom-outside' | GlobalValues) => RxElement
+  caretColor: (_?: 'auto' | Color) => RxElement
+  clear: (_?: 'none' | 'left' | 'right' | 'both' | 'inline-start' | 'inline-end' | GlobalValues) => RxElement
+  clip: (_?: 'rect()' | 'auto' | string | GlobalValues) => RxElement
+  color: (_?: Color) => RxElement
+  columnCount: (_?: 'auto' | string | number | GlobalValues) => RxElement
+  columnFill: (_?: 'auto' | 'balance' | 'balance-all' | GlobalValues) => RxElement
+  columnGap: (_?: 'normal' | string | number | GlobalValues) => RxElement
+  columnRule: (_?: BorderStyle | BorderWidth | string | number | number[]) => RxElement
+  columnRuleColor: (_?: Color) => RxElement
+  columnRuleStyle: (_?: BorderStyle) => RxElement
+  columnRuleWidth: (_?: BorderWidth) => RxElement
+  columnSpan: (_?: 'none' | 'all' | GlobalValues) => RxElement
+  columnWidth: (_?: 'auto' | string | number | GlobalValues) => RxElement
+  columns: (_?: 'auto' | string | number | string[] | GlobalValues) => RxElement
+  content: (_?:  'none' | 'normal' | 'attr()' | 'open-quote | close-quote' | 'no-open-quote | no-close-quote' | string | string[] | GlobalValues) => RxElement
+  counterIncrement: (_?: 'none' | string | number | string[] | GlobalValues) => RxElement
+  counterReset: (_?: 'none' | string | number | string[] | GlobalValues) => RxElement
+  counterSet: (_?: 'none' | string | number | string[] | GlobalValues) => RxElement
   cursor: (_?: 'auto' | 'default' | 'none' | 'context-menu' | 'help' | 'pointer' | 'progress' | 'wait' | 'cell' | 'crosshair' | 'text' | 'vertical-text' |
     'alias' | 'copy' | 'move' | 'no-drop' | 'not-allowed' | 'grab' | 'grabbing' | 'all-scroll' | 'col-resize' | 'row-resize' | 'n-resize' | 'e-resize' |
     's-resize' | 'w-resize' | 'ne-resize' | 'nw-resize' | 'se-resize' | 'sw-resize' | 'ew-resize' | 'ns-resize' | 'nesw-resize' | 'nwse-resize' |
-    'zoom-in' | 'zoom-out' | 'url()' | string | globalValues) => RxElement
-  direction: (_?: 'ltr' | 'rtl' | globalValues) => RxElement
+    'zoom-in' | 'zoom-out' | 'url()' | string | GlobalValues) => RxElement
+  direction: (_?: 'ltr' | 'rtl' | GlobalValues) => RxElement
   display: (_?: 'block' | 'inline' | 'run-in' | 'flow' | 'flow-root' | 'table' | 'flex' | 'grid' | 'ruby' | 'list-item' | 'table-row-group' | 'table-header-group' |
     'table-footer-group' | 'table-row' | 'table-cell' | 'table-column-group' | 'table-column' | 'table-caption' | 'ruby-base' | 'ruby-text' | 'ruby-base-container' |
-    'ruby-text-container' | 'contents' | 'none' | 'inline-block' | 'inline-list-item' | 'inline-table' | 'inline-flex' | 'inline-grid' | string | string[] | globalValues) => RxElement
-  emptyCells: (_?: 'show' | 'hide' | globalValues) => RxElement
+    'ruby-text-container' | 'contents' | 'none' | 'inline-block' | 'inline-list-item' | 'inline-table' | 'inline-flex' | 'inline-grid' | string | string[] | GlobalValues) => RxElement
+  emptyCells: (_?: 'show' | 'hide' | GlobalValues) => RxElement
   filter: (_?: 'url()' | 'blur()' | 'brightness()' | 'contrast()' | 'drop-shadow()' | 'grayscale()' | 'hue-rotate()' | 'invert()' | 'opacity()' | 'saturate()' |
-    'sepia()' | 'none' | string | globalValues) => RxElement
-  flex: (_?: 'auto' | 'inital' | 'none' | string | number | number[] | globalValues) => RxElement
-  flexBasis: (_?: 'fill' | 'max-content' | 'min-content' | 'fit-content' | 'content' | string | number | globalValues) => RxElement
-  flexDirection: (_?: 'row' | 'row-reverse' | 'column' | 'column-reverse' | globalValues) => RxElement
-  flexFlow: (_?: 'row' | 'row-reverse' | 'column' | 'column-reverse' | 'nowrap' | 'wrap' | 'wrap-reverse' | string | string[] | globalValues) => RxElement
-  flexGrow: (_?: string | globalValues) => RxElement
-  flexShrink: (_?: string | globalValues) => RxElement
-  flexWrap: (_?: 'nowrap' | 'wrap' | 'wrap-reverse' | globalValues) => RxElement
-  float: (_?: 'left' | 'right' | 'none' | 'inline-start' | 'inline-end' | globalValues) => RxElement
+    'sepia()' | 'none' | string | GlobalValues) => RxElement
+  flex: (_?: 'auto' | 'inital' | 'none' | string | number | number[] | GlobalValues) => RxElement
+  flexBasis: (_?: 'fill' | 'max-content' | 'min-content' | 'fit-content' | 'content' | string | number | GlobalValues) => RxElement
+  flexDirection: (_?: 'row' | 'row-reverse' | 'column' | 'column-reverse' | GlobalValues) => RxElement
+  flexFlow: (_?: 'row' | 'row-reverse' | 'column' | 'column-reverse' | 'nowrap' | 'wrap' | 'wrap-reverse' | string | string[] | GlobalValues) => RxElement
+  flexGrow: (_?: string | GlobalValues) => RxElement
+  flexShrink: (_?: string | GlobalValues) => RxElement
+  flexWrap: (_?: 'nowrap' | 'wrap' | 'wrap-reverse' | GlobalValues) => RxElement
+  float: (_?: 'left' | 'right' | 'none' | 'inline-start' | 'inline-end' | GlobalValues) => RxElement
   font: (_?: 'caption' | 'icon' | 'menu' | 'message-box' | 'small-caption' | 'status-bar' | StyleProperties['fontFamily'] | StyleProperties['fontSize'] | StyleProperties['fontStretch'] |
-    StyleProperties['fontStyle'] | StyleProperties['fontVariant'] | StyleProperties['fontWeight'] | StyleProperties['lineHeight']| string | string[] | globalValues) => RxElement
-  fontFamily: (_?: 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | string | string[] | globalValues) => RxElement
-  fontFeatureSettings: (_?: 'normal' | 'smcp' | 'swsh' | string | globalValues) => RxElement
+    StyleProperties['fontStyle'] | StyleProperties['fontVariant'] | StyleProperties['fontWeight'] | StyleProperties['lineHeight']| string | string[] | GlobalValues) => RxElement
+  fontFamily: (_?: 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | string | string[] | GlobalValues) => RxElement
+  fontFeatureSettings: (_?: 'normal' | 'smcp' | 'swsh' | string | GlobalValues) => RxElement
   fontKerning: (_?: 'auto' | 'normal' | 'none') => RxElement
-  fontLanguageOverride: (_?: 'normal' | string | globalValues) => RxElement
-  fontSize: (_?: 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' | 'xxx-large' | 'smaller' | 'larger' | string | number | globalValues) => RxElement
-  fontSizeAdjust: (_?: 'none' | string | globalValues) => RxElement
+  fontLanguageOverride: (_?: 'normal' | string | GlobalValues) => RxElement
+  fontSize: (_?: 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' | 'xxx-large' | 'smaller' | 'larger' | string | number | GlobalValues) => RxElement
+  fontSizeAdjust: (_?: 'none' | string | GlobalValues) => RxElement
   fontSmooth: (_?: 'auto' | 'never' | 'always' | number | string | StyleProperties['fontSize']) => RxElement
-  fontStretch: (_?: 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' | string | globalValues) => RxElement
+  fontStretch: (_?: 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' | string | GlobalValues) => RxElement
   fontStyle: (_?: 'normal' | 'italic' | 'oblique' | string | string[]) => RxElement
   fontSynthesis: (_?: 'none' | StyleProperties['fontWeight'] | StyleProperties['fontStyle'] | string) => RxElement
   fontVariant: (_?: 'common-ligatures' | 'no-common-ligatures' | 'discretionary-ligatures' | 'no-discretionary-ligatures' | 'historical-ligatures' | 'no-historical-ligatures' | 'contextual' | 'no-contextual' |
     'stylistic()' | 'historical-forms' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' |
     'titling-caps' | 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' |
     'full-width' | 'proportional-width' | 'ruby' | string) => RxElement
-  fontVariantAlternates: (_?: 'normal' | 'historical-forms' | 'stylistic()' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | string | globalValues) => RxElement
-  fontVariantCaps: (_?: 'normal' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' | 'titling-caps' | globalValues) => RxElement
-  fontVariantEastAsian: (_?: 'normal' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' | 'full-width' | 'proportional-width' | 'ruby' | string | globalValues) => RxElement
+  fontVariantAlternates: (_?: 'normal' | 'historical-forms' | 'stylistic()' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | string | GlobalValues) => RxElement
+  fontVariantCaps: (_?: 'normal' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' | 'titling-caps' | GlobalValues) => RxElement
+  fontVariantEastAsian: (_?: 'normal' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' | 'full-width' | 'proportional-width' | 'ruby' | string | GlobalValues) => RxElement
   fontVariantLigatures: (_?: 'normal' | 'none' | 'common-ligatures' | 'no-common-ligatures' | 'discretionary-ligatures' | 'no-discretionary-ligatures' | 'historical-ligatures' |
-    'no-historical-ligatures' | 'contextual' | 'no-contextual' | globalValues) => RxElement
-  fontVariantNumeric: (_?: 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | string | globalValues) => RxElement
-  fontVariantPosition: (_?: 'normal' | 'sub' | 'super' | globalValues) => RxElement
-  fontWeight: (_?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900' | globalValues) => RxElement
-  gap: (_?: number | number[] | string | string[] | globalValues) => RxElement
+    'no-historical-ligatures' | 'contextual' | 'no-contextual' | GlobalValues) => RxElement
+  fontVariantNumeric: (_?: 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | string | GlobalValues) => RxElement
+  fontVariantPosition: (_?: 'normal' | 'sub' | 'super' | GlobalValues) => RxElement
+  fontWeight: (_?: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900' | GlobalValues) => RxElement
+  gap: (_?: number | number[] | string | string[] | GlobalValues) => RxElement
   grid: (_?: StyleProperties['gridTemplate'] | StyleProperties['gridTemplateRows'] | StyleProperties['gridAutoFlow'] | StyleProperties['gridAutoColumns'] | StyleProperties['gridTemplateAreas'] |
-    StyleProperties['gridColumnGap'] | string | globalValues) => RxElement
-  gridArea: (_?: 'auto' | 'span' | string | globalValues) => RxElement
-  gridAutoColumns: (_?: 'auto' | 'max-content' | 'min-content' | 'minmax()' | 'fit-content()' | string | number | globalValues) => RxElement
-  gridAutoFlow: (_?: 'row' | 'column' | 'dense' | 'row dense' | 'column desne' | globalValues) => RxElement
+    StyleProperties['gridColumnGap'] | string | GlobalValues) => RxElement
+  gridArea: (_?: 'auto' | 'span' | string | GlobalValues) => RxElement
+  gridAutoColumns: (_?: 'auto' | 'max-content' | 'min-content' | 'minmax()' | 'fit-content()' | string | number | GlobalValues) => RxElement
+  gridAutoFlow: (_?: 'row' | 'column' | 'dense' | 'row dense' | 'column desne' | GlobalValues) => RxElement
   gridColumn: (_?: StyleProperties['gridArea']) => RxElement
   gridColumnEnd: (_?: StyleProperties['gridArea']) => RxElement
   gridColumnGap: (_?: StyleProperties['columnGap']) => RxElement
   gridColumnStart: (_?: StyleProperties['gridArea']) => RxElement
-  gridGap: (_?: numberType | number[]) => RxElement
-  gridRow: (_?: numberType | number[]) => RxElement
+  gridGap: (_?: Number | number[]) => RxElement
+  gridRow: (_?: Number | number[]) => RxElement
   gridRowEnd: (_?: StyleProperties['gridArea']) => RxElement
   gridRowStart: (_?: StyleProperties['gridArea']) => RxElement
-  gridTemplate: (_?: 'none' | string | globalValues) => RxElement
+  gridTemplate: (_?: 'none' | string | GlobalValues) => RxElement
   gridTemplateAreas: (_?: StyleProperties['gridTemplate']) => RxElement
   gridTemplateColumns: (_?: 'subgrid' | 'masonry' | 'minmax()' | 'fit-content()' | 'repeat()' | string | StyleProperties['gridTemplate']) => RxElement
   gridTemplateRows: (_?: StyleProperties['gridTemplateColumns']) => RxElement
-  hangingPunctuation: (_?: 'none' | 'first' | 'last' | 'force-end' | 'allow-end' | string | string[] | globalValues) => RxElement
-  height: (_?: numberType) => RxElement
-  hyphens: (_?: 'none' | 'manual' | 'auto' | globalValues) => RxElement
-  isolation: (_?: 'auto' | 'isolate' | globalValues) => RxElement
-  inset: (_?: 'auto' | string | number | string[] | number[] | globalValues) => RxElement
+  hangingPunctuation: (_?: 'none' | 'first' | 'last' | 'force-end' | 'allow-end' | string | string[] | GlobalValues) => RxElement
+  height: (_?: Number) => RxElement
+  hyphens: (_?: 'none' | 'manual' | 'auto' | GlobalValues) => RxElement
+  isolation: (_?: 'auto' | 'isolate' | GlobalValues) => RxElement
+  inset: (_?: 'auto' | string | number | string[] | number[] | GlobalValues) => RxElement
   insetBottom: (_?: StyleProperties['inset']) => RxElement
   insetLeft: (_?: StyleProperties['inset']) => RxElement
   insetRight: (_?: StyleProperties['inset']) => RxElement
   insetTop: (_?: StyleProperties['inset']) => RxElement
-  justifyContent: (_?: 'center' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'left' | 'right' | flexAlignment | 'safe center' | 'unsafe center' | globalValues) => RxElement
-  justifySelf: (_?: flexAlignmentItem | flexAlignment) => RxElement
-  justifyItems: (_?: flexAlignment | flexAlignmentItem | 'legacy right' | 'legacy left' | 'legacy center' | globalValues) => RxElement
-  left: (_?: numberType) => RxElement
-  letterSpacing: (_?: numberType) => RxElement
-  lineBreak: (_?: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | globalValues) => RxElement
-  lineHeight: (_?: numberType) => RxElement
+  justifyContent: (_?: 'center' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'left' | 'right' | FlexAlignment | 'safe center' | 'unsafe center' | GlobalValues) => RxElement
+  justifySelf: (_?: FlexAlignmentItem | FlexAlignment) => RxElement
+  justifyItems: (_?: FlexAlignment | FlexAlignmentItem | 'legacy right' | 'legacy left' | 'legacy center' | GlobalValues) => RxElement
+  left: (_?: Number) => RxElement
+  letterSpacing: (_?: Number) => RxElement
+  lineBreak: (_?: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | GlobalValues) => RxElement
+  lineHeight: (_?: Number) => RxElement
   listStyle: (_?: StyleProperties['listStyleType'] | StyleProperties['listStyleImage'] | StyleProperties['listStylePosition']) => RxElement
-  listStyleImage: (_?: 'none' | 'url()' | globalValues) => RxElement
-  listStylePosition: (_?: 'inside' | 'outside' | globalValues) => RxElement
-  listStyleType: (_?: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | globalValues) => RxElement
-  margin: (_?: numberType | string | number | string[] | number[]) => RxElement
-  marginBottom: (_?: numberType | string | number) => RxElement
+  listStyleImage: (_?: 'none' | 'url()' | GlobalValues) => RxElement
+  listStylePosition: (_?: 'inside' | 'outside' | GlobalValues) => RxElement
+  listStyleType: (_?: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | GlobalValues) => RxElement
+  margin: (_?: Number | string | number | string[] | number[]) => RxElement
+  marginBottom: (_?: Number | string | number) => RxElement
   marginLeft: (_?: StyleProperties['marginBottom']) => RxElement
   marginRight: (_?: StyleProperties['marginBottom']) => RxElement
   marginTop: (_?: StyleProperties['marginBottom']) => RxElement
-  maxHeight: (_?: 'none' | 'max-content' | 'min-content' | 'fit-content()' | numberType) => RxElement
+  maxHeight: (_?: 'none' | 'max-content' | 'min-content' | 'fit-content()' | Number) => RxElement
   maxWidth: (_?: StyleProperties['maxHeight']) => RxElement
   minHeight: (_?: StyleProperties['maxHeight']) => RxElement
   minWidth: (_?: StyleProperties['maxHeight']) => RxElement
   mixBlendMode: (_?: 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' |
-    'exclusion' | 'hue' | 'saturation' | 'color' | 'liminosity' | globalValues) => RxElement
+    'exclusion' | 'hue' | 'saturation' | 'color' | 'liminosity' | GlobalValues) => RxElement
   objectFit: (_?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down') => RxElement
-  objectPosition: (_?: 'top' | 'left' | 'right' | 'bottom' | string | number | string[] | number[] | globalValues) => RxElement
-  opacity: (_?: string | globalValues) => RxElement
-  order: (_?: string | globalValues) => RxElement
-  orphans: (_?: string | globalValues) => RxElement
+  objectPosition: (_?: 'top' | 'left' | 'right' | 'bottom' | string | number | string[] | number[] | GlobalValues) => RxElement
+  opacity: (_?: string | GlobalValues) => RxElement
+  order: (_?: string | GlobalValues) => RxElement
+  orphans: (_?: string | GlobalValues) => RxElement
   outline: (_?: StyleProperties['outlineColor'] | StyleProperties['outlineStyle'] | StyleProperties['outlineWidth']) => RxElement
-  outlineColor: (_?: colorType | 'invert') => RxElement
-  outlineOffset: (_?: string | number | globalValues) => RxElement
-  outlineStyle: (_?: borderStyleType) => RxElement
-  outlineWidth: (_?: borderWidthType) => RxElement
+  outlineColor: (_?: Color | 'invert') => RxElement
+  outlineOffset: (_?: string | number | GlobalValues) => RxElement
+  outlineStyle: (_?: BorderStyle) => RxElement
+  outlineWidth: (_?: BorderWidth) => RxElement
   overflow: (_?: StyleProperties['overflowX'] | StyleProperties['overflowY']) => RxElement
-  overflowBlock: (_?: 'visible' | 'hidden' | 'scroll' | 'auto' | globalValues) => RxElement
+  overflowBlock: (_?: 'visible' | 'hidden' | 'scroll' | 'auto' | GlobalValues) => RxElement
   overflowHidden: (_?: StyleProperties['overflowBlock']) => RxElement
-  overflowWrap: (_?: 'normal' | 'break-word' | 'anywhere' | globalValues) => RxElement
+  overflowWrap: (_?: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => RxElement
   overflowX: (_?: 'clip' | StyleProperties['overflowBlock']) => RxElement
   overflowY: (_?: 'clip' | StyleProperties['overflowBlock']) => RxElement
-  padding: (_?: numberType | string | number | string[] | number[] | globalValues) => RxElement
-  paddingBottom: (_?: numberType) => RxElement
-  paddingLeft: (_?: numberType) => RxElement
-  paddingRight: (_?: numberType) => RxElement
-  paddingTop: (_?: numberType) => RxElement
-  pageBreakAfter: (_?: 'auto' | 'always' | 'avoid' | 'left' | 'right' | 'recto' | 'verso' | globalValues) => RxElement
+  padding: (_?: Number | string | number | string[] | number[] | GlobalValues) => RxElement
+  paddingBottom: (_?: Number) => RxElement
+  paddingLeft: (_?: Number) => RxElement
+  paddingRight: (_?: Number) => RxElement
+  paddingTop: (_?: Number) => RxElement
+  pageBreakAfter: (_?: 'auto' | 'always' | 'avoid' | 'left' | 'right' | 'recto' | 'verso' | GlobalValues) => RxElement
   pageBreakBefore: (_?: StyleProperties['pageBreakAfter']) => RxElement
-  pageBreakInside: (_?: 'auto' | 'avoid' | globalValues) => RxElement
-  perspective: (_?: 'none' | numberType) => RxElement
-  perspectiveOrigin: (_?: 'center' | 'top' | 'bottom' | 'right' | string | globalValues) => RxElement
-  pointerEvents: (_?: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | globalValues) => RxElement
+  pageBreakInside: (_?: 'auto' | 'avoid' | GlobalValues) => RxElement
+  perspective: (_?: 'none' | Number) => RxElement
+  perspectiveOrigin: (_?: 'center' | 'top' | 'bottom' | 'right' | string | GlobalValues) => RxElement
+  pointerEvents: (_?: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | GlobalValues) => RxElement
   position: (_?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky') => RxElement | any
-  quotes: (_?: 'none' | 'initial' | 'auto' | string | globalValues) => RxElement
-  resize: (_?: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | globalValues) => RxElement
-  right: (_?: numberType) => RxElement
-  scrollBehavior: (_?: 'auto' | 'smooth' | globalValues) => RxElement
-  tabSize: (_?: numberType) => RxElement
-  tableLayout: (_?: 'auto' | 'fixed' | globalValues) => RxElement
-  textAlign: (_?: 'left' | 'right' | 'center' | 'justify' | 'justify-all' | 'start' | 'end' | 'match-parent' | string | globalValues) => RxElement
-  textAlignLast: (_?: 'auto' | 'start' | 'end' | 'left' | 'right' | 'center' | 'justify' | string | globalValues) => RxElement
-  textCombineUpright: (_?: 'none' | 'all' | 'digits' | globalValues) => RxElement
+  quotes: (_?: 'none' | 'initial' | 'auto' | string | GlobalValues) => RxElement
+  resize: (_?: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | GlobalValues) => RxElement
+  right: (_?: Number) => RxElement
+  scrollBehavior: (_?: 'auto' | 'smooth' | GlobalValues) => RxElement
+  tabSize: (_?: Number) => RxElement
+  tableLayout: (_?: 'auto' | 'fixed' | GlobalValues) => RxElement
+  textAlign: (_?: 'left' | 'right' | 'center' | 'justify' | 'justify-all' | 'start' | 'end' | 'match-parent' | string | GlobalValues) => RxElement
+  textAlignLast: (_?: 'auto' | 'start' | 'end' | 'left' | 'right' | 'center' | 'justify' | string | GlobalValues) => RxElement
+  textCombineUpright: (_?: 'none' | 'all' | 'digits' | GlobalValues) => RxElement
   textDecoration: (_?: StyleProperties['textDecorationLine'] | StyleProperties['textDecorationColor'] | StyleProperties['textDecorationStyle'] |
     StyleProperties['textDecorationThickness']) => RxElement
-  textDecorationColor: (_?: colorType) => RxElement
-  textDecorationLine: (_?: 'none' | 'underline' | 'overline' | 'line-through' | 'blink' | string | globalValues) => RxElement
-  textDecorationStyle: (_?: 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | globalValues ) => RxElement
-  textDecorationThickness: (_?: 'auto' | 'from-font' | number | string | globalValues) => RxElement
-  textIndent: (_?: 'each-line' | 'hanging' | number | string | globalValues) => RxElement
+  textDecorationColor: (_?: Color) => RxElement
+  textDecorationLine: (_?: 'none' | 'underline' | 'overline' | 'line-through' | 'blink' | string | GlobalValues) => RxElement
+  textDecorationStyle: (_?: 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | GlobalValues ) => RxElement
+  textDecorationThickness: (_?: 'auto' | 'from-font' | number | string | GlobalValues) => RxElement
+  textIndent: (_?: 'each-line' | 'hanging' | number | string | GlobalValues) => RxElement
   textJustify: (_?: 'none' | 'auto' | 'inter-word' | 'inter-character' | 'distribute') => RxElement
-  textOrientation: (_?: 'mixed' | 'upright' | 'sideways-right' | 'sideways' | 'use-glyph-orientation' | globalValues) => RxElement
-  textOverflow: (_?: 'clip' | 'ellipsis' | '-' | globalValues) => RxElement
+  textOrientation: (_?: 'mixed' | 'upright' | 'sideways-right' | 'sideways' | 'use-glyph-orientation' | GlobalValues) => RxElement
+  textOverflow: (_?: 'clip' | 'ellipsis' | '-' | GlobalValues) => RxElement
   textShadow: (_?: StyleProperties['boxShadow']) => RxElement
-  textTransform: (_?: 'none' | 'capitalize' | 'uppercase' | 'lowercase' | 'full-width' | 'full-size-kana' | globalValues) => RxElement
-  textUnderlinePosition: (_?: 'auto' | 'under' | 'left' | 'right' | string | globalValues) => RxElement
-  top: (_?: numberType) => RxElement
+  textTransform: (_?: 'none' | 'capitalize' | 'uppercase' | 'lowercase' | 'full-width' | 'full-size-kana' | GlobalValues) => RxElement
+  textUnderlinePosition: (_?: 'auto' | 'under' | 'left' | 'right' | string | GlobalValues) => RxElement
+  top: (_?: Number) => RxElement
   transform: (_?: 'none' | 'matrix()' | 'matrix3d()' | 'perspective()' | 'rotate()' | 'rotate3d()' | 'rotateX()' | 'rotateY()' | 'rotateZ()' | 'translate()' |
     'translate3d()' | 'translateX()' | 'translateY()' | 'translateZ()' | 'scale()' | 'scale3d()' | 'scaleX()' | 'scaleY()' | 'scaleZ()' | 'skew()' |
-    'skewX()' | 'skewY()' | string | globalValues) => RxElement
+    'skewX()' | 'skewY()' | string | GlobalValues) => RxElement
   transformOrigin: (_?: 'center' | 'top' | 'right' | 'left' | 'bottom' | string | number | string[] | number[]) => RxElement
-  transformStyle: (_?: 'flat' | 'preserve-3d' | globalValues) => RxElement
+  transformStyle: (_?: 'flat' | 'preserve-3d' | GlobalValues) => RxElement
   transition: (_?: StyleProperties['transitionDelay'] | StyleProperties['transitionDuration'] | StyleProperties['transitionProperty'] | StyleProperties['transitionTimingFunction']) => RxElement
-  transitionDelay: (_?: string | string[] | globalValues) => RxElement
-  transitionDuration: (_?: number | string | globalValues) => RxElement
+  transitionDelay: (_?: string | string[] | GlobalValues) => RxElement
+  transitionDuration: (_?: number | string | GlobalValues) => RxElement
   transitionProperty: (_?: StyleProperties['animationName']) => RxElement
   transitionTimingFunction: (_?: StyleProperties['animationTimingFunction']) => RxElement
-  unicodeBidi: (_?: 'normal' | 'embed' | 'isolate' | 'bidi-override' | 'isolate-override' | 'plaintext' | globalValues) => RxElement
-  userSelect: (_?: 'none' | 'auto' | 'text' | 'contain' | 'all' | 'element' | globalValues) => RxElement
-  verticalAlign: (_?: 'baseline' | 'sub' | 'super' | 'text-top' | 'text-bottom' | 'middle' | 'top' | 'bottom' | number | string | globalValues) => RxElement
-  visibility: (_?: 'visible' | 'hidden' | 'collapse' | globalValues) => RxElement
-  whiteSpace: (_?: 'normal' | 'nowrap' | 'wrap' | 'pre' | 'pre-wrap' | 'pre-line' | 'break-spaces' | globalValues) => RxElement
-  width: (_?: numberType) => RxElement
-  wordBreak: (_?: 'normal' | 'break-all' | 'keep-all' | 'break-word' | globalValues) => RxElement
-  wordSpacing: (_?: 'normal' | number | string | globalValues) => RxElement
-  wordWrap: (_?: 'normal' | 'break-word' | 'anywhere' | globalValues) => RxElement
-  writingMode: (_?: 'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | globalValues) => RxElement
+  unicodeBidi: (_?: 'normal' | 'embed' | 'isolate' | 'bidi-override' | 'isolate-override' | 'plaintext' | GlobalValues) => RxElement
+  userSelect: (_?: 'none' | 'auto' | 'text' | 'contain' | 'all' | 'element' | GlobalValues) => RxElement
+  verticalAlign: (_?: 'baseline' | 'sub' | 'super' | 'text-top' | 'text-bottom' | 'middle' | 'top' | 'bottom' | number | string | GlobalValues) => RxElement
+  visibility: (_?: 'visible' | 'hidden' | 'collapse' | GlobalValues) => RxElement
+  whiteSpace: (_?: 'normal' | 'nowrap' | 'wrap' | 'pre' | 'pre-wrap' | 'pre-line' | 'break-spaces' | GlobalValues) => RxElement
+  width: (_?: Number) => RxElement
+  wordBreak: (_?: 'normal' | 'break-all' | 'keep-all' | 'break-word' | GlobalValues) => RxElement
+  wordSpacing: (_?: 'normal' | number | string | GlobalValues) => RxElement
+  wordWrap: (_?: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => RxElement
+  writingMode: (_?: 'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | GlobalValues) => RxElement
 
-  zIndex: (_?: string | globalValues) => RxElement
+  zIndex: (_?: string | GlobalValues) => RxElement
   // custom specials
   cornerRadius: (_?: StyleProperties['borderRadius']) => RxElement
 
@@ -705,7 +705,7 @@ export class $RxElement {
     return this.$absCenter;
   }
 
-  absCenterRight(v?: numberType): RxElement | numberType {
+  absCenterRight(v?: Number): RxElement | Number {
     if(v) {
       if(this.$root) {
         this.$root.position('relative');
@@ -720,7 +720,7 @@ export class $RxElement {
     return this.$absCenterRight;
   }
 
-  absCenterLeft(v?: numberType): RxElement | numberType {
+  absCenterLeft(v?: Number): RxElement | Number {
     if(v) {
       if(this.$root) {
         this.$root.position('relative');
@@ -735,7 +735,7 @@ export class $RxElement {
     return this.$absCenterLeft;
   }
 
-  absCenterTop(v?: numberType): RxElement | numberType {
+  absCenterTop(v?: Number): RxElement | Number {
     if(v) {
       if(this.$root) {
         this.$root.position('relative');
@@ -750,7 +750,7 @@ export class $RxElement {
     return this.$absCenterTop;
   }
 
-  absCenterBottom(v?: numberType): RxElement | numberType {
+  absCenterBottom(v?: Number): RxElement | Number {
     if(v) {
       if(this.$root) {
         this.$root.position('relative');
@@ -765,9 +765,9 @@ export class $RxElement {
     return this.$absCenterBottom;
   }
 
-  absPosition(..._: numberType[]): RxElement | numberType[] {
+  absPosition(..._: Number[]): RxElement | Number[] {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       if(this.$root) {
         this.$root.position('relative');
         this.position('absolute').top(v[0]).right(v[1]).bottom(v[2])
@@ -781,9 +781,9 @@ export class $RxElement {
     return this.$absPosition;
   }
 
-  absTopRight(..._: numberType[]): RxElement | numberType[] {
+  absTopRight(..._: Number[]): RxElement | Number[] {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       if(this.$root) {
         this.$root.position('relative');
         this.position('absolute').top(v[0]).right(v[1]);
@@ -796,9 +796,9 @@ export class $RxElement {
     return this.$absTopRight;
   }
 
-  absTopLeft(..._: numberType[]): RxElement | numberType[] {
+  absTopLeft(..._: Number[]): RxElement | Number[] {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       if(this.$root) {
         this.$root.position('relative');
         this.position('absolute').top(v[0]).left(v[1]);
@@ -811,9 +811,9 @@ export class $RxElement {
     return this.$absTopLeft;
   }
 
-  absBottomRight(..._: numberType[]): RxElement | numberType[] {
+  absBottomRight(..._: Number[]): RxElement | Number[] {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       if(this.$root) {
         this.$root.position('relative');
         this.position('absolute').bottom(v[0]).right(v[1]);
@@ -826,9 +826,9 @@ export class $RxElement {
     return this.$absBottomRight;
   }
 
-  absBottomLeft(..._: numberType[]): RxElement | numberType[] {
+  absBottomLeft(..._: Number[]): RxElement | Number[] {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       if(this.$root) {
         this.$root.position('relative');
         this.position('absolute').bottom(v[0]).left(v[1]);
@@ -980,9 +980,9 @@ export class $RxElement {
   //   }
   //   return this.$aspectRatio;
   // },
-  backgroundLinearGradient(...colors: colorType[]): RxElement | colorType[] {
+  backgroundLinearGradient(...colors: Color[]): RxElement | Color[] {
     if(arguments.length > 0) {
-      const v: colorType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Color[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       this.background(`linear-gradient(${colors[0]}, ${colors[1]}, ${colors[2]})`);
       this.$backgroundLinearGradient = v;
       return this;
@@ -990,7 +990,7 @@ export class $RxElement {
     return this.$backgroundLinearGradient;
   }
 
-  // childVerticalSpacing(margin?: numberType) {
+  // childVerticalSpacing(margin?: Number) {
   //   if(margin) {
   //     this.globalStyle({ margin: [ margin / 2, 0, margin / 2, 0] })
   //       .pseudoFirstChild({ margin: [ 0, 0, margin / 2, 0 ] })
@@ -1106,11 +1106,11 @@ export class $RxElement {
     return this;
   }
 
-  size(): numberType[] | numberType
-  size(_: numberType[] | numberType): RxElement
-  size(_?: numberType[] | numberType): RxElement | numberType[] | numberType {
+  size(): Number[] | Number
+  size(_: Number[] | Number): RxElement
+  size(_?: Number[] | Number): RxElement | Number[] | Number {
     if(arguments.length > 0) {
-      const v: numberType[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
       this.height(v[1]).width(v[0]);
       this.$size = v;
       return this;
@@ -1118,7 +1118,7 @@ export class $RxElement {
     return this.$size;
   }
 
-  // stack(children: RxElement[], options: { margin?: numberType, vertical?: boolean, horizontal?: boolean }): RxElement {
+  // stack(children: RxElement[], options: { margin?: Number, vertical?: boolean, horizontal?: boolean }): RxElement {
   //   const o = options || {};
   //   for (let i = 0; i < children.length; i++) {
   //     this.addChild(children[i]);
@@ -1131,7 +1131,7 @@ export class $RxElement {
   //   return this;
   // }
 
-  // stackVertical(margin?: numberType): RxElement | boolean {
+  // stackVertical(margin?: Number): RxElement | boolean {
   //   if(margin != undefined) {
   //     this.display('flex').flexDirection('column')
   //       .globalStyle({ margin: [ margin / 2, 0, margin / 2, 0] })
@@ -1774,253 +1774,253 @@ export class Style {
     return this;
   }
 
-  alignContent: (_: flexAlignment) => Style
-  alignItems: (_: flexAlignmentItem) => Style
-  alignSelf: (_: flexAlignmentItem) => Style
+  alignContent: (_: FlexAlignment) => Style
+  alignItems: (_: FlexAlignmentItem) => Style
+  alignSelf: (_: FlexAlignmentItem) => Style
   animationDelay: (_: string | string[]) => Style
-  animationDirection: (_: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | globalValues) => Style
-  animationDuration: (_: string | string[] | globalValues) => Style
-  animationFillMode: (_: 'none' | 'forwards' | 'backwards' | 'both' | string | string[] | globalValues) => Style
-  animationIterationCount: (_: 'infinite' | string | string[] | globalValues) => Style
-  animationName: (_: 'none' | '-specific' | 'sliding-vertically' | 'sliding' | string | string[] | globalValues) => Style
-  animationPlayState: (_: 'running' | 'paused' | string | string[] | globalValues) => Style
-  animationTimingFunction: (_: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' |  string | string[] | globalValues) => Style
-  backfaceVisibility: (_: 'visible' | 'hidden' | string | string[] | globalValues) => Style
-  background: (_: string | string[] | globalValues) => Style
-  backgroundAttachment: (_: 'scroll' | 'fixed' | 'local' | string | string[] | globalValues) => Style
-  backgroundClip: (_: 'border-box' | 'padding-box' | 'content-box' | 'text' | string | string[] | globalValues) => Style
-  backgroundColor: (_: colorType) => Style
-  backgroundImage: (_: imageType) => Style
-  backgroundOrigin: (_: 'border-box' | 'padding-box' | 'content-box' | string | string[] | globalValues) => Style
-  backgroundPosition: (_: 'top' | 'bottom' | 'left' | 'right' | 'center' | string | number | string[] | number[] | globalValues) => Style
-  backgroundPositionX: (_: 'left' | 'center' | 'right' | string | number | string[] | globalValues) => Style
-  backgroundPositionY: (_: 'top' | 'center' | 'bottom' | string | number | string[] | globalValues) => Style
-  backgroundRepeat: (_: 'repeat-x' | 'repeat-y' | 'repeat' | 'space' | 'round' | 'no-repeat' | string | string[] | globalValues) => Style
-  backgroundSize: (_: 'cover' | 'contain' | string | number | string[] | number[] | globalValues) => Style
-  border: (_: borderStyleType | borderWidthType | string | number | string[] | globalValues) => Style
-  borderBottom: (_: borderStyleType | borderWidthType | string | number | string[] | globalValues) => Style
-  borderBottomColor: (_: colorType) => Style
-  borderBottomLeftRadius: (_: string | number | string[] | number[] | globalValues) => Style
-  borderBottomRightRadius: (_: string | number | string[] | number[] | globalValues) => Style
-  borderBottomStyle: (_: borderStyleType) => Style
-  borderBottomWidth: (_: borderWidthType) => Style
-  borderCollapse: (_: 'collapse' | 'separate' | string | globalValues) => Style
-  borderColor: (_: colorType) => Style
-  borderImage: (_: 'url()' | 'linear-gradient()' | string | string[] | globalValues) => Style
-  borderImageOutset: (_: number | number[] | globalValues) => Style
-  borderImageRepeat: (_: 'stretch' | 'repeat' | 'round' | 'space' | string | string[] | globalValues) => Style
-  borderImageSlice: (_: 'fill' | string | number | string[] | number[] | globalValues) => Style
-  borderImageSource: (_: imageType) => Style
-  borderImageWidth: (_: 'auto' | string | number | string[] | number[] | globalValues) => Style
-  borderLeft: (_: borderStyleType | borderWidthType | string | number | string[] | globalValues) => Style
-  borderLeftColor: (_: colorType) => Style
-  borderLeftStyle: (_: borderStyleType) => Style
-  borderLeftWidth: (_: borderWidthType) => Style
-  borderRadius: (_: string | number | string[] | number[] | globalValues) => Style
-  borderRight: (_: borderStyleType | borderWidthType | string | number | string[] | globalValues) => Style
-  borderRightColor: (_: colorType) => Style
-  borderRightStyle: (_: borderStyleType) => Style
-  borderRightWidth: (_: borderWidthType) => Style
-  borderSpacing: (_: number | number[] | globalValues) => Style
-  borderStyle: (_: borderStyleType) => Style
-  borderTop: (_: borderStyleType | borderWidthType | string | number | string[] | globalValues) => Style
-  borderTopColor: (_: colorType) => Style
-  borderTopLeftRadius: (_: string | number | string[] | number[] | globalValues) => Style
-  borderTopRightRadius: (_: string | number | string[] | number[] | globalValues) => Style
-  borderTopStyle: (_: borderStyleType) => Style
-  borderTopWidth: (_: borderWidthType) => Style
-  borderWidth: (_: borderWidthType) => Style
-  bottom: (_: spaceType) => Style
-  boxDecorationBreak: (_: 'slice' | 'clone' | string | globalValues) => Style
-  boxShadow: (_: 'none' | string | string[] | globalValues) => Style
-  boxSizing: (_: 'border-box' | 'content-box' | globalValues) => Style
-  breakAfter: (_: breakType) => Style
-  breakBefore: (_: breakType) => Style
-  breakInside: (_: 'auto' | 'avoid' | 'avoid-page' | 'avoid-column' | 'avoid-region' | globalValues) => Style
-  captionSide: (_: 'top' | 'bottom' | 'left' | 'right' | 'top-outside' | 'bottom-outside' | globalValues) => Style
-  caretColor: (_: 'auto' | colorType) => Style
-  clear: (_: 'none' | 'left' | 'right' | 'both' | 'inline-start' | 'inline-end' | globalValues) => Style
-  clip: (_: 'rect()' | 'auto' | string | globalValues) => Style
-  color: (_: colorType) => Style
-  columnCount: (_: 'auto' | string | number | globalValues) => Style
-  columnFill: (_: 'auto' | 'balance' | 'balance-all' | globalValues) => Style
-  columnGap: (_: 'normal' | string | number | globalValues) => Style
-  columnRule: (_: borderStyleType | borderWidthType | string | number | number[]) => Style
-  columnRuleColor: (_: colorType) => Style
-  columnRuleStyle: (_: borderStyleType) => Style
-  columnRuleWidth: (_: borderWidthType) => Style
-  columnSpan: (_: 'none' | 'all' | globalValues) => Style
-  columnWidth: (_: 'auto' | string | number | globalValues) => Style
-  columns: (_: 'auto' | string | number | string[] | globalValues) => Style
-  content: (_:  'none' | 'normal' | 'attr()' | 'open-quote | close-quote' | 'no-open-quote | no-close-quote' | string | string[] | globalValues) => Style
-  counterIncrement: (_: 'none' | string | number | string[] | globalValues) => Style
-  counterReset: (_: 'none' | string | number | string[] | globalValues) => Style
-  counterSet: (_: 'none' | string | number | string[] | globalValues) => Style
+  animationDirection: (_: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | GlobalValues) => Style
+  animationDuration: (_: string | string[] | GlobalValues) => Style
+  animationFillMode: (_: 'none' | 'forwards' | 'backwards' | 'both' | string | string[] | GlobalValues) => Style
+  animationIterationCount: (_: 'infinite' | string | string[] | GlobalValues) => Style
+  animationName: (_: 'none' | '-specific' | 'sliding-vertically' | 'sliding' | string | string[] | GlobalValues) => Style
+  animationPlayState: (_: 'running' | 'paused' | string | string[] | GlobalValues) => Style
+  animationTimingFunction: (_: 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'linear' | 'step-start' | 'step-end' |  string | string[] | GlobalValues) => Style
+  backfaceVisibility: (_: 'visible' | 'hidden' | string | string[] | GlobalValues) => Style
+  background: (_: string | string[] | GlobalValues) => Style
+  backgroundAttachment: (_: 'scroll' | 'fixed' | 'local' | string | string[] | GlobalValues) => Style
+  backgroundClip: (_: 'border-box' | 'padding-box' | 'content-box' | 'text' | string | string[] | GlobalValues) => Style
+  backgroundColor: (_: Color) => Style
+  backgroundImage: (_: CSSImage) => Style
+  backgroundOrigin: (_: 'border-box' | 'padding-box' | 'content-box' | string | string[] | GlobalValues) => Style
+  backgroundPosition: (_: 'top' | 'bottom' | 'left' | 'right' | 'center' | string | number | string[] | number[] | GlobalValues) => Style
+  backgroundPositionX: (_: 'left' | 'center' | 'right' | string | number | string[] | GlobalValues) => Style
+  backgroundPositionY: (_: 'top' | 'center' | 'bottom' | string | number | string[] | GlobalValues) => Style
+  backgroundRepeat: (_: 'repeat-x' | 'repeat-y' | 'repeat' | 'space' | 'round' | 'no-repeat' | string | string[] | GlobalValues) => Style
+  backgroundSize: (_: 'cover' | 'contain' | string | number | string[] | number[] | GlobalValues) => Style
+  border: (_: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => Style
+  borderBottom: (_: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => Style
+  borderBottomColor: (_: Color) => Style
+  borderBottomLeftRadius: (_: string | number | string[] | number[] | GlobalValues) => Style
+  borderBottomRightRadius: (_: string | number | string[] | number[] | GlobalValues) => Style
+  borderBottomStyle: (_: BorderStyle) => Style
+  borderBottomWidth: (_: BorderWidth) => Style
+  borderCollapse: (_: 'collapse' | 'separate' | string | GlobalValues) => Style
+  borderColor: (_: Color) => Style
+  borderImage: (_: 'url()' | 'linear-gradient()' | string | string[] | GlobalValues) => Style
+  borderImageOutset: (_: number | number[] | GlobalValues) => Style
+  borderImageRepeat: (_: 'stretch' | 'repeat' | 'round' | 'space' | string | string[] | GlobalValues) => Style
+  borderImageSlice: (_: 'fill' | string | number | string[] | number[] | GlobalValues) => Style
+  borderImageSource: (_: CSSImage) => Style
+  borderImageWidth: (_: 'auto' | string | number | string[] | number[] | GlobalValues) => Style
+  borderLeft: (_: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => Style
+  borderLeftColor: (_: Color) => Style
+  borderLeftStyle: (_: BorderStyle) => Style
+  borderLeftWidth: (_: BorderWidth) => Style
+  borderRadius: (_: string | number | string[] | number[] | GlobalValues) => Style
+  borderRight: (_: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => Style
+  borderRightColor: (_: Color) => Style
+  borderRightStyle: (_: BorderStyle) => Style
+  borderRightWidth: (_: BorderWidth) => Style
+  borderSpacing: (_: number | number[] | GlobalValues) => Style
+  borderStyle: (_: BorderStyle) => Style
+  borderTop: (_: BorderStyle | BorderWidth | string | number | string[] | GlobalValues) => Style
+  borderTopColor: (_: Color) => Style
+  borderTopLeftRadius: (_: string | number | string[] | number[] | GlobalValues) => Style
+  borderTopRightRadius: (_: string | number | string[] | number[] | GlobalValues) => Style
+  borderTopStyle: (_: BorderStyle) => Style
+  borderTopWidth: (_: BorderWidth) => Style
+  borderWidth: (_: BorderWidth) => Style
+  bottom: (_: Space) => Style
+  boxDecorationBreak: (_: 'slice' | 'clone' | string | GlobalValues) => Style
+  boxShadow: (_: 'none' | string | string[] | GlobalValues) => Style
+  boxSizing: (_: 'border-box' | 'content-box' | GlobalValues) => Style
+  breakAfter: (_: Break) => Style
+  breakBefore: (_: Break) => Style
+  breakInside: (_: 'auto' | 'avoid' | 'avoid-page' | 'avoid-column' | 'avoid-region' | GlobalValues) => Style
+  captionSide: (_: 'top' | 'bottom' | 'left' | 'right' | 'top-outside' | 'bottom-outside' | GlobalValues) => Style
+  caretColor: (_: 'auto' | Color) => Style
+  clear: (_: 'none' | 'left' | 'right' | 'both' | 'inline-start' | 'inline-end' | GlobalValues) => Style
+  clip: (_: 'rect()' | 'auto' | string | GlobalValues) => Style
+  color: (_: Color) => Style
+  columnCount: (_: 'auto' | string | number | GlobalValues) => Style
+  columnFill: (_: 'auto' | 'balance' | 'balance-all' | GlobalValues) => Style
+  columnGap: (_: 'normal' | string | number | GlobalValues) => Style
+  columnRule: (_: BorderStyle | BorderWidth | string | number | number[]) => Style
+  columnRuleColor: (_: Color) => Style
+  columnRuleStyle: (_: BorderStyle) => Style
+  columnRuleWidth: (_: BorderWidth) => Style
+  columnSpan: (_: 'none' | 'all' | GlobalValues) => Style
+  columnWidth: (_: 'auto' | string | number | GlobalValues) => Style
+  columns: (_: 'auto' | string | number | string[] | GlobalValues) => Style
+  content: (_:  'none' | 'normal' | 'attr()' | 'open-quote | close-quote' | 'no-open-quote | no-close-quote' | string | string[] | GlobalValues) => Style
+  counterIncrement: (_: 'none' | string | number | string[] | GlobalValues) => Style
+  counterReset: (_: 'none' | string | number | string[] | GlobalValues) => Style
+  counterSet: (_: 'none' | string | number | string[] | GlobalValues) => Style
   cursor: (_: 'auto' | 'default' | 'none' | 'context-menu' | 'help' | 'pointer' | 'progress' | 'wait' | 'cell' | 'crosshair' | 'text' | 'vertical-text' |
     'alias' | 'copy' | 'move' | 'no-drop' | 'not-allowed' | 'grab' | 'grabbing' | 'all-scroll' | 'col-resize' | 'row-resize' | 'n-resize' | 'e-resize' |
     's-resize' | 'w-resize' | 'ne-resize' | 'nw-resize' | 'se-resize' | 'sw-resize' | 'ew-resize' | 'ns-resize' | 'nesw-resize' | 'nwse-resize' |
-    'zoom-in' | 'zoom-out' | 'url()' | string | globalValues) => Style
-  direction: (_: 'ltr' | 'rtl' | globalValues) => Style
+    'zoom-in' | 'zoom-out' | 'url()' | string | GlobalValues) => Style
+  direction: (_: 'ltr' | 'rtl' | GlobalValues) => Style
   display: (_: 'block' | 'inline' | 'run-in' | 'flow' | 'flow-root' | 'table' | 'flex' | 'grid' | 'ruby' | 'list-item' | 'table-row-group' | 'table-header-group' |
     'table-footer-group' | 'table-row' | 'table-cell' | 'table-column-group' | 'table-column' | 'table-caption' | 'ruby-base' | 'ruby-text' | 'ruby-base-container' |
-    'ruby-text-container' | 'contents' | 'none' | 'inline-block' | 'inline-list-item' | 'inline-table' | 'inline-flex' | 'inline-grid' | string | string[] | globalValues) => Style
-  emptyCells: (_: 'show' | 'hide' | globalValues) => Style
+    'ruby-text-container' | 'contents' | 'none' | 'inline-block' | 'inline-list-item' | 'inline-table' | 'inline-flex' | 'inline-grid' | string | string[] | GlobalValues) => Style
+  emptyCells: (_: 'show' | 'hide' | GlobalValues) => Style
   filter: (_: 'url()' | 'blur()' | 'brightness()' | 'contrast()' | 'drop-shadow()' | 'grayscale()' | 'hue-rotate()' | 'invert()' | 'opacity()' | 'saturate()' |
-    'sepia()' | 'none' | string | globalValues) => Style
-  flex: (_: 'auto' | 'inital' | 'none' | string | number | number[] | globalValues) => Style
-  flexBasis: (_: 'fill' | 'max-content' | 'min-content' | 'fit-content' | 'content' | string | number | globalValues) => Style
-  flexDirection: (_: 'row' | 'row-reverse' | 'column' | 'column-reverse' | globalValues) => Style
-  flexFlow: (_: 'row' | 'row-reverse' | 'column' | 'column-reverse' | 'nowrap' | 'wrap' | 'wrap-reverse' | string | string[] | globalValues) => Style
-  flexGrow: (_: string | globalValues) => Style
-  flexShrink: (_: string | globalValues) => Style
-  flexWrap: (_: 'nowrap' | 'wrap' | 'wrap-reverse' | globalValues) => Style
-  float: (_: 'left' | 'right' | 'none' | 'inline-start' | 'inline-end' | globalValues) => Style
+    'sepia()' | 'none' | string | GlobalValues) => Style
+  flex: (_: 'auto' | 'inital' | 'none' | string | number | number[] | GlobalValues) => Style
+  flexBasis: (_: 'fill' | 'max-content' | 'min-content' | 'fit-content' | 'content' | string | number | GlobalValues) => Style
+  flexDirection: (_: 'row' | 'row-reverse' | 'column' | 'column-reverse' | GlobalValues) => Style
+  flexFlow: (_: 'row' | 'row-reverse' | 'column' | 'column-reverse' | 'nowrap' | 'wrap' | 'wrap-reverse' | string | string[] | GlobalValues) => Style
+  flexGrow: (_: string | GlobalValues) => Style
+  flexShrink: (_: string | GlobalValues) => Style
+  flexWrap: (_: 'nowrap' | 'wrap' | 'wrap-reverse' | GlobalValues) => Style
+  float: (_: 'left' | 'right' | 'none' | 'inline-start' | 'inline-end' | GlobalValues) => Style
   font: (_: 'caption' | 'icon' | 'menu' | 'message-box' | 'small-caption' | 'status-bar' | StyleProperties['fontFamily'] | StyleProperties['fontSize'] | StyleProperties['fontStretch'] |
-    StyleProperties['fontStyle'] | StyleProperties['fontVariant'] | StyleProperties['fontWeight'] | StyleProperties['lineHeight']| string | string[] | globalValues) => Style
-  fontFamily: (_: 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | string | string[] | globalValues) => Style
-  fontFeatureSettings: (_: 'normal' | 'smcp' | 'swsh' | string | globalValues) => Style
+    StyleProperties['fontStyle'] | StyleProperties['fontVariant'] | StyleProperties['fontWeight'] | StyleProperties['lineHeight']| string | string[] | GlobalValues) => Style
+  fontFamily: (_: 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | string | string[] | GlobalValues) => Style
+  fontFeatureSettings: (_: 'normal' | 'smcp' | 'swsh' | string | GlobalValues) => Style
   fontKerning: (_: 'auto' | 'normal' | 'none') => Style
-  fontLanguageOverride: (_: 'normal' | string | globalValues) => Style
-  fontSize: (_: 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' | 'xxx-large' | 'smaller' | 'larger' | string | number | globalValues) => Style
-  fontSizeAdjust: (_: 'none' | string | globalValues) => Style
+  fontLanguageOverride: (_: 'normal' | string | GlobalValues) => Style
+  fontSize: (_: 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' | 'xxx-large' | 'smaller' | 'larger' | string | number | GlobalValues) => Style
+  fontSizeAdjust: (_: 'none' | string | GlobalValues) => Style
   fontSmooth: (_: 'auto' | 'never' | 'always' | number | string | StyleProperties['fontSize']) => Style
-  fontStretch: (_: 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' | string | globalValues) => Style
+  fontStretch: (_: 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' | string | GlobalValues) => Style
   fontStyle: (_: 'normal' | 'italic' | 'oblique' | string | string[]) => Style
   fontSynthesis: (_: 'none' | StyleProperties['fontWeight'] | StyleProperties['fontStyle'] | string) => Style
   fontVariant: (_: 'common-ligatures' | 'no-common-ligatures' | 'discretionary-ligatures' | 'no-discretionary-ligatures' | 'historical-ligatures' | 'no-historical-ligatures' | 'contextual' | 'no-contextual' |
     'stylistic()' | 'historical-forms' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' |
     'titling-caps' | 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' |
     'full-width' | 'proportional-width' | 'ruby' | string) => Style
-  fontVariantAlternates: (_: 'normal' | 'historical-forms' | 'stylistic()' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | string | globalValues) => Style
-  fontVariantCaps: (_: 'normal' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' | 'titling-caps' | globalValues) => Style
-  fontVariantEastAsian: (_: 'normal' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' | 'full-width' | 'proportional-width' | 'ruby' | string | globalValues) => Style
+  fontVariantAlternates: (_: 'normal' | 'historical-forms' | 'stylistic()' | 'styleset()' | 'character-variant()' | 'swash()' | 'ornaments()' | 'annotation()' | string | GlobalValues) => Style
+  fontVariantCaps: (_: 'normal' | 'small-caps' | 'all-small-caps' | 'petite-caps' | 'all-petite-caps' | 'unicase' | 'titling-caps' | GlobalValues) => Style
+  fontVariantEastAsian: (_: 'normal' | 'jis78' | 'jis83' | 'jis90' | 'jis04' | 'simplified' | 'traditional' | 'full-width' | 'proportional-width' | 'ruby' | string | GlobalValues) => Style
   fontVariantLigatures: (_: 'normal' | 'none' | 'common-ligatures' | 'no-common-ligatures' | 'discretionary-ligatures' | 'no-discretionary-ligatures' | 'historical-ligatures' |
-    'no-historical-ligatures' | 'contextual' | 'no-contextual' | globalValues) => Style
-  fontVariantNumeric: (_: 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | string | globalValues) => Style
-  fontVariantPosition: (_: 'normal' | 'sub' | 'super' | globalValues) => Style
-  fontWeight: (_: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900' | globalValues) => Style
-  gap: (_: number | number[] | string | string[] | globalValues) => Style
+    'no-historical-ligatures' | 'contextual' | 'no-contextual' | GlobalValues) => Style
+  fontVariantNumeric: (_: 'lining-nums' | 'oldstyle-nums' | 'diagonal-fractions' | 'stacked-fractions' | 'ordinal' | 'slashed-zero' | string | GlobalValues) => Style
+  fontVariantPosition: (_: 'normal' | 'sub' | 'super' | GlobalValues) => Style
+  fontWeight: (_: 'normal' | 'bold' | 'lighter' | 'bolder' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900' | GlobalValues) => Style
+  gap: (_: number | number[] | string | string[] | GlobalValues) => Style
   grid: (_: StyleProperties['gridTemplate'] | StyleProperties['gridTemplateRows'] | StyleProperties['gridAutoFlow'] | StyleProperties['gridAutoColumns'] | StyleProperties['gridTemplateAreas'] |
-    StyleProperties['gridColumnGap'] | string | globalValues) => Style
-  gridArea: (_: 'auto' | 'span' | string | globalValues) => Style
-  gridAutoColumns: (_: 'auto' | 'max-content' | 'min-content' | 'minmax()' | 'fit-content()' | string | number | globalValues) => Style
-  gridAutoFlow: (_: 'row' | 'column' | 'dense' | 'row dense' | 'column desne' | globalValues) => Style
+    StyleProperties['gridColumnGap'] | string | GlobalValues) => Style
+  gridArea: (_: 'auto' | 'span' | string | GlobalValues) => Style
+  gridAutoColumns: (_: 'auto' | 'max-content' | 'min-content' | 'minmax()' | 'fit-content()' | string | number | GlobalValues) => Style
+  gridAutoFlow: (_: 'row' | 'column' | 'dense' | 'row dense' | 'column desne' | GlobalValues) => Style
   gridColumn: (_: StyleProperties['gridArea']) => Style
   gridColumnEnd: (_: StyleProperties['gridArea']) => Style
   gridColumnGap: (_: StyleProperties['columnGap']) => Style
   gridColumnStart: (_: StyleProperties['gridArea']) => Style
-  gridGap: (_: numberType | number[]) => Style
-  gridRow: (_: numberType | number[]) => Style
+  gridGap: (_: Number | number[]) => Style
+  gridRow: (_: Number | number[]) => Style
   gridRowEnd: (_: StyleProperties['gridArea']) => Style
   gridRowStart: (_: StyleProperties['gridArea']) => Style
-  gridTemplate: (_: 'none' | string | globalValues) => Style
+  gridTemplate: (_: 'none' | string | GlobalValues) => Style
   gridTemplateAreas: (_: StyleProperties['gridTemplate']) => Style
   gridTemplateColumns: (_: 'subgrid' | 'masonry' | 'minmax()' | 'fit-content()' | 'repeat()' | string | StyleProperties['gridTemplate']) => Style
   gridTemplateRows: (_: StyleProperties['gridTemplateColumns']) => Style
-  hangingPunctuation: (_: 'none' | 'first' | 'last' | 'force-end' | 'allow-end' | string | string[] | globalValues) => Style
-  height: (_: numberType) => Style
-  hyphens: (_: 'none' | 'manual' | 'auto' | globalValues) => Style
-  isolation: (_: 'auto' | 'isolate' | globalValues) => Style
-  inset: (_: 'auto' | string | number | string[] | number[] | globalValues) => Style
+  hangingPunctuation: (_: 'none' | 'first' | 'last' | 'force-end' | 'allow-end' | string | string[] | GlobalValues) => Style
+  height: (_: Number) => Style
+  hyphens: (_: 'none' | 'manual' | 'auto' | GlobalValues) => Style
+  isolation: (_: 'auto' | 'isolate' | GlobalValues) => Style
+  inset: (_: 'auto' | string | number | string[] | number[] | GlobalValues) => Style
   insetBottom: (_: StyleProperties['inset']) => Style
   insetLeft: (_: StyleProperties['inset']) => Style
   insetRight: (_: StyleProperties['inset']) => Style
   insetTop: (_: StyleProperties['inset']) => Style
-  justifyContent: (_: 'center' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'left' | 'right' | flexAlignment | 'safe center' | 'unsafe center' | globalValues) => Style
-  justifySelf: (_: flexAlignmentItem | flexAlignment) => Style
-  justifyItems: (_: flexAlignment | flexAlignmentItem | 'legacy right' | 'legacy left' | 'legacy center' | globalValues) => Style
-  left: (_: numberType) => Style
-  letterSpacing: (_: numberType) => Style
-  lineBreak: (_: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | globalValues) => Style
-  lineHeight: (_: numberType) => Style
+  justifyContent: (_: 'center' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'left' | 'right' | FlexAlignment | 'safe center' | 'unsafe center' | GlobalValues) => Style
+  justifySelf: (_: FlexAlignmentItem | FlexAlignment) => Style
+  justifyItems: (_: FlexAlignment | FlexAlignmentItem | 'legacy right' | 'legacy left' | 'legacy center' | GlobalValues) => Style
+  left: (_: Number) => Style
+  letterSpacing: (_: Number) => Style
+  lineBreak: (_: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | GlobalValues) => Style
+  lineHeight: (_: Number) => Style
   listStyle: (_: StyleProperties['listStyleType'] | StyleProperties['listStyleImage'] | StyleProperties['listStylePosition']) => Style
-  listStyleImage: (_: 'none' | 'url()' | globalValues) => Style
-  listStylePosition: (_: 'inside' | 'outside' | globalValues) => Style
-  listStyleType: (_: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | globalValues) => Style
-  margin: (_: numberType | string | number | string[] | number[]) => Style
-  marginBottom: (_: numberType | string | number) => Style
+  listStyleImage: (_: 'none' | 'url()' | GlobalValues) => Style
+  listStylePosition: (_: 'inside' | 'outside' | GlobalValues) => Style
+  listStyleType: (_: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | GlobalValues) => Style
+  margin: (_: Number | string | number | string[] | number[]) => Style
+  marginBottom: (_: Number | string | number) => Style
   marginLeft: (_: StyleProperties['marginBottom']) => Style
   marginRight: (_: StyleProperties['marginBottom']) => Style
   marginTop: (_: StyleProperties['marginBottom']) => Style
-  maxHeight: (_: 'none' | 'max-content' | 'min-content' | 'fit-content()' | numberType) => Style
+  maxHeight: (_: 'none' | 'max-content' | 'min-content' | 'fit-content()' | Number) => Style
   maxWidth: (_: StyleProperties['maxHeight']) => Style
   minHeight: (_: StyleProperties['maxHeight']) => Style
   minWidth: (_: StyleProperties['maxHeight']) => Style
   mixBlendMode: (_: 'normal' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' |
-    'exclusion' | 'hue' | 'saturation' | 'color' | 'liminosity' | globalValues) => Style
+    'exclusion' | 'hue' | 'saturation' | 'color' | 'liminosity' | GlobalValues) => Style
   objectFit: (_: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down') => Style
-  objectPosition: (_: 'top' | 'left' | 'right' | 'bottom' | string | number | string[] | number[] | globalValues) => Style
-  opacity: (_: string | globalValues) => Style
-  order: (_: string | globalValues) => Style
-  orphans: (_: string | globalValues) => Style
+  objectPosition: (_: 'top' | 'left' | 'right' | 'bottom' | string | number | string[] | number[] | GlobalValues) => Style
+  opacity: (_: string | GlobalValues) => Style
+  order: (_: string | GlobalValues) => Style
+  orphans: (_: string | GlobalValues) => Style
   outline: (_: StyleProperties['outlineColor'] | StyleProperties['outlineStyle'] | StyleProperties['outlineWidth']) => Style
-  outlineColor: (_: colorType | 'invert') => Style
-  outlineOffset: (_: string | number | globalValues) => Style
-  outlineStyle: (_: borderStyleType) => Style
-  outlineWidth: (_: borderWidthType) => Style
+  outlineColor: (_: Color | 'invert') => Style
+  outlineOffset: (_: string | number | GlobalValues) => Style
+  outlineStyle: (_: BorderStyle) => Style
+  outlineWidth: (_: BorderWidth) => Style
   overflow: (_: StyleProperties['overflowX'] | StyleProperties['overflowY']) => Style
-  overflowBlock: (_: 'visible' | 'hidden' | 'scroll' | 'auto' | globalValues) => Style
+  overflowBlock: (_: 'visible' | 'hidden' | 'scroll' | 'auto' | GlobalValues) => Style
   overflowHidden: (_: StyleProperties['overflowBlock']) => Style
-  overflowWrap: (_: 'normal' | 'break-word' | 'anywhere' | globalValues) => Style
+  overflowWrap: (_: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => Style
   overflowX: (_: 'clip' | StyleProperties['overflowBlock']) => Style
   overflowY: (_: 'clip' | StyleProperties['overflowBlock']) => Style
-  padding: (_: numberType | string | number | string[] | number[] | globalValues) => Style
-  paddingBottom: (_: numberType) => Style
-  paddingLeft: (_: numberType) => Style
-  paddingRight: (_: numberType) => Style
-  paddingTop: (_: numberType) => Style
-  pageBreakAfter: (_: 'auto' | 'always' | 'avoid' | 'left' | 'right' | 'recto' | 'verso' | globalValues) => Style
+  padding: (_: Number | string | number | string[] | number[] | GlobalValues) => Style
+  paddingBottom: (_: Number) => Style
+  paddingLeft: (_: Number) => Style
+  paddingRight: (_: Number) => Style
+  paddingTop: (_: Number) => Style
+  pageBreakAfter: (_: 'auto' | 'always' | 'avoid' | 'left' | 'right' | 'recto' | 'verso' | GlobalValues) => Style
   pageBreakBefore: (_: StyleProperties['pageBreakAfter']) => Style
-  pageBreakInside: (_: 'auto' | 'avoid' | globalValues) => Style
-  perspective: (_: 'none' | numberType) => Style
-  perspectiveOrigin: (_: 'center' | 'top' | 'bottom' | 'right' | string | globalValues) => Style
-  pointerEvents: (_: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | globalValues) => Style
+  pageBreakInside: (_: 'auto' | 'avoid' | GlobalValues) => Style
+  perspective: (_: 'none' | Number) => Style
+  perspectiveOrigin: (_: 'center' | 'top' | 'bottom' | 'right' | string | GlobalValues) => Style
+  pointerEvents: (_: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | GlobalValues) => Style
   position: (_: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky') => Style
-  quotes: (_: 'none' | 'initial' | 'auto' | string | globalValues) => Style
-  resize: (_: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | globalValues) => Style
-  right: (_: numberType) => Style
-  scrollBehavior: (_: 'auto' | 'smooth' | globalValues) => Style
-  tabSize: (_: numberType) => Style
-  tableLayout: (_: 'auto' | 'fixed' | globalValues) => Style
-  textAlign: (_: 'left' | 'right' | 'center' | 'justify' | 'justify-all' | 'start' | 'end' | 'match-parent' | string | globalValues) => Style
-  textAlignLast: (_: 'auto' | 'start' | 'end' | 'left' | 'right' | 'center' | 'justify' | string | globalValues) => Style
-  textCombineUpright: (_: 'none' | 'all' | 'digits' | globalValues) => Style
+  quotes: (_: 'none' | 'initial' | 'auto' | string | GlobalValues) => Style
+  resize: (_: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | GlobalValues) => Style
+  right: (_: Number) => Style
+  scrollBehavior: (_: 'auto' | 'smooth' | GlobalValues) => Style
+  tabSize: (_: Number) => Style
+  tableLayout: (_: 'auto' | 'fixed' | GlobalValues) => Style
+  textAlign: (_: 'left' | 'right' | 'center' | 'justify' | 'justify-all' | 'start' | 'end' | 'match-parent' | string | GlobalValues) => Style
+  textAlignLast: (_: 'auto' | 'start' | 'end' | 'left' | 'right' | 'center' | 'justify' | string | GlobalValues) => Style
+  textCombineUpright: (_: 'none' | 'all' | 'digits' | GlobalValues) => Style
   textDecoration: (_: StyleProperties['textDecorationLine'] | StyleProperties['textDecorationColor'] | StyleProperties['textDecorationStyle'] |
     StyleProperties['textDecorationThickness']) => Style
-  textDecorationColor: (_: colorType) => Style
-  textDecorationLine: (_: 'none' | 'underline' | 'overline' | 'line-through' | 'blink' | string | globalValues) => Style
-  textDecorationStyle: (_: 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | globalValues ) => Style
-  textDecorationThickness: (_: 'auto' | 'from-font' | number | string | globalValues) => Style
-  textIndent: (_: 'each-line' | 'hanging' | number | string | globalValues) => Style
+  textDecorationColor: (_: Color) => Style
+  textDecorationLine: (_: 'none' | 'underline' | 'overline' | 'line-through' | 'blink' | string | GlobalValues) => Style
+  textDecorationStyle: (_: 'solid' | 'double' | 'dotted' | 'dashed' | 'wavy' | GlobalValues ) => Style
+  textDecorationThickness: (_: 'auto' | 'from-font' | number | string | GlobalValues) => Style
+  textIndent: (_: 'each-line' | 'hanging' | number | string | GlobalValues) => Style
   textJustify: (_: 'none' | 'auto' | 'inter-word' | 'inter-character' | 'distribute') => Style
-  textOrientation: (_: 'mixed' | 'upright' | 'sideways-right' | 'sideways' | 'use-glyph-orientation' | globalValues) => Style
-  textOverflow: (_: 'clip' | 'ellipsis' | '-' | globalValues) => Style
+  textOrientation: (_: 'mixed' | 'upright' | 'sideways-right' | 'sideways' | 'use-glyph-orientation' | GlobalValues) => Style
+  textOverflow: (_: 'clip' | 'ellipsis' | '-' | GlobalValues) => Style
   textShadow: (_: StyleProperties['boxShadow']) => Style
-  textTransform: (_: 'none' | 'capitalize' | 'uppercase' | 'lowercase' | 'full-width' | 'full-size-kana' | globalValues) => Style
-  textUnderlinePosition: (_: 'auto' | 'under' | 'left' | 'right' | string | globalValues) => Style
-  top: (_: numberType) => Style
+  textTransform: (_: 'none' | 'capitalize' | 'uppercase' | 'lowercase' | 'full-width' | 'full-size-kana' | GlobalValues) => Style
+  textUnderlinePosition: (_: 'auto' | 'under' | 'left' | 'right' | string | GlobalValues) => Style
+  top: (_: Number) => Style
   transform: (_: 'none' | 'matrix()' | 'matrix3d()' | 'perspective()' | 'rotate()' | 'rotate3d()' | 'rotateX()' | 'rotateY()' | 'rotateZ()' | 'translate()' |
     'translate3d()' | 'translateX()' | 'translateY()' | 'translateZ()' | 'scale()' | 'scale3d()' | 'scaleX()' | 'scaleY()' | 'scaleZ()' | 'skew()' |
-    'skewX()' | 'skewY()' | string | globalValues) => Style
+    'skewX()' | 'skewY()' | string | GlobalValues) => Style
   transformOrigin: (_: 'center' | 'top' | 'right' | 'left' | 'bottom' | string | number | string[] | number[]) => Style
-  transformStyle: (_: 'flat' | 'preserve-3d' | globalValues) => Style
+  transformStyle: (_: 'flat' | 'preserve-3d' | GlobalValues) => Style
   transition: (_: StyleProperties['transitionDelay'] | StyleProperties['transitionDuration'] | StyleProperties['transitionProperty'] | StyleProperties['transitionTimingFunction']) => Style
-  transitionDelay: (_: string | string[] | globalValues) => Style
-  transitionDuration: (_: number | string | globalValues) => Style
+  transitionDelay: (_: string | string[] | GlobalValues) => Style
+  transitionDuration: (_: number | string | GlobalValues) => Style
   transitionProperty: (_: StyleProperties['animationName']) => Style
   transitionTimingFunction: (_: StyleProperties['animationTimingFunction']) => Style
-  unicodeBidi: (_: 'normal' | 'embed' | 'isolate' | 'bidi-override' | 'isolate-override' | 'plaintext' | globalValues) => Style
-  userSelect: (_: 'none' | 'auto' | 'text' | 'contain' | 'all' | 'element' | globalValues) => Style
-  verticalAlign: (_: 'baseline' | 'sub' | 'super' | 'text-top' | 'text-bottom' | 'middle' | 'top' | 'bottom' | number | string | globalValues) => Style
-  visibility: (_: 'visible' | 'hidden' | 'collapse' | globalValues) => Style
-  whiteSpace: (_: 'normal' | 'nowrap' | 'wrap' | 'pre' | 'pre-wrap' | 'pre-line' | 'break-spaces' | globalValues) => Style
-  width: (_: numberType) => Style
-  wordBreak: (_: 'normal' | 'break-all' | 'keep-all' | 'break-word' | globalValues) => Style
-  wordSpacing: (_: 'normal' | number | string | globalValues) => Style
-  wordWrap: (_: 'normal' | 'break-word' | 'anywhere' | globalValues) => Style
-  writingMode: (_: 'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | globalValues) => Style
+  unicodeBidi: (_: 'normal' | 'embed' | 'isolate' | 'bidi-override' | 'isolate-override' | 'plaintext' | GlobalValues) => Style
+  userSelect: (_: 'none' | 'auto' | 'text' | 'contain' | 'all' | 'element' | GlobalValues) => Style
+  verticalAlign: (_: 'baseline' | 'sub' | 'super' | 'text-top' | 'text-bottom' | 'middle' | 'top' | 'bottom' | number | string | GlobalValues) => Style
+  visibility: (_: 'visible' | 'hidden' | 'collapse' | GlobalValues) => Style
+  whiteSpace: (_: 'normal' | 'nowrap' | 'wrap' | 'pre' | 'pre-wrap' | 'pre-line' | 'break-spaces' | GlobalValues) => Style
+  width: (_: Number) => Style
+  wordBreak: (_: 'normal' | 'break-all' | 'keep-all' | 'break-word' | GlobalValues) => Style
+  wordSpacing: (_: 'normal' | number | string | GlobalValues) => Style
+  wordWrap: (_: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => Style
+  writingMode: (_: 'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | GlobalValues) => Style
 
-  zIndex: (_: string | globalValues) => Style
+  zIndex: (_: string | GlobalValues) => Style
   // custom specials
   cornerRadius: (_: StyleProperties['borderRadius']) => Style
 
