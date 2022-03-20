@@ -6,7 +6,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development node build/build.js",
-    "build": "tsdx build",
+    "build": "webpack --config build/build.prod.js",
     "test": "tsdx test",
     "lint": "tsdx lint"
   },

@@ -48,7 +48,7 @@ const Props: {
     '$alignContent': 'css.align-content',
     '$alignItems': 'css.align-items',
     '$alignSelf': 'css.align-self',
-    // '$animation': 'css.animation', // Parsed in component.js already
+    '$animation': 'css.animation', // Parsed in component.js already
     '$animationDelay': 'css.animation-delay',
     '$animationDirection': 'css.animation-direction',
     '$animationDuration': 'css.animation-duration',

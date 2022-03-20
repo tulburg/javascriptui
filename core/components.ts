@@ -238,6 +238,7 @@ export class $RxElement {
   alignContent: (_?: FlexAlignment) => RxElement
   alignItems: (_?: FlexAlignmentItem) => RxElement
   alignSelf: (_?: FlexAlignmentItem) => RxElement
+  animation: (_?: string) => RxElement
   animationDelay: (_?: string | string[]) => RxElement
   animationDirection: (_?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | GlobalValues) => RxElement
   animationDuration: (_?: string | string[] | GlobalValues) => RxElement
@@ -1718,6 +1719,23 @@ export class Video extends $RxElement {
 }
 
 
+export class Animation {
+
+  $className: string;
+  name: string;
+  $rule: CSSStyleRule;
+
+  constructor(props: {[key: string]: StyleProperties} & {'from'?: StyleProperties} & {'to'?: StyleProperties}) {
+    this.$className = this.name = 's' + Math.random().toString(36).substr(2, 9);
+    let rule = '@keyframes ' + this.$className + '{ ';
+    Object.getOwnPropertyNames(props).forEach((key: string) => {
+      rule +=  key + ' {' + Parser.parseNativeStyle(props[key]) + '} ';
+    });
+    rule += ' }';
+    createRules(this, [rule]);
+  }
+}
+
 export class Style {
 
   $className: string;
@@ -1777,6 +1795,7 @@ export class Style {
   alignContent: (_: FlexAlignment) => Style
   alignItems: (_: FlexAlignmentItem) => Style
   alignSelf: (_: FlexAlignmentItem) => Style
+  animation: (_: string) => Style
   animationDelay: (_: string | string[]) => Style
   animationDirection: (_: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse' | string | string[] | GlobalValues) => Style
   animationDuration: (_: string | string[] | GlobalValues) => Style
