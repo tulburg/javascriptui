@@ -1,29 +1,30 @@
 import Native from "./native";
 
 export const createSheet = function (data: string[]) {
-  let style;
   const allStyles = document.head.getElementsByTagName('style');
-  style = Array.from(allStyles).find(i => i.id === 'native-styles');
-  if(!style) {
-    style = document.createElement('style');
-    style.appendChild(document.createTextNode(''));
-    style.setAttribute('id', 'native-styles');
-    document.head.appendChild(style);
-  }
+  const id = 'n' + Math.random().toString(36).substr(2, 9);
+  const style: any = Array.from(allStyles).find(i => i.id === (<any>window).Native.sheedId);
+  if(style) style.disabled = true;
+  const newStyle = document.createElement('style');
+  newStyle.appendChild(document.createTextNode(''));
+  newStyle.setAttribute('id', id);
+  (<any>window).Native.sheedId = id;
+  document.head.appendChild(newStyle);
   for (let i = 0; i < data.length; i++) {
     if (data[i].trim().length > 0 && !data[i].trim().match('{ }')) {
       const rule = data[i].trim();
       try {
-        style.sheet.insertRule(rule, style.sheet.cssRules.length);
+        newStyle.sheet.insertRule(rule, newStyle.sheet.cssRules.length);
       } catch (e) {
         throw Error('Rule not applied: ' + rule + ' ' + e.message);
       }
     }
   }
-  return style.sheet;
+  return newStyle.sheet;
 };
 
 export const createRules = function(object: any, rules: string[]) {
+  if(object.name === undefined) console.trace(rules);
   const sheet = ((<any>window).Native as Native).sheet;
   rules.forEach(css => {
     try {
