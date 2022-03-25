@@ -21,7 +21,7 @@ export default {
     },
     styles: {
       roundButton: new Style({
-        padding: [10, 20]
+        padding: [10, 20], borderRadius: 16
       })
     }
   },

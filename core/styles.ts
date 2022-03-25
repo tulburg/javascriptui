@@ -24,7 +24,6 @@ export const createSheet = function (data: string[]) {
 };
 
 export const createRules = function(object: any, rules: string[]) {
-  if(object.name === undefined) console.trace(rules);
   const sheet = ((<any>window).Native as Native).sheet;
   rules.forEach(css => {
     try {

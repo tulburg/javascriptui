@@ -1745,10 +1745,10 @@ export class Style {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{  }'];
     if(Native() && Native().sheet) {
-      // createRules(this, rules);
-      // Object.getOwnPropertyNames(props).forEach(i => {
-      //   (<any>this)[i]((<any>props)[i]);
-      // });
+      createRules(this, rules);
+      Object.getOwnPropertyNames(props).forEach(i => {
+        (<any>this)[i]((<any>props)[i]);
+      });
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
@@ -1766,7 +1766,7 @@ export class Style {
       rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
     if(Native() && Native().sheet) {
-      // createRules(this, rules);
+      createRules(this, rules);
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
@@ -1782,7 +1782,7 @@ export class Style {
       rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
     if(Native() && Native().sheet) {
-      // createRules(this, rules)
+      createRules(this, rules)
     }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
