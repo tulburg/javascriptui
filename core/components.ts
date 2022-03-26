@@ -205,7 +205,6 @@ export class $RxElement {
       rule += ' }';
       rules.push(rule);
     });
-    console.log(rules);
     (<any>window).__native_load_complete_queue = (<any>window).__native_load_complete_queue || [];
     (<any>window).__native_load_complete_queue.push(() => {
       createRules(this, rules);

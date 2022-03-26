@@ -58,7 +58,7 @@ export default class Router {
               if('${key}' === 'css') {
                 this.$rules = this.$rules || [];
                 if(this.$rules.length > 0) {
-                  this.$rules[0].style.setProperty('${name}', Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
+                  this.$rules[this.$rules.length - 1].style.setProperty('${name}', Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
                 }
               }
               if('${key}' === 'attr') {
