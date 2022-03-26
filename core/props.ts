@@ -532,7 +532,8 @@ const Props: {
     '$flexSpaceBetween',
     '$flexCenter',
     '$responsiveness',
-    '$styles'
+    '$styles',
+    '$medias'
   ]
 }
 

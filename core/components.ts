@@ -29,6 +29,7 @@ export class $RxElement {
   $className: string = undefined;
   $styles: Style[] = [];
   $pseudo: {[key: string]: StyleProperties}[] = [];
+  $medias: {[key: string]: StyleProperties}[] = [];
   $global: {[key: string]: StyleProperties}[] = [];
 
   // Layout function keys
@@ -193,6 +194,23 @@ export class $RxElement {
       this.$styles = this.$styles.filter(s => s.$className === styles[i].$className);
       this.$className.replace(' ' + styles[i].$className, '');
     }
+  }
+
+  medias(props: {[key: string]: StyleProperties}) {
+    this.$medias.push(props);
+    const rules: string[] = [];
+    Object.getOwnPropertyNames(props).forEach((key: string) => {
+      let rule = '@media ' + key + '{ ';
+      rule += this.$tagName.toLowerCase() + '.' + this.$className.replace(' ', '.') + ' {' + Parser.parseNativeStyle(props[key]) + '} ';
+      rule += ' }';
+      rules.push(rule);
+    });
+    console.log(rules);
+    (<any>window).__native_load_complete_queue = (<any>window).__native_load_complete_queue || [];
+    (<any>window).__native_load_complete_queue.push(() => {
+      createRules(this, rules);
+    });
+    return this;
   }
 
   // functions

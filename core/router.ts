@@ -114,6 +114,9 @@ export default class Router {
         }
       }
     }
+    if((<any>window).__native_load_complete_queue && (<any>window).__native_load_complete_queue.length > 0) {
+      (<any>window).__native_load_complete_queue.forEach((i: Function) => i());
+    }
     if(!loaded) {
       console.warn('Path not configured');
       this.window.Native.unload('#app');
