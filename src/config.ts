@@ -1,5 +1,5 @@
 import App from './app';
-import { Style } from '@js-native/core/dist/components';
+import { Style } from '../core/components';
 
 export default {
   theme: {

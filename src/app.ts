@@ -1,4 +1,4 @@
-import { PageComponent, H1, P } from "@js-native/core/dist/components";
+import { PageComponent, H1, P } from "../core/components";
 
 export default class App extends PageComponent {
 

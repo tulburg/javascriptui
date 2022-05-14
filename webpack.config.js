@@ -8,7 +8,7 @@ module.exports = {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?path=/__webpack_hmr&overlay=true&timeout=20000',
-    path.resolve(__dirname, './core/dist/index.js')
+    path.resolve(__dirname, './core/instance.ts')
   ],
   devtool: 'source-map',
   watch: true,
