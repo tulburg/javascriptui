@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "declaration": true,
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "paths": {
+      "*": ["*", "./dist/*", "../../src/*", "../../../src/*"],
+      "config": ["../src/config.js", "../src/config.ts", "../../src/config.ts", "../../../src/config.ts", "../../../../src/config.ts"]
+    },
+  },
+  "include": [
+    "./*.ts"
+  ],
+  "exclude": ["*.json", ".DS_Store"]
+}

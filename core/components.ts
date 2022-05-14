@@ -212,6 +212,15 @@ export class $RxElement {
     return this;
   }
 
+  animate(callback: () => void): any {
+    const work = () => {
+      callback();
+      requestAnimationFrame(work);
+    }
+    requestAnimationFrame(work)
+    return this
+  }
+
   // functions
 
   $render() {

@@ -1,11 +1,10 @@
-import Config from '@src/config';
+import Config from 'config';
 import Props from './props';
 import { Component, Style, $RxElement, Container } from './components';
 import {ConfigType, RxElement} from './types';
 import Native from './native';
 
 export default class Router {
-
   routes: ConfigType.Route[] = Config.routes as ConfigType.Route[];
   current: ConfigType.Route;
   get window() : any {

@@ -1,6 +1,5 @@
 import Router from "./router";
 
-
 new Router();
 
 if((<any>module).hot) {
@@ -14,3 +13,5 @@ if((<any>module).hot) {
     new NewRouter();
   })
 }
+
+console.log('wonderful');
