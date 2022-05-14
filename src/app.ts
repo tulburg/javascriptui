@@ -7,9 +7,9 @@ export default class App extends PageComponent {
     super();
     this.paddingTop(120).addChild(
       new H1().text('Hello World').fontSize(56).textAlign('center')
-        .color('white').border('2px solid yellow'),
+        .color('white').padding([16,32]),
       new P().text('Welcome to JS Native. Follow me on twitter @tulburg')
-        .color('white').textAlign('center')
+        .color('white').textAlign('center').marginTop(8).fontSize(24).opacity('0.6')
     );
   }
 

@@ -14,6 +14,9 @@
     "removeComments": true,
     "allowJs": false,
     "target": "es6",
+    "paths": {
+      "config": ["src/config.ts", "../src/config.js", "../src/config.ts", "../../src/config.ts", "../../../src/config.ts", "../../../../src/config.ts"]
+    },
     "typeRoots": [
       "node_modules/@types"
     ],
