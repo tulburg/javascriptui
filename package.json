@@ -5,8 +5,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "NODE_ENV=development node build/build.js",
-    "build": "webpack --config build/build.prod.js",
+    "start": "NODE_ENV=development webpack serve --config config/webpack.dev.js",
+    "build": "NODE_ENV=production webpack --config config/webpack.prod.js",
     "test": "tsdx test",
     "lint": "tsdx lint"
   },
@@ -17,29 +17,25 @@
     "@babel/node": "^7.10.5",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
+    "@js-native/core": "^0.0.11",
     "@types/webpack-env": "^1.15.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "cross-env": "^7.0.3",
     "css-loader": "^3.6.0",
-    "express": "^4.17.1",
     "file-loader": "^4.3.0",
     "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "husky": "^4.3.0",
-    "size-limit": "^4.6.0",
-    "standard": "*",
+    "html-webpack-plugin": "^5.5.0",
+    "path-browserify": "^1.0.1",
     "style-loader": "^0.23.1",
     "ts-loader": "^8.0.5",
     "url-loader": "^2.3.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.4",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^4.2.2",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0",
+    "webpack-dev-server": "^4.3.1",
+    "webpack-merge": "^5.8.0",
     "write-file-webpack-plugin": "^4.5.1"
-  },
-  "dependencies": {
-    "tsdx": "^0.14.1"
-  }
+  } 
 }
