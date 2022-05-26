@@ -113,6 +113,14 @@ export class $RxElement {
     }
   }
 
+  removeChildren(): RxElement {
+    if(this.$children.length > 0) {
+      this.$children.forEach(child => child.$root = undefined);
+      this.$children = [];
+      return this;
+    }
+  }
+
   replaceChild(child: RxElement, newChild: RxElement) {
     if(this.$children.indexOf(child) > -1) {
       if(newChild.$root != undefined) {

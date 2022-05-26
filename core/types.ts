@@ -114,7 +114,7 @@ export interface StyleProperties {
   borderLeftColor?: Color;
   borderLeftStyle?: BorderStyle;
   borderLeftWidth?: BorderWidth;
-  borderRadius?: string | number | string[] | number[] | GlobalValues;
+  borderRadius?: string | number | string[] | (number|string)[] | GlobalValues;
   borderRight?: BorderStyle | BorderWidth | string | number | string[] | GlobalValues;
   borderRightColor?: Color;
   borderRightStyle?: BorderStyle;
@@ -235,7 +235,7 @@ export interface StyleProperties {
   listStyleImage?: 'none' | 'url()' | GlobalValues;
   listStylePosition?: 'inside' | 'outside' | GlobalValues;
   listStyleType?: 'none' | 'disc' | 'circle' | 'square' | 'decimal' | 'georgian' | 'trad-chinese-informal' | 'kannada' | '-' | '@<<custom>>' | GlobalValues;
-  margin?: 'auto' | Number | string | number | string[] | number[];
+  margin?: 'auto' | Number | string | number | (string | number)[];
   marginBottom?: 'auto' | Number | string | number;
   marginLeft?: StyleProperties['marginBottom']
   marginRight?: StyleProperties['marginBottom'];
@@ -262,7 +262,7 @@ export interface StyleProperties {
   overflowWrap?: 'normal' | 'break-word' | 'anywhere' | GlobalValues;
   overflowX?: 'clip' | StyleProperties['overflowBlock'];
   overflowY?: 'clip' | StyleProperties['overflowBlock'];
-  padding?: Number | string | number | string[] | number[] | GlobalValues;
+  padding?: Number | string | number | (number|string)[] | GlobalValues;
   paddingBottom?: Number;
   paddingLeft?: Number;
   paddingRight?: Number;
@@ -524,7 +524,7 @@ export type RxElement = {
   overflowWrap: (value: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => RxElement
   overflowX: (value: 'clip' | StyleProperties['overflowBlock']) => RxElement
   overflowY: (value: 'clip' | StyleProperties['overflowBlock']) => RxElement
-  padding: (value: Number | string | number | string[] | number[] | GlobalValues) => RxElement
+  padding: (value: Number | string | number | (string | number)[] | GlobalValues) => RxElement
   paddingBottom: (value: Number) => RxElement
   paddingLeft: (value: Number) => RxElement
   paddingRight: (value: Number) => RxElement
