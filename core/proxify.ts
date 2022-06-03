@@ -70,7 +70,7 @@ const $observeArray = (object: any, value: any, key: string) => {
       }else {
         // send delete
         Native().$notify({
-          old: oldObj, index: index, count: 1
+          old: oldObj, index, count
         }, NativeEventType.delete);
       }
     }
