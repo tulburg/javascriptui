@@ -28,48 +28,44 @@ export default class Router {
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
       if(typeof caller === 'function') {
-        fn = new Function(
-          prop, `return function() {
-            if(arguments.length > 0) {
-              Object.defineProperty(this, '${prop}', {
-                value: '',
-                writable: true,
-                enumerable: true,
-                configurable: true
-              });
-              this['${prop}'] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-            }else return this.${prop};
-            return this;
-          }`
-        )();
+        fn = function() {
+          if(arguments.length > 0) {
+            Object.defineProperty(this, prop, {
+              value: '',
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+            this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+          }else return this[prop];
+          return this;
+        }
       }else {
         const split = caller.split('.'),
         key = split[0], name = split[1];
-        fn = new Function(
-          prop, `return function() {
-            if(arguments.length > 0) {
-              Object.defineProperty(this, '${prop}', {
-                value: '',
-                writable: true,
-                enumerable: true,
-                configurable: true
-              });
-              if('${key}' === 'css') {
-                this.$rules = this.$rules || [];
-                if(this.$rules.length > 0) {
-                  this.$rules[this.$rules.length - 1].style.setProperty('${name}', Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
-                }
+        fn = function() {
+          if(arguments.length > 0) {
+            Object.defineProperty(this, prop, {
+              value: '',
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+            if(key === 'css') {
+              this.$rules = this.$rules || [];
+              if(this.$rules.length > 0) {
+                this.$rules[this.$rules.length - 1].style.setProperty(name, (<any>window).Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
               }
-              if('${key}' === 'attr') {
-                if(this.$node) {
-                  this.$node.setAttribute('${name}', arguments.length === 1 ? arguments[0] : Array.from(arguments));
-                }
+            }
+            if(key === 'attr') {
+              if(this.$node) {
+                this.$node.setAttribute(prop, arguments.length === 1 ? arguments[0] : Array.from(arguments));
               }
-              this['${prop}'] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-            }else return this.${prop};
-            return this;
-          }`
-        )();
+            }
+            this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+          }else return this[prop];
+          return this;
+        }
       }
       (<any>$RxElement.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
@@ -117,7 +113,7 @@ export default class Router {
       (<any>window).__native_load_complete_queue.forEach((i: Function) => i());
     }
     if(!loaded) {
-      console.warn('Path not configured');
+      console.warn(`Path ${location.pathname} not configured`);
       this.window.Native.unload('#app');
     }
   }
