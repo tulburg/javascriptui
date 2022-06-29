@@ -71,7 +71,7 @@ export type Space = 'auto' | number | number[] | string | string[] | GlobalValue
 export type Break = 'auto' | 'avoid' | 'always' | 'all' | 'avoid-pages' | 'page' | 'left' | 'right' | 'recto' | 'verso' | 'avoid-column' | 'column' | 'avoid-region' | GlobalValues;
 export type Number = 'calc()' | number | string | GlobalValues;
 
-export interface StyleProperties {
+export type StyleProperties = {
   alignContent?: FlexAlignment;
   alignItems?: FlexAlignmentItem;
   alignSelf?: FlexAlignmentItem;
@@ -321,7 +321,7 @@ export interface StyleProperties {
   zIndex?: string | GlobalValues;
   // custom specials
   cornerRadius?: StyleProperties['borderRadius'];
-}
+} | {[key: string]: string}
 
 export type RxElement = {
 

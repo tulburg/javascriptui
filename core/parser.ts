@@ -103,7 +103,10 @@ const Parser = {
           // if (parsed != undefined) objStyles += parsed;
         }
       } else {
-        if (Props.excludes.indexOf(prop.toLowerCase()) < 0 && obj.$level != 0) {
+        if(prop.replace('$','').match('--')) {
+          const root = prop.replace('$', '');
+          objStyles += `${root}: ${obj[root]}; `;
+        }else if (Props.excludes.indexOf(prop.toLowerCase()) < 0 && obj.$level != 0) {
           throw new Error('Invalid css property ' + prop);
         }
       }

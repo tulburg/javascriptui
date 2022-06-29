@@ -84,6 +84,10 @@ class Native {
 
     if (type == NativeEventType.insert) {
       node = data.old.$node;
+      // if(!node) {
+      //   node = this.createElement(data.old);
+      // }
+
       // if(data.key == 'animations') {
       //   // Todo: animation would still be tricky, if there's no way
       //   // to remove applied css styles
@@ -107,7 +111,7 @@ class Native {
       // const object = data.newValue[data.index];
       // Parser.parseProperties(object);
       if(data.index == 0) {
-        node.insertBefore(newNode, node.childNodes[0]);
+        if(node) node.insertBefore(newNode, node.childNodes[0]);
       }else {
         node.appendChild(newNode);
       }
@@ -467,8 +471,10 @@ class Native {
       // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
       // this.createEventQueue = [];
     });
-    this.loadQueue[this.serving].forEach(i => Function.prototype.call.apply(i));
-    this.loadQueue[this.serving] = [];
+    if(this.serving) {
+      this.loadQueue[this.serving].forEach(i => Function.prototype.call.apply(i));
+      this.loadQueue[this.serving] = [];
+    }
     this.serving = undefined;
     this.components[component.name][nid].served = true;
     this.served = true;

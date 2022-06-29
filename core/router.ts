@@ -59,7 +59,7 @@ export default class Router {
             }
             if(key === 'attr') {
               if(this.$node) {
-                this.$node.setAttribute(prop, arguments.length === 1 ? arguments[0] : Array.from(arguments));
+                this.$node.setAttribute(name, arguments.length === 1 ? arguments[0] : Array.from(arguments));
               }
             }
             this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
@@ -113,7 +113,7 @@ export default class Router {
       (<any>window).__native_load_complete_queue.forEach((i: Function) => i());
     }
     if(!loaded) {
-      console.warn(`Path ${location.pathname} not configured`);
+      console.error(`Path ${location.pathname} not configured`);
       this.window.Native.unload('#app');
     }
   }
@@ -140,7 +140,7 @@ export default class Router {
       }
     }
     if(fromGo && !loaded) {
-      console.warn('Path not configured');
+      console.error('Path not configured');
       this.window.Native.unload('#app');
     }
   }

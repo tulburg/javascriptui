@@ -29,7 +29,7 @@ export class $RxElement {
   $className: string = undefined;
   $styles: Style[] = [];
   $pseudo: {[key: string]: StyleProperties}[] = [];
-  $medias: {[key: string]: StyleProperties}[] = [];
+  $medias: {[key: string]: StyleProperties | string}[] = [];
   $global: {[key: string]: StyleProperties}[] = [];
 
   // Layout function keys
@@ -1075,7 +1075,7 @@ export class $RxElement {
 
   tag(tag?: string): RxElement | string {
     if(tag !== undefined) {
-      this.$tag = window.Object.assign(this.tag() || {}, tag);
+      this.$tag = tag;
       return this;
     }
     return this.$tag;
@@ -1113,15 +1113,19 @@ export class $RxElement {
     return this;
   }
 
-  replaceTextTag(text: string, tagObject: {[key: string]: typeof $RxElement}): RxElement {
-    const all = text.match(/([\${\w]+\([\w,\s]*\)})/g),
-    children: ($RxElement | string)[] = [],
+  replaceTextTag(text: string, tagObject: {[key: string]: any }): RxElement {
+    const all = text.match(/\${\w+(\(.*\))?\}?/g);
+    const children: ($RxElement | string)[] = [],
     p = (t: string) => {
       all.map((i, inx) => {
-        const tag = i.match(/{([\w]+\()/g)[0].replace('{','').replace('(',''),
-        args = i.match(/(\([\w,]+)/g).map(i => i.replace('(', ''));
+        let tag: any = i.replace('${','').replace('}',''), args = [];
+        const match = tag.match(/(\w+)\(/g);
+        if(match) {
+          tag = match[0]?.replace('(','');
+          args = i.match(/(\(.*)\)/g).map(i => i.replace('(', '').replace(')', ''));
+        }
         children.push(t.slice(0, t.indexOf(i)));
-        children.push(new tagObject[tag](...args));
+        children.push(tagObject[tag](...args));
         t = t.slice(t.indexOf(i) + i.length);
         if(inx === all.length - 1) {
           if(t.length > 0) children.push(t);
@@ -1508,6 +1512,14 @@ export class Input extends $RxElement {
 
   constructor() { super('input'); }
 
+  track?(obj: any) {
+    console.log(obj.name);
+    obj.watch((v: any) => console.log(v));
+    this.on({ input: (e: any) => {
+      obj = e.target.value;
+    } })
+  }
+
   model?(object: any) {
     this.$model = {
       key: Native().lock.key,
@@ -1686,6 +1698,10 @@ export class Source extends $RxElement {
 
 export class Span extends $RxElement {
   constructor() { super('span'); }
+}
+
+export class Strong extends $RxElement {
+  constructor() { super('strong'); }
 }
 
 export class Summary extends $RxElement {
