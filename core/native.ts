@@ -387,6 +387,7 @@ class Native {
             // newInstance.emit('create', true);
             if(newInstance.onCreate) {
               newInstance.onCreate();
+              newInstance.dispatch('create');
               // this.createEventQueue.push(newInstance.onCreate.bind(newInstance));
             }
           }
@@ -409,6 +410,12 @@ class Native {
   }
 
   load(parentSelector: string, route: ConfigType.Route, sub: ConfigType.Route) {
+    // if(Config.useHash) {
+    //   window.history.pushState({}, route.name, location.href + '/#' + route.path);
+    //   console.log('pushing', location.href + '/#' + route.path)
+    // }else {
+    //   window.history.pushState({}, route.name, location.href + route.path.slice(1));
+    // }
     const parent = document.querySelector(parentSelector);
     const component = route.component;
     this.served = false;
@@ -467,6 +474,7 @@ class Native {
       // newInstance.emit('create', true);
       if(newInstance.onCreate) {
         newInstance.onCreate();
+        newInstance.dispatch('create');
       }
       // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
       // this.createEventQueue = [];
