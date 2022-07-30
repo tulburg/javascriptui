@@ -116,7 +116,7 @@ export class $RxElement {
   removeChildren(): RxElement {
     if(this.$children.length > 0) {
       this.$children.forEach(child => child.$root = undefined);
-      this.$children.splice(0, this.$children.length);
+      this.$children.splice(0, this.$children.length, null);
       return this;
     }
   }
