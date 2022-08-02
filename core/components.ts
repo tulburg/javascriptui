@@ -1215,7 +1215,7 @@ export class Component extends $RxElement {
   constructor(...args: any[]) {
     super('component');
     this.$nid = Math.random().toString(36).substr(2, 9);
-    this.$tagName = this.name;
+    this.$tagName = this.name.length > 2 ? this.name : this.name + this.$nid;
     Native().serving = this.name + "-" + this.$nid;
     Native().components[this.name] = Native().components[this.name] || { structure: this.constructor } as any;
     Native().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;

@@ -7,7 +7,7 @@
     "outDir": "./dist",
     "paths": {
       "*": ["*", "./dist/*", "../../src/*", "../../../src/*"],
-      "config": ["../src/config.js", "../src/config.ts", "../../src/config.ts", "../../../src/config.ts", "../../../../src/config.ts"]
+      "config": ["src/config.ts", "../src/config.ts", "../../src/config.ts", "../../../src/config.ts", "../../../../src/config.ts"]
     },
   },
   "include": [
