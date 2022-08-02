@@ -13,7 +13,12 @@ declare global {
     routes: ConfigType.Route[],
     theme?: typeof Theme
   } & {[key: string]: any};
-  var Router: NSRouter
+  var Router: {
+    host: (host: RxElement, routes: ConfigType.Route[]) => void,
+    go: (path: string) => void,
+    pathData: (route: ConfigType.Route, sub?: boolean) => { path: string, data: string },
+    on: (event: 'go' | 'load' | 'unload', listener: (..._: any) => void) => void,
+  };
   interface String {
     watch: (_ : (v: any) => void) => void
   }
