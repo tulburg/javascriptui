@@ -67,20 +67,22 @@ class Native {
   // data: { oldObj, newObj, oldVal, newVal, key, index, count }
   // type: MOD_TYPE
   $notify (data: NativeEventData, type: NativeEventType) {
-    // console.log(data, NativeEventType.toString());
     const $ = (id: string) => document.querySelector('.'+id);
     let newNode, node: Element; // styles: any;
     if (type == NativeEventType.insert) {
       if(data.key != 'animations') {
         // parsed = Parser.parse(data.newVal[data.index]);
         //styles = [];
-        newNode = this.createElement(data.newValue[data.index], false);
+        const value = data.newValue[data.index];
+        newNode = (typeof value !== 'string') ? this.createElement(value, false) : document.createTextNode(value);
       }
     } else if (type == NativeEventType.update || type == NativeEventType.replace) {
       // parsed = Parser.parse(data.newObj);
       //styles = [];
       // newNode = this.createElement(data.newObj, false);
     }
+
+    if(data.old && !data.old.$node) return;
 
     if (type == NativeEventType.insert) {
       node = data.old.$node;
@@ -139,7 +141,7 @@ class Native {
         const rNode = (<RxElement>data.old.$children[data.index + i]).$node;
         if(rNode && rNode.parentNode) {
           rNode.parentNode.removeChild(rNode);
-        }
+        }else data.old.$node.removeChild(data.old.$node.childNodes[data.index + i]);
       }
     } else if (type == NativeEventType.sort) {
       node = $(data.old.$className);

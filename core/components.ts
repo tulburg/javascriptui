@@ -115,8 +115,8 @@ export class $RxElement {
 
   removeChildren(): RxElement {
     if(this.$children.length > 0) {
-      this.$children.forEach(child => child.$root = undefined);
-      this.$children.splice(0, this.$children.length, null);
+      this.$children.forEach(child => child && child.$root ? child.$root = undefined : '');
+      while(this.$children.length > 0) this.$children.pop();
       return this;
     }
   }
@@ -1145,7 +1145,12 @@ export class $RxElement {
       });
     };
     p(text);
-    this.$children = this.$children.concat(children as RxElement[]);
+    children.forEach((child: RxElement) => {
+      const nullIndex = this.$children.indexOf(null);
+      if(nullIndex > -1) this.$children.splice(nullIndex, 1, child)
+      else this.$children.push(child);
+      (type(child) === 'object') ? child.$root = this : '';
+    })
     return this;
   }
 
@@ -1505,7 +1510,6 @@ export class Input extends $RxElement {
   constructor() { super('input'); }
 
   track?(obj: any) {
-    console.log(obj.name);
     obj.watch((v: any) => console.log(v));
     this.on({ input: (e: any) => {
       obj = e.target.value;
@@ -1564,7 +1568,7 @@ export class Input extends $RxElement {
   value? = (v?: string | number) => {
     if(v !== undefined) {
       if(this.$node) {
-        (<any>this.$node).value = v;
+        if((<any>this.$node).type !== 'file') (<any>this.$node).value = v;
         this.$value = v;
       }else this.$value = v;
       return this;

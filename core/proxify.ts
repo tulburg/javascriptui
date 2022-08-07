@@ -5,7 +5,7 @@ import {$RxElement} from './components';
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
 const Native = function() : NativeClass {  return (<any>window).Native || undefined };
 
-const $observeArray = (object: any, value: any, key: string) => {
+export const $observeArray = (object: any, value: any, key: string) => {
   const val = value;
   const oldObj = object;
   const oldVal = val;
@@ -28,12 +28,12 @@ const $observeArray = (object: any, value: any, key: string) => {
 
   value.pop = () => {
     const index = value.length - 1;
-    Array.prototype.pop.call(value);
     if(Native() && Native().served) {
       Native().$notify({
         old: oldObj, index: index, count: 1
       }, NativeEventType.delete);
     }
+    Array.prototype.pop.call(value);
   };
 
   value.shift = () => {
@@ -46,7 +46,6 @@ const $observeArray = (object: any, value: any, key: string) => {
   };
 
   value.unshift = (item: any) => {
-    Array.prototype.unshift.call(value, item);
     if(Native() && Native().served) {
       if(key === '$children') {
         Native().$notify({
@@ -55,6 +54,7 @@ const $observeArray = (object: any, value: any, key: string) => {
         }, NativeEventType.update);
       }
     }
+    Array.prototype.unshift.call(value, item);
   };
 
   value.splice = (index: number, count: number, replace: any) => {

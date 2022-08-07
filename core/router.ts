@@ -1,3 +1,4 @@
+//@ts-ignore
 import Config from '@src/config';
 import Props from './props';
 import { Component, Style, $RxElement, Container } from './components';
