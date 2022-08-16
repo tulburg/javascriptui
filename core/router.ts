@@ -17,7 +17,6 @@ export default class Router {
   private events: {name: string, listener: (..._: any[]) => void}[];
 
   constructor() {
-
     // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
     if(Config.theme) this.window.Theme = Config.theme;
@@ -78,7 +77,6 @@ export default class Router {
       (<any>window).__native_load_queue.forEach((i: Function) => i());
     }
 
-
     this.loadRoute();
     history.pushState({}, '', location.href);
 
@@ -112,8 +110,8 @@ export default class Router {
         }
       }
     }
-    if((<any>window).__native_load_complete_queue && (<any>window).__native_load_complete_queue.length > 0) {
-      (<any>window).__native_load_complete_queue.forEach((i: Function) => i());
+    if(this.window.__native_load_complete_queue && this.window.__native_load_complete_queue.length > 0) {
+      this.window.__native_load_complete_queue.forEach((i: Function) => i());
     }
     if(!loaded) {
       console.error(`Path ${location.pathname} not configured`);

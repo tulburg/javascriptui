@@ -74,7 +74,8 @@ export const $observeArray = (object: any, value: any, key: string) => {
         }, NativeEventType.delete);
       }
     }
-    Array.prototype.splice.call(value, index, count, replace);
+    if(replace) Array.prototype.splice.call(value, index, count, replace);
+    else Array.prototype.splice.call(value, index, count)
   };
 
   value.sort = (fn: Function) => {

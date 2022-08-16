@@ -346,6 +346,7 @@ class Native {
         }
       }
       item.$node = c;
+      item.$node.dispatchEvent(new Event('created'));
       // rules = rules.concat(rule);
       // createRules(item, rule);
       if(parent) parent.appendChild(c);
