@@ -134,14 +134,29 @@ class Native {
       if((<RxElement>data.old.$children[data.index]).$level === 0) {
         const c = data.old.$children[data.index];
         // delete shadow
+        debugger;
+        const cascadeDestroy = (c0: RxElement) => {
+          if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
+            c0.dispatch('destroy');
+          }
+          if(c0.$children.length > 0) c0.$children.forEach(child => {
+            if(child.$node && child.$node.nodeType !== child.$node.TEXT_NODE) cascadeDestroy(child);
+          });
+        }
+        cascadeDestroy(c);
         delete (<any>this.components)[(<RxElement>c).name][(c as Component).$nid];
       }
 
       for(let i = 0; i < data.count; i++) {
-        const rNode = (<RxElement>data.old.$children[data.index + i]).$node;
+        const rChild = data.old.$children[data.index + i] as RxElement;
+        const rNode = rChild.$node;
         if(rNode && rNode.parentNode) {
           rNode.parentNode.removeChild(rNode);
-        }else data.old.$node.removeChild(data.old.$node.childNodes[data.index + i]);
+          rChild.dispatch('destroy');
+        }else {
+          data.old.$node.removeChild(data.old.$node.childNodes[data.index + i]);
+          if(data.old.$children[data.index + i] instanceof $RxElement) data.old.$children[data.index + i].dispatch('destroy');
+        }
       }
     } else if (type == NativeEventType.sort) {
       node = $(data.old.$className);
@@ -302,8 +317,8 @@ class Native {
     //   oldInstance.onCreate();
     // }
     // For the window update
-    document.dispatchEvent(new Event('DOMContentLoaded'));
-    window.dispatchEvent(new Event('load'));
+    document.dispatchEvent(new Event('DOMContentLoaded', { bubbles: false }));
+    window.dispatchEvent(new Event('load', { bubbles: false }));
     //
     // oldInstance.emit('update', this.components[name][nid].state);
     if(oldInstance.onUpdate) {
@@ -346,7 +361,7 @@ class Native {
         }
       }
       item.$node = c;
-      item.$node.dispatchEvent(new Event('created'));
+      item.dispatch('create');
       // rules = rules.concat(rule);
       // createRules(item, rule);
       if(parent) parent.appendChild(c);
@@ -367,6 +382,7 @@ class Native {
             const event = this.bindings[nid][i];
             const o: any = {};
             o[event.name] = event.event.bind(newInstance);
+            event.event.cancelBubbles = true;
             event.object.$events.push(o);
             c.addEventListener(event.name, event.event, { capture: true });
             this.bindings[nid].splice(i, 1);
@@ -475,9 +491,19 @@ class Native {
     // notify component
     queueMicrotask(() => {
       // newInstance.emit('create', true);
-      if(newInstance.onCreate) {
-        newInstance.onCreate();
-        newInstance.dispatch('create');
+      if(newInstance.onCreate) newInstance.onCreate();
+      newInstance.dispatch('create');
+      window.onbeforeunload = (e: any) => {
+        if(newInstance.onDestroy) newInstance.onDestroy();
+        const cascadeDestroy = (c0: RxElement) => {
+          if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
+            c0.dispatch('destroy');
+          }
+          if(c0.$children.length > 0) c0.$children.forEach(child => {
+            if(child.$node && child.$node.nodeType !== child.$node.TEXT_NODE) cascadeDestroy(child);
+          });
+        }
+        cascadeDestroy(newInstance);
       }
       // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
       // this.createEventQueue = [];

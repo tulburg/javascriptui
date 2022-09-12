@@ -148,6 +148,7 @@ export default class Router {
 
   go (path: string) {
     if(path === window.location.pathname) return;
+    window.scrollTo(0,0);
     window.history.pushState({}, '', location.href);
     let current = this.window.Config.useHash ? window.location.hash.slice(1) : window.location.pathname;
     if(path === current) return;

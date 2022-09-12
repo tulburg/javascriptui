@@ -330,6 +330,7 @@ export type RxElement = {
 
   onCreate?: Function;
   onUpdate?: Function;
+  onDestroy?: Function;
 
   //input model
   model?: (object: any) => RxElement
@@ -808,8 +809,10 @@ export type ElementEvent = {
   click?: () => void
   close?: () => void
   contextmenu?: () => void
+  create?: () => void
   cuechange?: () => void
   dblclick?: () => void
+  destroy?: () => void
   drag?: () => void
   dragend?: () => void
   dragenter?: () => void

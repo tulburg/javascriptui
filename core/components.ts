@@ -168,7 +168,8 @@ export class $RxElement {
   dispatch(event: string) {
     if(!this.$node) throw `Cannot dispatch, node is not attached`;
     else {
-      this.$node.dispatchEvent(new Event(event));
+      const e = new Event(event, { bubbles: false });
+      this.$node.dispatchEvent(e);
     }
     return this;
   }
@@ -1150,13 +1151,15 @@ export class $RxElement {
         }
       });
     };
-    p(text);
-    children.forEach((child: RxElement) => {
-      const nullIndex = this.$children.indexOf(null);
-      if(nullIndex > -1) this.$children.splice(nullIndex, 1, child)
-      else this.$children.push(child);
-      (type(child) === 'object') ? child.$root = this : '';
-    })
+    if(all) {
+      p(text);
+      children.forEach((child: RxElement) => {
+        const nullIndex = this.$children.indexOf(null);
+        if(nullIndex > -1) this.$children.splice(nullIndex, 1, child)
+        else this.$children.push(child);
+        (type(child) === 'object') ? child.$root = this : '';
+      })
+    }else this.$children.push(text as any);
     return this;
   }
 
