@@ -703,6 +703,7 @@ export type RxElement = {
   playsInline: (value: string | number | string[] | number[]) => RxElement
   poster: (value: string | number | string[] | number[]) => RxElement
   preload: (value: string | number | string[] | number[]) => RxElement
+  preserveAspectRatio: (value: 'none' | 'xMinYMin' | 'xMidYMin' | 'xMaxYMin' | 'xMinMid' | 'xMidYMid' | 'xMaxYMid' | 'xMinYMax' | 'xMidYMax' | 'xMaxYMax' | 'meet' | 'slice') => RxElement
   profile: (value: string | number | string[] | number[]) => RxElement
   prompt: (value: string | number | string[] | number[]) => RxElement
   readOnly: (value: string | number | string[] | number[]) => RxElement
