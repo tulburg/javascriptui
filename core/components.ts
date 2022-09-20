@@ -3,9 +3,9 @@ import {
   RxElement, ElementEvent, NativeLock, StyleProperties, FlexAlignment, FlexAlignmentItem, ConfigType,
   GlobalValues, Color, BorderStyle, BorderWidth, CSSImage, Space, Break, Number
 } from './types';
-import { ProxifyComponent, ProxifyState, $observeArray } from './proxify';
 import NativeClass from './native';
 import {createRules} from './styles';
+import {$observeArray} from './proxify';
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
 const Native = function() : NativeClass {  return (<any>window).Native || undefined };
@@ -79,6 +79,7 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
+    $observeArray(this, this.$children, 'children');
     // return Proxify(this);
   }
 
@@ -93,8 +94,9 @@ export class $RxElement {
         }
         const nullIndex = this.$children.indexOf(null);
         if(nullIndex > -1) this.$children.splice(nullIndex, 1, children[i])
-        else this.$children.push(children[i]);
+          else this.$children.push(children[i]);
         children[i].$root = this;
+        if(this.$node) this.$node.append(Native().createElement(children[i]));
       }
       return this;
     }else {
@@ -107,7 +109,7 @@ export class $RxElement {
       child.$root = undefined;
       const resetRules = (item: RxElement) => {
         item.$rules = []
-        if(item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i))
+        if(item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
       }
       resetRules(child);
       this.$children.splice(this.$children.indexOf(child), 1);
@@ -123,8 +125,8 @@ export class $RxElement {
     if(this.$children.length > 0) {
       this.$children.forEach(child => child && child.$root ? child.$root = undefined : '');
       while(this.$children.length > 0) this.$children.pop();
-      return this;
     }
+    return this;
   }
 
   replaceChild(child: RxElement, newChild: RxElement) {
@@ -137,6 +139,11 @@ export class $RxElement {
       return this;
     } else {
       // child doesnt exist on parent
+    }
+
+    if(this.$node) {
+      this.$node.removeChild(child.$node);
+      this.$node.appendChild(newChild.$node);
     }
   }
 
@@ -479,6 +486,7 @@ export class $RxElement {
   perspectiveOrigin: (_?: 'center' | 'top' | 'bottom' | 'right' | string | GlobalValues) => RxElement
   pointerEvents: (_?: 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | GlobalValues) => RxElement
   position: (_?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky') => RxElement | any
+  preserveAspectRatio: (_?: 'none' | 'xMinYMin' | 'xMidYMin' | 'xMaxYMin' | 'xMinMid' | 'xMidYMid' | 'xMaxYMid' | 'xMinYMax' | 'xMidYMax' | 'xMaxYMax' | 'meet' | 'slice') => RxElement
   quotes: (_?: 'none' | 'initial' | 'auto' | string | GlobalValues) => RxElement
   resize: (_?: 'none' | 'both' | 'horizontal' | 'vertical' | 'block' | 'inline' | GlobalValues) => RxElement
   right: (_?: Number) => RxElement
@@ -1240,29 +1248,29 @@ export class Component extends $RxElement {
     // additional styling (default div styling)?
     this.display('block');
 
-    return ProxifyComponent(this, this.name, this.$nid) as Component;
+    // return ProxifyComponent(this, this.name, this.$nid) as Component;
   }
 
-  set state(v) {
-    if(type(v) !== 'object') {
-      throw new Error('Invalid state format, state must be an object');
-    }
-    if(!Native().components[this.name][this.$nid]){
-      throw new Error('Set state: Component doesn\'t exist or has been destroy');
-    }
-    v.__state__ = true;
-    Native().components[this.name][this.$nid].state =
-      Native().components[this.name][this.$nid].state
-      || Native().components[this.name].state
-      || ProxifyState(v, this.name, this.$nid);
-  }
-
-  get state() {
-    if(!Native().components[this.name][this.$nid]){
-      throw new Error('Get state: Component doesn\'t exist or has been destroy');
-    }
-    return Native().components[this.name][this.$nid].state;
-  }
+  // set state(v) {
+  //   if(type(v) !== 'object') {
+  //     throw new Error('Invalid state format, state must be an object');
+  //   }
+  //   if(!Native().components[this.name][this.$nid]){
+  //     throw new Error('Set state: Component doesn\'t exist or has been destroy');
+  //   }
+  //   v.__state__ = true;
+  //   Native().components[this.name][this.$nid].state =
+  //     Native().components[this.name][this.$nid].state
+  //     || Native().components[this.name].state
+  //     || ProxifyState(v, this.name, this.$nid);
+  // }
+  //
+  // get state() {
+  //   if(!Native().components[this.name][this.$nid]){
+  //     throw new Error('Get state: Component doesn\'t exist or has been destroy');
+  //   }
+  //   return Native().components[this.name][this.$nid].state;
+  // }
 
   get route() {
     if(!Native().components[this.name][this.$nid]) {
@@ -1799,12 +1807,12 @@ export class Style {
   constructor(props: StyleProperties) {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{  }'];
-    if(Native() && Native().sheet) {
-      createRules(this, rules);
-      Object.getOwnPropertyNames(props).forEach(i => {
-        (<any>this)[i]((<any>props)[i]);
-      });
-    }else {
+    // if(Native() && Native().sheet) {
+    //   createRules(this, rules);
+    //   Object.getOwnPropertyNames(props).forEach(i => {
+    //     (<any>this)[i]((<any>props)[i]);
+    //   });
+    // }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
         createRules(this, rules);
@@ -1812,7 +1820,7 @@ export class Style {
           (<any>this)[i]((<any>props)[i]);
         });
       });
-    }
+    // }
   }
 
   global(props: {[key: string]: StyleProperties}) {
@@ -1820,14 +1828,14 @@ export class Style {
     for(const key in props) {
       rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
-    if(Native() && Native().sheet) {
-      createRules(this, rules);
-    }else {
+    // if(Native() && Native().sheet) {
+    //   createRules(this, rules);
+    // }else {
       (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
         createRules(this, rules);
       });
-    }
+    // }
     return this;
   }
 

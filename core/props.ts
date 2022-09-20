@@ -398,6 +398,7 @@ const Props: {
     '$playsInline': 'attr.playsinline',
     '$poster': 'attr.poster',
     '$preload': 'attr.preload',
+    '$preserveAspectRatio': 'attr.preserveAspectRatio',
     '$profile': 'attr.profile',
     '$prompt': 'attr.prompt',
     '$readOnly': 'attr.readonly',

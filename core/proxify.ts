@@ -14,10 +14,11 @@ export const $observeArray = (object: any, value: any, key: string) => {
     Array.prototype.push.call(value, item);
     if(Native() && Native().served) {
       if(key === '$children') {
-        Native().$notify({
-          old: oldObj, new: object, oldValue: oldVal, newValue: value,
-          key: key, index: value.indexOf(item), count: 1
-        }, NativeEventType.insert);
+        object.$node.appendChild(item.$node);
+        // Native().$notify({
+        //   old: oldObj, new: object, oldValue: oldVal, newValue: value,
+        //   key: key, index: value.indexOf(item), count: 1
+        // }, NativeEventType.insert);
       }else if(key !== '$rules'){
         Native().$notify({
           old: oldObj, new: object, oldValue: oldVal, newValue: value, key: key
@@ -29,9 +30,10 @@ export const $observeArray = (object: any, value: any, key: string) => {
   value.pop = () => {
     const index = value.length - 1;
     if(Native() && Native().served) {
-      Native().$notify({
-        old: oldObj, index: index, count: 1
-      }, NativeEventType.delete);
+      object.$node.removeChild(object.$node.childNodes[index]);
+      // Native().$notify({
+      //   old: oldObj, index: index, count: 1
+      // }, NativeEventType.delete);
     }
     Array.prototype.pop.call(value);
   };
@@ -39,19 +41,22 @@ export const $observeArray = (object: any, value: any, key: string) => {
   value.shift = () => {
     Array.prototype.shift.call(value);
     if(Native() && Native().served) {
-      Native().$notify({
-        old: oldObj, index: 0, count: 1
-      }, NativeEventType.delete);
+      // @ts-ignore
+      object.$node.removeChild(this.$node.childNodes[0]);
+      // Native().$notify({
+      //   old: oldObj, index: 0, count: 1
+      // }, NativeEventType.delete);
     }
   };
 
   value.unshift = (item: any) => {
     if(Native() && Native().served) {
       if(key === '$children') {
-        Native().$notify({
-          old: oldObj, new: object, oldValue: oldVal, newValue: value,
-          key: key, index: 0, count: 1
-        }, NativeEventType.update);
+        object.$node.childNodes[0] = item.$node;
+        // Native().$notify({
+        //   old: oldObj, new: object, oldValue: oldVal, newValue: value,
+        //   key: key, index: 0, count: 1
+        // }, NativeEventType.update);
       }
     }
     Array.prototype.unshift.call(value, item);
@@ -69,9 +74,10 @@ export const $observeArray = (object: any, value: any, key: string) => {
         }, NativeEventType.replace);
       }else {
         // send delete
-        Native().$notify({
-          old: oldObj, index, count
-        }, NativeEventType.delete);
+        object.$node.childNodes[index].remove();
+        // Native().$notify({
+        //   old: oldObj, index, count
+        // }, NativeEventType.delete);
       }
     }
     if(replace) Array.prototype.splice.call(value, index, count, replace);
