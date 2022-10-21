@@ -30,11 +30,8 @@ class Native {
 
   constructor (router: Router) {
     (<any>window).Native = this;
-    // this.bonds = {};
-    // this.bindings = {};
     this.components = {} as any;
     this.router = router;
-    // this.createEventQueue = [];
     this.sheet = createSheet([]);
     return this;
   }
@@ -64,54 +61,20 @@ class Native {
     return value;
   }
 
-  // data: { oldObj, newObj, oldVal, newVal, key, index, count }
-  // type: MOD_TYPE
   $notify (data: NativeEventData, type: NativeEventType) {
     const $ = (id: string) => document.querySelector('.'+id);
     let newNode, node: Element; // styles: any;
     if (type == NativeEventType.insert) {
       if(data.key != 'animations') {
-        // parsed = Parser.parse(data.newVal[data.index]);
-        //styles = [];
         const value = data.newValue[data.index];
         newNode = (typeof value !== 'string') ? this.createElement(value, false) : document.createTextNode(value);
       }
-    } else if (type == NativeEventType.update || type == NativeEventType.replace) {
-      // parsed = Parser.parse(data.newObj);
-      //styles = [];
-      // newNode = this.createElement(data.newObj, false);
-    }
+    } else if (type == NativeEventType.update || type == NativeEventType.replace) {}
 
     if(data.old && !data.old.$node) return;
 
     if (type == NativeEventType.insert) {
       node = data.old.$node;
-      // if(!node) {
-      //   node = this.createElement(data.old);
-      // }
-
-      // if(data.key == 'animations') {
-      //   // Todo: animation would still be tricky, if there's no way
-      //   // to remove applied css styles
-      //   if(data.new.animations) {
-      //     for(let i = 0; i < data.newObj.animations.length; i++) {
-      //       const anim = data.newObj.animations[i];
-      //       this.patchCSS(node, `{ transition: all
-      //         ${(anim.options.duration) ? anim.options.duration / 1000 : '0.35'}s
-      //         ${(anim.options.function) ? anim.options.function : 'ease-in-out' }; }`);
-      //       for(const prop in anim.styles) {
-      //         data.oldObj['$'+prop] = anim.styles[prop];
-      //       }
-      //       const css = Parser.parseNativeStyle(anim.styles, []);
-      //       this.patchCSS(node, '{ '+css+' }');
-      //       setTimeout(() => {
-      //         this.patchCSS(node, '{ transition: unset; }');
-      //       }, anim.options.duration);
-      //     }
-      //   }
-      // }else if(node) {
-      // const object = data.newValue[data.index];
-      // Parser.parseProperties(object);
       if(data.index == 0) {
         if(node) node.insertBefore(newNode, node.childNodes[0]);
       }else {
@@ -130,10 +93,8 @@ class Native {
       }else data.old.$node.appendChild( typeof newNode === 'string' ? document.createTextNode(newNode) : newNode);
 
     } else if (type == NativeEventType.delete) {
-      // check if its a component and delete the native instance
       if((<RxElement>data.old.$children[data.index]).$level === 0) {
         const c = data.old.$children[data.index];
-        // delete shadow
         debugger;
         const cascadeDestroy = (c0: RxElement) => {
           if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
@@ -173,12 +134,6 @@ class Native {
         node.appendChild(node.childNodes[node.childNodes.length - i - 1]);
       }
     }
-
-    // if (styles) {
-    //   if (this.sheet != undefined) {
-    //     updateRules(this.sheet, styles);
-    //   }
-    // }
   }
 
   $toggleActive(node: Element) {
@@ -199,7 +154,6 @@ class Native {
           if(oldEl.attributes[j].name == newEl.attributes[i].name){
             if(oldEl.attributes[j].value != newEl.attributes[i].value) {
               if(newEl.attributes[i].name != 'class') {
-                // oldEl.removeAttribute(newEl.attributes[j].name);
                 oldEl.attributes[j].value = newEl.attributes[i].value;
                 oldEl.setAttribute(newEl.attributes[i].name, newEl.attributes[i].value);
               }
@@ -272,78 +226,11 @@ class Native {
     }
   }
 
-  updateState(name: string, nid: string) {
-    this.served = false;
-    this.serving = name + '-' + nid;
-    this.components[name][nid].served = false;
-    // parse new state
-    this.components[name].state = this.components[name][nid].state;
-    // spawn a patch instance
-    const oldServing = this.serving;
-    const instanceNID = Math.random().toString(36).substr(2, 9);
-    this.serving = name + '-' + instanceNID;
-    this.shadowing = true;
-    const newInstance: RxElement = new (<any>this.components[name]).structure(this.components[name][nid].args);
-    // get running instance
-    // fetch old instance
-    const oldInstance: RxElement = this.components[name][nid].instance;
-    // if(this.bindings[instanceNID]) {
-    //   for(let i = 0; i < this.bindings[instanceNID].length; i++) {
-    //     const event = this.bindings[instanceNID][i];
-    //     const o: any = {};
-    //     o[event.name] = event.event.bind(oldInstance);
-    //     event.object.$events.push(o);
-    //     this.bindings[instanceNID].splice(i, 1);
-    //     i--;
-    //   }
-    //   if(this.bindings[instanceNID].length < 1) {
-    //     delete this.bindings[instanceNID];
-    //   }
-    // }
-
-    this.serving = oldServing;
-    this.createElement(newInstance, true); // createElement(parsed.tree);
-    // loop through, and throw diffs
-
-    this.patchAttrs(oldInstance.$node, newInstance.$node);
-    this.loop(oldInstance.$children, newInstance.$children, oldInstance, newInstance, 0);
-    // update rootNode
-    // update the instance
-    // this.components[name].instance = <any>newInstance;
-    // update the css rules
-    // updateRules(this.sheet, newInstance.cssRules);
-    //-------- why?
-    // if(oldInstance.onCreate) {
-    //   oldInstance.onCreate();
-    // }
-    // For the window update
-    document.dispatchEvent(new Event('DOMContentLoaded', { bubbles: false }));
-    window.dispatchEvent(new Event('load', { bubbles: false }));
-    //
-    // oldInstance.emit('update', this.components[name][nid].state);
-    if(oldInstance.onUpdate) {
-      oldInstance.onUpdate(this.components[name][nid].state);
-    }
-    this.served = true;
-    this.serving = undefined;
-    this.shadowing = false;
-    this.components[name][nid].served = true;
-    // delete the spawn
-    delete this.components[name][newInstance.$nid];
-  }
-
   createElement(object: $RxElement | Component, updateState?: any) {
-    // let rules: string[] = [];
     const graphics = ['svg', 'path'] //... plus more
     const create = (parent: Element, item: RxElement) => {
       const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$xmlns || parent.namespaceURI, item.$tagName);
       const parsedProperties = Parser.parseProperties(item, updateState);
-      // if(item.$animation) {
-      //   rule = rule.concat(Parser.parseAnimation(item.$animation));
-      // }
-      // if(item.$responsiveness) {
-      //   rule = rule.concat(Parser.parseResponsive(item));
-      // }
       for(const prop in parsedProperties) {
         if(prop == '$events') {
           for(let i = 0; i < parsedProperties[prop].length; i++) {
@@ -352,38 +239,26 @@ class Native {
           }
         }else {
           c.setAttribute(prop, parsedProperties[prop])
-          // if(graphics.indexOf(item.$tagName) < 0) {
-          //   c.setAttribute(prop, parsedProperties[prop])
-          // }else {
-          //   const namespace = item.$tagName === 'svg' ? (<any>item).$xmlns : parent.namespaceURI;
-          //   c.setAttributeNS(namespace, prop, parsedProperties[prop]);
-          // }
         }
       }
       item.$node = c;
-      item.dispatch('create');
-      // rules = rules.concat(rule);
-      // createRules(item, rule);
       if(parent) parent.appendChild(c);
       if(item.$level === 0 && parent != undefined) {
         const oldServing = this.serving;
-        // get a sub component load instance
         const component = item;
         this.components[component.name]
           = this.components[component.name] || { structure: component.constructor } as any;
         const newInstance = item;
         const nid = (newInstance as Component).$nid;
-        // this.serving = component.name + '-' + nid;
         this.components[component.name][nid].route = this.router.current;
         this.components[component.name][nid].instance = newInstance;
-
         if(this.bindings[nid]) {
           for(let i = 0; i < this.bindings[nid].length; i++) {
             const event = this.bindings[nid][i];
             const o: any = {};
             o[event.name] = event.event.bind(newInstance);
-            event.event.cancelBubbles = true;
             event.object.$events.push(o);
+            console.log('adding listerners', o);
             c.addEventListener(event.name, event.event, { capture: true });
             this.bindings[nid].splice(i, 1);
             i--;
@@ -394,26 +269,27 @@ class Native {
         }
 
         queueMicrotask(() => {
-          // updateRules(this.sheet, newInstance.cssRules);
-
           if(this.components[component.name][nid] && this.components[component.name][nid].rootNode == undefined) {
             this.components[component.name][nid].rootNode = item.$node;
           }
         })
 
         queueMicrotask(() => {
+          console.log('got here');
           if(!updateState) {
-            // newInstance.emit('create', true);
             if(newInstance.onCreate) {
               newInstance.onCreate();
               newInstance.dispatch('create');
-              // this.createEventQueue.push(newInstance.onCreate.bind(newInstance));
             }
           }
         })
         this.serving = oldServing;
         this.components[component.name][nid].served = true;
       }
+      queueMicrotask(() => {
+        if(item.onCreate) item.onCreate();
+        item.dispatch('create');
+      });
       for(let i = 0; i < item.$children.length; i++) {
         if(typeof item.$children[i] === 'string') {
           c.appendChild(document.createTextNode(<any>item.$children[i]));
@@ -424,17 +300,10 @@ class Native {
       return c;
     };
     const result = create(undefined, object);
-    // object.$rules = rules;
     return result;
   }
 
   load(parentSelector: string, route: ConfigType.Route, sub: ConfigType.Route) {
-    // if(Config.useHash) {
-    //   window.history.pushState({}, route.name, location.href + '/#' + route.path);
-    //   console.log('pushing', location.href + '/#' + route.path)
-    // }else {
-    //   window.history.pushState({}, route.name, location.href + route.path.slice(1));
-    // }
     const parent = document.querySelector(parentSelector);
     const component = route.component;
     this.served = false;
@@ -461,24 +330,12 @@ class Native {
         delete this.bindings[nid];
       }
     }
-    // const parsed = Parser.parse(this.components[route.name].instance);
     const rootNode = this.createElement(newInstance);// createElement(parsed.tree);
-    // updateRules(this.sheet, newInstance.cssRules);
     if(this.components[component.name][nid].rootNode == undefined) {
       this.components[component.name][nid].rootNode = rootNode;
     }
     for(let c = 0; c < parent.childNodes.length; c++) {
       if(parent.childNodes[c].nodeType !== parent.TEXT_NODE) {
-    //     const existingInstance = this.components[parent.childNodes[c].className];
-    //     if(existingInstance) {
-    //       if(existingInstance.onDestroy) {
-    //         existingInstance.onDestroy();
-    //       }
-    //       if(parent.childNodes[c].className != route.name) {
-    //         delete this.components[parent.childNodes[c].className];
-    //       }
-    //       existingInstance.served = false;
-    //     }
         parent.removeChild(parent.childNodes[c]);
       }
     }
@@ -486,11 +343,7 @@ class Native {
       console.warn('Loading a component on a non empty container!');
     }
     parent.appendChild(rootNode);
-    // setup tree
-    // this.components[route.name].tree = parsed.tree;
-    // notify component
     queueMicrotask(() => {
-      // newInstance.emit('create', true);
       if(newInstance.onCreate) newInstance.onCreate();
       newInstance.dispatch('create');
       window.onbeforeunload = (e: any) => {
@@ -505,8 +358,6 @@ class Native {
         }
         cascadeDestroy(newInstance);
       }
-      // this.createEventQueue.forEach(i => Function.prototype.call.apply(i));
-      // this.createEventQueue = [];
     });
     if(this.serving) {
       this.loadQueue[this.serving].forEach(i => Function.prototype.call.apply(i));
@@ -524,120 +375,6 @@ class Native {
   unload(parentSelector: string) {
     const parent = document.querySelector(parentSelector);
     if(parent && parent.childNodes.length > 0) parent.removeChild(parent.childNodes[0]);
-  }
-
-  loop(arr1: any, arr2: any, p1: any, p2: any, index: number) {
-    const a: $RxElement = arr1[index], b: $RxElement = arr2[index];
-    if(a == undefined && b == undefined) return;
-    if(type(a) == 'string' || type(b) == 'string') {
-      // console.trace(p1);
-      // debugger;
-      if(arr2.indexOf(a) < 0) {
-        // setText(p1, getText(p2));
-        p1.$children[index] = b;
-        if(p1.$node.childNodes[index].nodeType === (<any>Element).TEXT_NODE) {
-          p1.$node.childNodes[index].textContent = b;
-        }
-        this.loop(arr1, arr2, p1, p2, index);
-      }
-    }else if(a != undefined) {
-      if(b != undefined) {
-        if(a.$tagName == b.$tagName) {
-          const similarity = similar(props(a), props(b));
-          if(similarity >= 0.5) {
-            if(similarity < 1) {
-              if(a.$level === 0 && b.$level === 0) {
-                // console.log('got components', a);
-                this.served = false;
-                const name = a.name;
-                const nid = (a as Component).$nid;
-                const oldInstance = this.components[name][nid].instance;
-                this.components[name][nid].served = false;
-                this.components[name].state = this.components[name][nid].state;
-                this.patchAttrs(oldInstance.$node, b.$node);
-                this.loop(oldInstance.$children, b.$children, oldInstance, b, 0);
-
-                // oldInstance.emit('update', this.components[name][nid].state);
-                if(oldInstance.onUpdate) {
-                  oldInstance.onUpdate(this.components[name][nid].state);
-                }
-                this.served = true;
-                this.components[name][nid].served = true;
-                this.components[name][nid].args = this.components[b.name][(b as Component).$nid].args;
-                delete this.components[b.name][(b as Component).$nid];
-              } else {
-                // must patch strongly
-                // console.log("> must patch", props(a), props(b))
-                this.patchAttrs(a.$node, b.$node);
-                this.patchCSS(a, b.$rules);
-                this.patchProps(a, b);
-                b.$node = a.$node;
-
-                // todo: i think you should the Native instance of
-                // b if, its a component
-                if(b.$level === 0) {
-                  delete this.components[b.name][(b as Component).$nid];
-                }
-              }
-            }
-          } else {
-            if(visible(arr2, a)) {
-              // insert b
-              console.log("> insert", props(a), props(b))
-              arr1.splice(index, 0, b);
-              this.$notify({ old: p1, newValue: arr1, index: index }, NativeEventType.insert);
-              index++;
-              p1.$children = arr1;
-              this.loop(arr1, arr2, p1, p2, index);
-            } else {
-              // delete a;
-              // console.log("> delete", props(a), props(b))
-              arr1 = arr1.filter((_: any, i: number) => i != index);
-              this.$notify({ old: p1, index: index, count: 1 }, NativeEventType.delete);
-              p1.$children = arr1;
-              this.loop(arr1, arr2, p1, p2, index);
-            }
-          }
-          if(a.$children && b.$children) {
-            this.loop(a.$children, b.$children, a, b, 0);
-          }
-          index++;
-          this.loop(arr1, arr2, p1, p2, index);
-        } else {
-          if(visible(arr2, a)) {
-            // insert b
-            // console.log("> insert", props(a), props(b))
-            arr1.splice(index, 0, b);
-            this.$notify({ old: p1, newValue: arr1, index: index }, NativeEventType.insert);
-            index++;
-            p1.$children = arr1;
-            this.loop(arr1, arr2, p1, p2, index);
-          } else {
-            // delete a;
-            // console.log("> delete", props(a), props(b))
-            arr1 = arr1.filter((_: any, i: number) => i != index);
-            this.$notify({ old: p1, index: index, count: 1 }, NativeEventType.delete);
-            p1.$children = arr1;
-            this.loop(arr1, arr2, p1, p2, index);
-          }
-        }
-      } else {
-        // delete a;
-        // console.log("> delete", props(a))
-        arr1 = arr1.filter((_: any, i: number) => i != index);
-        this.$notify({ old: p1, index: index, count: 1 }, NativeEventType.delete);
-        p1.$children = arr1;
-        this.loop(arr1, arr2, p1, p2, index);
-      }
-    } else {
-      // insert b;
-      // console.log("> insert", props(b))
-      arr1.splice(index, 0, b);
-      this.$notify({ old: p1, newValue: arr1, index: index }, NativeEventType.insert);
-      index++;
-      p1.$children = arr1;
-      this.loop(arr1, arr2, p1, p2, index);
-    }
   }
 }
 

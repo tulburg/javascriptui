@@ -79,8 +79,6 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
-    $observeArray(this, this.$children, 'children');
-    // return Proxify(this);
   }
 
   addChild(...children: RxElement[]): RxElement {
@@ -1244,33 +1242,8 @@ export class Component extends $RxElement {
     Native().components[this.name][this.$nid].args
     = Native().components[this.name][this.$nid].args || args;
     Native().loadQueue[Native().serving] = [];
-
-    // additional styling (default div styling)?
     this.display('block');
-
-    // return ProxifyComponent(this, this.name, this.$nid) as Component;
   }
-
-  // set state(v) {
-  //   if(type(v) !== 'object') {
-  //     throw new Error('Invalid state format, state must be an object');
-  //   }
-  //   if(!Native().components[this.name][this.$nid]){
-  //     throw new Error('Set state: Component doesn\'t exist or has been destroy');
-  //   }
-  //   v.__state__ = true;
-  //   Native().components[this.name][this.$nid].state =
-  //     Native().components[this.name][this.$nid].state
-  //     || Native().components[this.name].state
-  //     || ProxifyState(v, this.name, this.$nid);
-  // }
-  //
-  // get state() {
-  //   if(!Native().components[this.name][this.$nid]){
-  //     throw new Error('Get state: Component doesn\'t exist or has been destroy');
-  //   }
-  //   return Native().components[this.name][this.$nid].state;
-  // }
 
   get route() {
     if(!Native().components[this.name][this.$nid]) {
