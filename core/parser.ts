@@ -50,32 +50,19 @@ const Parser = {
 
   parseProperties: function (component: $RxElement | any, state?: boolean) {
     const properties: any = {};
+    const all = Object.keys(Props.props).concat(Props.excludes);
     let componentStyles = component.$tagName+'.'
       + component.$className.split(' ')[0] + ' { ';
     const props = Object.getOwnPropertyNames(component);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i];
-      if (Props.props.hasOwnProperty(prop)) {
-        const f: any = Props.props[prop];
-        if (type(f) === 'string') {
-          if (f.match('attr.')) {
-            properties[f.split('.')[1]] = component[prop];
-          } else {
-            componentStyles += f.split('.')[1] + ': '
+      if (all.indexOf(prop) === -1 && prop[0] === '$') {
+        const key = prop.slice(1).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+        componentStyles += key + ': '
               + Parser.parseStyleValue(component[prop]) + '; ';
-          }
-        } else if (type(f) === 'function') {
-          if(component[prop]) {
-            const fnc = f(component[prop], component);
-            if(fnc !== undefined) {
-              const parsed = Parser.parseFncStyles(fnc, component, state);
-              if (parsed !== undefined) componentStyles += parsed;
-            }
-          }
-        }
-      } else {
-        if (prop === '$events' && component[prop] !== undefined) {
-          properties[prop] = component[prop];
+      } else if(Props.props[prop] || prop === '$events') {
+        if (component[prop] !== undefined) {
+          properties[prop.slice(1)] = component[prop];
         } else if (Props.excludes.indexOf(prop) < 0 && component.$level !== 0) {
           // console.log(component);
           // throw new Error('Invalid property ' + prop);
@@ -89,19 +76,10 @@ const Parser = {
   parseNativeStyle: function (obj: $RxElement | any) {
     let objStyles = '';
     for (let prop in obj) {
-      prop = '$' + prop;
-      if (Props.props.hasOwnProperty(prop)) {
-        const f = Props.props[prop];
-        if (typeof f === 'string') {
-          if (f.match('css.')) {
-            objStyles += f.split('.')[1] + ': '
-              + Parser.parseStyleValue(obj[prop.slice(1)]) + '; ';
-          }
-        } else if (typeof f === 'function') {
-          const fnc = f(obj[prop]);
-          Parser.parseFncStyles(fnc, obj);
-          // if (parsed != undefined) objStyles += parsed;
-        }
+      if ($RxElement.prototype[prop]) {
+        const key = prop.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+        objStyles += key + ': '
+              + Parser.parseStyleValue(obj[prop]) + '; ';
       } else {
         if(prop.replace('$','').match('--')) {
           const root = prop.replace('$', '');

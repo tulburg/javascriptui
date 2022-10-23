@@ -13,5 +13,3 @@ if((<any>module).hot) {
     new NewRouter();
   })
 }
-
-console.log('wonderful');

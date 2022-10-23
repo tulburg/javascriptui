@@ -23,56 +23,58 @@ export default class Router {
     this.window.Router = this;
     new Native(this);
     this.events = [];
-    if(this.window.Native.sheet.cssRules.length === 0) this.window.Native.writeGlobals(Config.theme || {});
+    this.window.Native.sheet.insertRule('app{}');
+    const altProps = Object.getOwnPropertyNames(this.window.Native.sheet.cssRules[0].style);
+    let propIndex = 0;
+    while(propIndex < altProps.length - 1) {
+      const prop = altProps[propIndex], key = prop.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+      Object.defineProperty(this, '$' + prop, {
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+      const fns = function() {
+        if((<any>Native).serving) return this;
+        const value = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+        if(arguments.length > 0) {
+          this.$rules = this.$rules || [];
+          if(this.$rules.length > 0) {
+            this.$rules[this.$rules.length - 1].style.setProperty(key, (<any>window).Native.parseStyleValue(value));
+          }
+          this['$' + prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+        }else return this['$' + prop];
+        return this;
+      };
+      (<any>$RxElement.prototype)[prop] = fns;
+      propIndex++;
+    }
+    if(this.window.Native.sheet.cssRules.length === 1) this.window.Native.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
-      if(typeof caller === 'function') {
-        fn = function() {
-          if(arguments.length > 0) {
-            Object.defineProperty(this, prop, {
-              value: '',
-              writable: true,
-              enumerable: true,
-              configurable: true
-            });
-            this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-          }else return this[prop];
-          return this;
-        }
-      }else {
-        const split = caller.split('.'),
-        key = split[0], name = split[1];
-        fn = function() {
-          if(arguments.length > 0) {
-            Object.defineProperty(this, prop, {
-              value: '',
-              writable: true,
-              enumerable: true,
-              configurable: true
-            });
-            if(key === 'css') {
-              this.$rules = this.$rules || [];
-              if(this.$rules.length > 0) {
-                this.$rules[this.$rules.length - 1].style.setProperty(name, (<any>window).Native.parseStyleValue(arguments.length === 1 ? arguments[0] : Array.from(arguments)));
-              }
+      const split = caller.split('.'),
+      key = split[0], name = split[1];
+      Object.defineProperty(this, prop, {
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+      fn = function() {
+        if((<any>Native).serving) return this;
+        if(arguments.length > 0) {
+          if(key === 'attr') {
+            if(this.$node) {
+              this.$node.setAttribute(name, arguments.length === 1 ? arguments[0] : Array.from(arguments));
             }
-            if(key === 'attr') {
-              if(this.$node) {
-                this.$node.setAttribute(name, arguments.length === 1 ? arguments[0] : Array.from(arguments));
-              }
-            }
-            this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-          }else return this[prop];
-          return this;
-        }
-      }
+          }
+          this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
+        }else return this[prop];
+        return this;
+      };
       (<any>$RxElement.prototype)[prop.slice(1)] = fn;
-      (<any>Component.prototype)[prop.slice(1)] = fn;
-      if(typeof caller !== 'function' && caller.split('.')[0] === 'css') {
-        (<any>Style.prototype)[prop.slice(1)] = fn;
-      }
     }
+    Component.prototype = Object.assign(Component.prototype, $RxElement.prototype);
+    Style.prototype = Object.assign(Style.prototype, $RxElement.prototype);
     if((<any>window).__native_load_queue && (<any>window).__native_load_queue.length > 0) {
       (<any>window).__native_load_queue.forEach((i: Function) => i());
     }

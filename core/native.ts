@@ -232,13 +232,13 @@ class Native {
       const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$xmlns || parent.namespaceURI, item.$tagName);
       const parsedProperties = Parser.parseProperties(item, updateState);
       for(const prop in parsedProperties) {
-        if(prop == '$events') {
+        if(prop == 'events') {
           for(let i = 0; i < parsedProperties[prop].length; i++) {
             const e = parsedProperties[prop][i];
             c.addEventListener(e.name, e.event, { capture: true });
           }
         }else {
-          c.setAttribute(prop, parsedProperties[prop])
+          c.setAttribute(prop === 'className' ? 'class' : prop, parsedProperties[prop])
         }
       }
       item.$node = c;

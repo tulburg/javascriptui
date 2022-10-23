@@ -5,7 +5,6 @@ import {
 } from './types';
 import NativeClass from './native';
 import {createRules} from './styles';
-import {$observeArray} from './proxify';
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
 const Native = function() : NativeClass {  return (<any>window).Native || undefined };
@@ -740,186 +739,6 @@ export class $RxElement {
 
   hover: (_: StyleProperties) => RxElement
 
-  // Layout Functions
-  absCenter(v?: boolean): RxElement | boolean {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top('50%').left('50%')
-          .transform('translate(-50%, -50%)');
-        this.$absCenter = v;
-        return this;
-      }else {
-        throw new Error('absCenter: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenter;
-  }
-
-  absCenterRight(v?: Number): RxElement | Number {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top('50%').right(v)
-          .transform('translateY(-50%)');
-        this.$absCenterRight = v;
-        return this;
-      }else {
-        throw new Error('absCenterRight: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterRight;
-  }
-
-  absCenterLeft(v?: Number): RxElement | Number {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top('50%').left(v)
-          .transform('translateY(-50%)');
-        this.$absCenterLeft = v;
-        return this;
-      }else {
-        throw new Error('absCenterLeft: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterLeft;
-  }
-
-  absCenterTop(v?: Number): RxElement | Number {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').left('50%').top(v)
-          .transform('translateX(-50%)');
-        this.$absCenterTop = v;
-        return this;
-      }else {
-        throw new Error('absCenterTop: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterTop;
-  }
-
-  absCenterBottom(v?: Number): RxElement | Number {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').left('50%').bottom(v)
-          .transform('translateX(-50%)');
-        this.$absCenterBottom = v;
-        return this;
-      }else {
-        throw new Error('absCenterBottom: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterBottom;
-  }
-
-  absPosition(..._: Number[]): RxElement | Number[] {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top(v[0]).right(v[1]).bottom(v[2])
-          .left(v[3]);
-        this.$absPosition = v;
-        return this;
-      }else {
-        throw new Error('absPosition: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absPosition;
-  }
-
-  absTopRight(..._: Number[]): RxElement | Number[] {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top(v[0]).right(v[1]);
-        this.$absTopRight = v;
-        return this;
-      }else {
-        throw new Error('absTopRight: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absTopRight;
-  }
-
-  absTopLeft(..._: Number[]): RxElement | Number[] {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top(v[0]).left(v[1]);
-        this.$absTopLeft = v;
-        return this;
-      }else {
-        throw new Error('absTopLeft: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absTopLeft;
-  }
-
-  absBottomRight(..._: Number[]): RxElement | Number[] {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').bottom(v[0]).right(v[1]);
-        this.$absBottomRight = v;
-        return this;
-      }else {
-        throw new Error('absBottomRight: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absBottomRight;
-  }
-
-  absBottomLeft(..._: Number[]): RxElement | Number[] {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').bottom(v[0]).left(v[1]);
-        this.$absBottomLeft = v;
-        return this;
-      }else {
-        throw new Error('absBottomLeft: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absBottomLeft;
-  }
-
-  absCenterVertical(v?: boolean): RxElement | boolean {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').top('50%').transform('translateY(-50%)');
-        this.$absCenterVertical = v;
-        return this;
-      }else {
-        throw new Error('absCenterVertical: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterVertical;
-  }
-
-  absCenterHorizontal(v?: boolean): RxElement | boolean {
-    if(v) {
-      if(this.$root) {
-        this.$root.position('relative');
-        this.position('absolute').left('50%').transform('translateX(-50%)');
-        this.$absCenterHorizontal = v;
-        return this;
-      }else {
-        throw new Error('absCenterVertical: Parent attachement required before absolute property');
-      }
-    }
-    return this.$absCenterHorizontal;
-  }
-
   addClassName(name: string): RxElement {
     if(this.$node) {
       if(!this.$node.classList || !this.$node.classList.contains(name)) {
@@ -931,162 +750,6 @@ export class $RxElement {
       }
     }
     return this;
-  }
-
-  // animate(animation: StyleProperties & {
-  //   duration?: StyleProperties['animationDuration'], timingFunction?: StyleProperties['animationTimingFunction'],
-  //   fillMode?: StyleProperties['animationFillMode']
-  // } | Animation, completion?: () => void): RxElement {
-  //   if(type(animation) === 'object' && !(animation instanceof Animation)) {
-  //     const oldFrame: any = {};
-  //     this.$animation = this.$animation || {};
-  //     for(let prop in animation) {
-  //       if(this.$animation.hasOwnProperty(prop)) {
-  //         oldFrame[prop] = this.$animation[prop];
-  //       }else {
-  //         oldFrame[prop] = "initial";
-  //       }
-  //     }
-  //     const anim = new Animation();
-  //     anim.keyframes([
-  //       { key: 'from', frame: oldFrame },
-  //       { key: 'to', frame: animation }
-  //     ]).duration(animation.duration || 0.35)
-  //       .timingFunction(animation.timingFunction || Animation.$.TimingFunction.EaseInOut)
-  //       .fillMode(animation.fillMode || Animation.$.FillMode.Forwards);
-  //     this.$animation = anim;
-  //   } else {
-  //     if(!animation.$fillMode) animation.$fillMode = Animation.$.FillMode.Forwards;
-  //     this.$animation = animation;
-  //   }
-  //
-  //   const styles = Parser.parseAnimation(this.$animation);
-  //   for(let i = 0; i < styles.length; i++) {
-  //     try {
-  //       Native.$sheet.insertRule(styles[i], Native.sheet.cssRules.length - 1);
-  //     }catch(e){ console.log(e); }
-  //   }
-  //   if(this.$node) {
-  //     if(this.$animation) {
-  //       this.$node.className = this.className + ' ' + this.$animation.$name;
-  //       // this.className = this.className + ' ' + this.$animation.$name;
-  //     }
-  //   }else {
-  //     this.$className = this.$className + ' ' + this.$animation.$name;
-  //   }
-  //   setTimeout(() => {
-  //     completion && Function.prototype.call.apply(completion);
-  //     const keyframe = this.$animation.$keyframes[this.$animation.$keyframes.length - 1];
-  //     for(const prop in keyframe.frame) {
-  //       this.$animation[prop] = keyframe.frame[prop];
-  //     }
-  //     // this.$node.classList.remove(this.$animation.$name);
-  //     // this.className = Array.from(this.$node.classList).join(' ');
-  //   }, (this.$animation.$duration||1 + this.$animation.$delay||1) * 1000);
-  //   return this;
-  // }
-  //
-  // animation(animation?: Animation) {
-  //   if(animation) {
-  //     if(type(animation) === 'object' && !(animation instanceof Animation)) {
-  //       const oldFrame = {}, options = animation.$ || {};
-  //       this.$animation = this.$animation || {};
-  //       animation.$ && delete animation.$;
-  //       for(let prop in animation) {
-  //         if(this.$animation.hasOwnProperty(prop)) {
-  //           oldFrame[prop] = this.$animation[prop];
-  //         }else {
-  //           oldFrame[prop] = "initial";
-  //         }
-  //       }
-  //       const anim = new Animation();
-  //       anim.keyframes([
-  //         { key: 'from', frame: oldFrame },
-  //         { key: 'to', frame: animation }
-  //       ]).duration(options.duration || 0.35)
-  //         .timingFunction(options.timingFunction || Animation.$.TimingFunction.EaseInOut)
-  //         .fillMode(options.fillMode || Animation.$.FillMode.Forwards);
-  //       this.$animation = anim;
-  //     } else {
-  //       if(!animation.$fillMode) animation.$fillMode = Animation.$.FillMode.Forwards;
-  //       this.$animation = animation;
-  //     }
-  //     return this;
-  //   }
-  //   return this.$animation;
-  // },
-  // aspectRatio(_?: boolean): RxElement | boolean {
-  //   if(arguments.length > 0) {
-  //     const v = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-  //     this.position('relative');
-  //     this.pseudoBefore({
-  //       display: 'block', content: '', width: '100%',
-  //       paddingTop: `(${v[1]} / ${v[0]}) * 100%`
-  //     });
-  //     this.pseudoFirstChild({
-  //       position: 'absolute', top: 0, left: 0, right: 0, bottom: 0
-  //     });
-  //     this.$aspectRatio = v;
-  //     return this;
-  //   }
-  //   return this.$aspectRatio;
-  // },
-  backgroundLinearGradient(...colors: Color[]): RxElement | Color[] {
-    if(arguments.length > 0) {
-      const v: Color[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      this.background(`linear-gradient(${colors[0]}, ${colors[1]}, ${colors[2]})`);
-      this.$backgroundLinearGradient = v;
-      return this;
-    }
-    return this.$backgroundLinearGradient;
-  }
-
-  // childVerticalSpacing(margin?: Number) {
-  //   if(margin) {
-  //     this.globalStyle({ margin: [ margin / 2, 0, margin / 2, 0] })
-  //       .pseudoFirstChild({ margin: [ 0, 0, margin / 2, 0 ] })
-  //       .pseudoLastChild({ margin: [ margin / 2, 0, 0, 0] });
-  //     this.$childVerticalSpacing = margin;
-  //     return this;
-  //   }
-  //   return this.$childVerticalSpacing;
-  // },
-  // childHorizontalSpacing: function(margin) {
-  //   if(margin) {
-  //     this.globalStyle({ margin: [ 0, margin / 2, 0, margin / 2] })
-  //       .pseudoFirstChild({ margin: [ 0, margin / 2, 0, 0] })
-  //       .pseudoLastChild({ margin: [ 0, 0, 0, margin / 2] });
-  //     this.$childVerticalSpacing = margin;
-  //     return this;
-  //   }
-  //   return this.$childHorizontalSpacing;
-  // },
-  // clearFix: function(v) {
-  //   if(v) {
-  //     this.pseudoAfter({
-  //       content: '', display: 'table', clear: 'both'
-  //     });
-  //     this.$clearFix = v;
-  //     return this;
-  //   }
-  //   return this.$clearFix;
-  // },
-  flexSpaceBetween(v?: boolean): RxElement | boolean {
-    if(v) {
-      this.display('flex').justifyContent('space-between');
-      this.$flexSpaceBetween = v;
-      return this;
-    }
-    return this.$flexSpaceBetween;
-  }
-
-  flexCenter(v?: boolean): RxElement | boolean {
-    if(v) {
-      this.display('flex').justifyContent('center').alignItems('center');
-      this.$flexCenter = v;
-      return this;
-    }
-    return this.$flexCenter;
   }
 
   tag(tag?: string): RxElement | string {
@@ -1109,15 +772,6 @@ export class $RxElement {
       if(valid === check) return true;
     });
     return children[0];
-  }
-
-  relCenterHorizontal(v?: boolean): RxElement | boolean {
-    if(v){
-      this.margin(['auto', 'auto']);
-      this.$relCenterHorizontal = v;
-      return this;
-    }
-    return this.$relCenterHorizontal;
   }
 
   removeAllClassName(): RxElement {
@@ -1169,14 +823,6 @@ export class $RxElement {
     return this;
   }
 
-  respond(key: string, props: StyleProperties): RxElement {
-    // Check all
-
-    this.$responsiveness = this.$responsiveness || [];
-    this.$responsiveness.push({key: key, props: props});
-    return this;
-  }
-
   size(): Number[] | Number
   size(_: Number[] | Number): RxElement
   size(_?: Number[] | Number): RxElement | Number[] | Number {
@@ -1187,41 +833,6 @@ export class $RxElement {
       return this;
     }
     return this.$size;
-  }
-
-  // stack(children: RxElement[], options: { margin?: Number, vertical?: boolean, horizontal?: boolean }): RxElement {
-  //   const o = options || {};
-  //   for (let i = 0; i < children.length; i++) {
-  //     this.addChild(children[i]);
-  //   }
-  //   (o.vertical)
-  //     ? this.childVerticalSpacing(o.margin||0)
-  //     : this.childHorizontalSpacing(o.margin||0);
-  //   this.display('flex').flexDirection((o.vertical)
-  //     ? 'column' : 'row');
-  //   return this;
-  // }
-
-  // stackVertical(margin?: Number): RxElement | boolean {
-  //   if(margin != undefined) {
-  //     this.display('flex').flexDirection('column')
-  //       .globalStyle({ margin: [ margin / 2, 0, margin / 2, 0] })
-  //       .pseudoFirstChild({ margin: [ 0, 0, margin / 2, 0 ] })
-  //       .pseudoLastChild({ margin: [ margin / 2, 0, 0, 0 ] });
-  //     this.$stackVertical = true;
-  //     return this;
-  //   }
-  //   return this.$stackVertical;
-  // }
-
-  truncateText(v?: boolean): RxElement | boolean {
-    if(v) {
-      this.overflow('hidden').textOverflow('ellipsis')
-        .whiteSpace('nowrap');
-      this.$truncateText = v;
-      return this;
-    }
-    return this.$truncateText;
   }
 }
 
@@ -1295,203 +906,7 @@ export class Container extends $RxElement {
     return this;
   }
 }
-
-export class A extends $RxElement {
-  constructor() { super('a'); }
-}
-
-export class Abbr extends $RxElement {
-  constructor() { super('abbr'); }
-}
-
-export class Applet extends $RxElement {
-  constructor() { super('applet'); }
-}
-
-export class Area extends $RxElement {
-  constructor() { super('area'); }
-}
-
-export class Article extends $RxElement {
-  constructor() { super('article'); }
-}
-
-export class Aside extends $RxElement {
-  constructor() { super('aside'); }
-}
-
-export class Audio extends $RxElement {
-  constructor() { super('audio'); }
-}
-
-export class Base extends $RxElement {
-  constructor() { super('base'); }
-}
-
-export class BaseFont extends $RxElement {
-  constructor() { super('basefont'); }
-}
-
-export class BDO extends $RxElement {
-  constructor() { super('bdo'); }
-}
-
-export class BlockQuote extends $RxElement {
-  constructor() { super('blockquote'); }
-}
-
-export class Body extends $RxElement {
-  constructor() { super('body'); }
-}
-
-export class BR extends $RxElement {
-  constructor() { super('br'); }
-}
-
-export class Canvas extends $RxElement {
-  constructor() { super('canvas'); }
-}
-
-export class Caption extends $RxElement {
-  constructor() { super('caption'); }
-}
-
-export class Code extends $RxElement {
-  constructor() { super('code'); }
-}
-
-export class Col extends $RxElement {
-  constructor() { super('col'); }
-}
-
-export class ColGroup extends $RxElement {
-  constructor() { super('colgroup'); }
-}
-
-export class Data extends $RxElement {
-  constructor() { super('data'); }
-}
-
-export class Details extends $RxElement {
-  constructor() { super('details'); }
-}
-
-export class DFN extends $RxElement {
-  constructor() { super('dfn'); }
-}
-
-export class Dialog extends $RxElement {
-  constructor() { super('dialog'); }
-}
-
-export class DIR extends $RxElement {
-  constructor() { super('dir'); }
-}
-
-export class Div extends $RxElement {
-  constructor() { super('div'); }
-}
-
-export class DL extends $RxElement {
-  constructor() { super('dl'); }
-}
-
-export class EM extends $RxElement {
-  constructor() { super('em'); }
-}
-
-export class Embed extends $RxElement {
-  constructor() { super('embed'); }
-}
-
-export class FieldSet extends $RxElement {
-  constructor() { super('fieldset'); }
-}
-
-export class FigCaption extends $RxElement {
-  constructor() { super('figcaption'); }
-}
-
-export class Figure extends $RxElement {
-  constructor() { super('figure'); }
-}
-
-export class Font extends $RxElement {
-  constructor() { super('font'); }
-}
-
-export class Footer extends $RxElement {
-  constructor() { super('footer'); }
-}
-
-export class Form extends $RxElement {
-  constructor() { super('form'); }
-}
-
-export class Del extends $RxElement {
-  constructor() { super('del'); }
-}
-
-export class Frame extends $RxElement {
-  constructor() { super('frame'); }
-}
-
-export class FrameSet extends $RxElement {
-  constructor() { super('frameset'); }
-}
-
-export class H1 extends $RxElement {
-  constructor() { super('h1'); }
-}
-
-export class H2 extends $RxElement {
-  constructor() { super('h2'); }
-}
-
-export class H3 extends $RxElement {
-  constructor() { super('h3'); }
-}
-
-export class H4 extends $RxElement {
-  constructor() { super('h4'); }
-}
-
-export class H5 extends $RxElement {
-  constructor() { super('h5'); }
-}
-
-export class H6 extends $RxElement {
-  constructor() { super('h6'); }
-}
-
-export class Head extends $RxElement {
-  constructor() { super('head'); }
-}
-
-export class Header extends $RxElement {
-  constructor() { super('header'); }
-}
-
-export class HR extends $RxElement {
-  constructor() { super('hr'); }
-}
-
-export class HTML extends $RxElement {
-  constructor() { super('html'); }
-}
-
-export class IFrame extends $RxElement {
-  constructor() { super('iframe'); }
-}
-
-export class Image extends $RxElement {
-  constructor() { super('img'); }
-}
-
-export class IMG extends $RxElement {
-  constructor() { super('img'); }
-}
-
+'A,Abbr,Applet,Area,Article,Aside,Audio,Base,BaseFont,BDO,BlockQuote,Body,BR,Canvas,Caption,Code,Col,ColGroup,Data,Details,DFN,Dialog,DIR,Div,DL,EM,Embed,FieldSet,FigCaption,Figure,Font,Footer,Form,Del,Frame,FrameSet,H1,H2,H3,H4,H5,H6,Head,Header,HR,HTML,IFrame,Image,IMG,Ins,IsIndex,Label,Link,Legend,LI,Main,Map,Mark,Menu,Meta,Meter,Nav,ObjectElement,OL,OptGroup,Option,Output,P,Param,Path,Pre,Progress,Q,Script,Section,Select,Slot,Source,Span,Strong,Summary,Table,TBody,TD,Textarea,TFoot,TH,THead,Time,TR,Track,UL,Video'.split(',').forEach(i => exports[i] = class extends $RxElement{ constructor(){ super(i)} });
 export class Input extends $RxElement {
 
   $model?: NativeLock;
@@ -1506,55 +921,6 @@ export class Input extends $RxElement {
     } })
   }
 
-  model?(object: any) {
-    this.$model = {
-      key: Native().lock.key,
-      type: Native().lock.type,
-      nid: Native().lock.nid,
-      className: Native().lock.className
-    };
-
-    const notifyWatchlist = (lock: NativeLock, value: any) => {
-      const instance = Native().components[lock.className][lock.nid];
-      if(instance && instance.served) {
-        for(let i = 0; i < instance.watchlist.length; i++) {
-          const w = instance.watchlist[i];
-          if(lock.key === w.prop) {
-            w.function(value);
-            w.oldValue = value;
-          }
-        }
-      }
-    }
-    const lock = this.$model, chain = lock.key.replace(lock.className + '.', '').split('.'),
-    sync = () => {
-      if (lock.type === 'state') {
-        protoSet(Native().components[lock.className][lock.nid].state, chain, (<HTMLInputElement>this.$node).value || '');
-        notifyWatchlist(lock, this.value());
-      } else if (lock.type === 'property') {
-        protoSet(Native().components[lock.className][lock.nid].instance, chain, (<HTMLInputElement>this.$node).value || '');
-        notifyWatchlist(lock, (<HTMLInputElement>this.$node).value);
-      }
-    }
-
-    if(!Native().shadowing) {
-      const watcher: { object: any, prop: string, oldValue: any, function: Function } = {
-        prop: Native().lock.key, oldValue: this.value(), function: (v: any) => {
-          if(v === undefined) this.value('');
-          else this.value(v);
-        }, object: this.$model.type === 'state'
-          ? Native().components[lock.className][lock.nid].state
-          : Native().components[lock.className][lock.nid]
-      }
-      Native().components[lock.className][lock.nid].watchlist.push(watcher);
-    }
-    this.value(object);
-    this.on({
-      input: () => sync()
-    });
-    return this;
-  }
-
   value? = (v?: string | number) => {
     if(v !== undefined) {
       if(this.$node) {
@@ -1566,194 +932,12 @@ export class Input extends $RxElement {
   }
 }
 
-export class Ins extends $RxElement {
-  constructor() { super('ins'); }
-}
-
-export class IsIndex extends $RxElement {
-  constructor() { super('isindex'); }
-}
-
-export class Label extends $RxElement {
-  constructor() { super('label'); }
-}
-
-export class Link extends $RxElement {
-  constructor() { super('a'); }
-}
-
-export class Legend extends $RxElement {
-  constructor() { super('legend'); }
-}
-
-export class LI extends $RxElement {
-  constructor() { super('li'); }
-}
-
-export class Main extends $RxElement {
-  constructor() { super('main'); }
-}
-
-export class Map extends $RxElement {
-  constructor() { super('map'); }
-}
-
-export class Mark extends $RxElement {
-  constructor() { super('mark'); }
-}
-
-export class Menu extends $RxElement {
-  constructor() { super('menu'); }
-}
-
-export class Meta extends $RxElement {
-  constructor() { super('meta'); }
-}
-
-export class Meter extends $RxElement {
-  constructor() { super('meter'); }
-}
-
-export class Nav extends $RxElement {
-  constructor() { super('nav'); }
-}
-
-export class ObjectElement extends $RxElement {
-  constructor() { super('object'); }
-}
-
-export class OL extends $RxElement {
-  constructor() { super('ol'); }
-}
-
-export class OptGroup extends $RxElement {
-  constructor() { super('optgroup'); }
-}
-
-export class Option extends $RxElement {
-  constructor() { super('option'); }
-}
-
-export class Output extends $RxElement {
-  constructor() { super('output'); }
-}
-
-export class P extends $RxElement {
-  constructor() { super('p'); }
-}
-
-export class Param extends $RxElement {
-  constructor() { super('param'); }
-}
-
-export class Path extends $RxElement {
-  constructor() { super('path'); }
-}
-
-export class Pre extends $RxElement {
-  constructor() { super('pre'); }
-}
-
-export class Progress extends $RxElement {
-  constructor() { super('progress'); }
-}
-
-export class Q extends $RxElement {
-  constructor() { super('q'); }
-}
-
-export class Script extends $RxElement {
-  constructor() { super('script'); }
-}
-
-export class Section extends $RxElement {
-  constructor() { super('section'); }
-}
-
-export class Select extends $RxElement {
-  constructor() { super('select'); }
-}
-
-export class Slot extends $RxElement {
-  constructor() { super('slot'); }
-}
-
-export class Source extends $RxElement {
-  constructor() { super('source'); }
-}
-
-export class Span extends $RxElement {
-  constructor() { super('span'); }
-}
-
-export class Strong extends $RxElement {
-  constructor() { super('strong'); }
-}
-
-export class Summary extends $RxElement {
-  constructor() { super('summary'); }
-}
-
 export class SVG extends $RxElement {
   constructor() {
     super('svg');
     this.xmlns('http://www.w3.org/2000/svg');
   }
 }
-
-export class Table extends $RxElement {
-  constructor() { super('table'); }
-}
-
-export class TBody extends $RxElement {
-  constructor() { super('tbody'); }
-}
-
-export class TD extends $RxElement {
-  constructor() { super('td'); }
-}
-
-export class TextArea extends Input {
-  constructor() {
-    super();
-    this.$tagName = 'textarea';
-  }
-}
-
-export class TFoot extends $RxElement {
-  constructor() { super('tfoot'); }
-}
-
-export class TH extends $RxElement {
-  constructor() { super('th'); }
-}
-
-export class THead extends $RxElement {
-  constructor() { super('thead'); }
-}
-
-export class Time extends $RxElement {
-  constructor() { super('time'); }
-}
-
-export class TR extends $RxElement {
-  constructor() { super('tr'); }
-}
-
-export class Track extends $RxElement {
-  constructor() { super('track'); }
-}
-
-export class UL extends $RxElement {
-  constructor() { super('ul'); }
-}
-
-export class Video extends $RxElement {
-  constructor() {
-    super('video');
-  }
-}
-
 
 export class Animation {
 
@@ -1780,51 +964,36 @@ export class Style {
   constructor(props: StyleProperties) {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{  }'];
-    // if(Native() && Native().sheet) {
-    //   createRules(this, rules);
-    //   Object.getOwnPropertyNames(props).forEach(i => {
-    //     (<any>this)[i]((<any>props)[i]);
-    //   });
-    // }else {
-      (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
+     (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
       (<any>window).__native_load_queue.push(() => {
         createRules(this, rules);
         Object.getOwnPropertyNames(props).forEach(i => {
           (<any>this)[i]((<any>props)[i]);
         });
       });
-    // }
   }
 
   global(props: {[key: string]: StyleProperties}) {
-    const rules: string[] = [];
-    for(const key in props) {
-      rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
-    }
-    // if(Native() && Native().sheet) {
-    //   createRules(this, rules);
-    // }else {
-      (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
-      (<any>window).__native_load_queue.push(() => {
-        createRules(this, rules);
-      });
-    // }
+    (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
+    (<any>window).__native_load_queue.push(() => {
+      const rules: string[] = [];
+      for(const key in props) {
+        rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+      }
+      createRules(this, rules);
+    });
     return this;
   }
 
   pseudo(props: {[key: string]: StyleProperties}) {
-    const rules: string[] = [];
-    for(const key in props) {
-      rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
-    }
-    if(Native() && Native().sheet) {
-      createRules(this, rules)
-    }else {
-      (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
-      (<any>window).__native_load_queue.push(() => {
-        createRules(this, rules);
-      });
-    }
+    (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
+    (<any>window).__native_load_queue.push(() => {
+      const rules: string[] = [];
+      for(const key in props) {
+        rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+      }
+      createRules(this, rules);
+    });
     return this;
   }
 
