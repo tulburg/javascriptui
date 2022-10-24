@@ -752,48 +752,8 @@ export type RxElement = {
   for: (value: string | number) => RxElement
   default: (value: string | number) => RxElement
 
-
-  // functional attributes
-  globalStyle: (value: {[key: string]: StyleProperties}) => RxElement
-  pseudoActive: (value: StyleProperties) => RxElement
-  pseudoChecked: (value: StyleProperties) => RxElement
-  pseudoDisabled: (value: StyleProperties) => RxElement
-  pseudoEmpty: (value: StyleProperties) => RxElement
-  pseudoEnabled: (value: StyleProperties) => RxElement
-  pseudoFirstOfType: (value: StyleProperties) => RxElement
-  pseudoFocus: (value: StyleProperties) => RxElement
-  pseudoHover: (value: StyleProperties) => RxElement
-  pseudoInRange: (value: StyleProperties) => RxElement
-  pseudoInvalid: (value: StyleProperties) => RxElement
-  pseudoLang: (value: StyleProperties) => RxElement
-  pseudoLastChild: (value: StyleProperties) => RxElement
-  pseudoLastOfType: (value: StyleProperties) => RxElement
-  pseudoLink: (value: StyleProperties) => RxElement
-  pseudoNot: (value: StyleProperties) => RxElement
-  pseudoNthChild: (value: StyleProperties) => RxElement
-  pseudoNthLastChild: (value: StyleProperties) => RxElement
-  pseudoNthLastOfType: (value: StyleProperties) => RxElement
-  pseudoNthOfType: (value: StyleProperties) => RxElement
-  pseudoOnlyOfType: (value: StyleProperties) => RxElement
-  pseudoOnlyChild: (value: StyleProperties) => RxElement
-  pseudoOptional: (value: StyleProperties) => RxElement
-  pseudoOutOfRange: (value: StyleProperties) => RxElement
-  pseudoReadOnly: (value: StyleProperties) => RxElement
-  pseudoReadWrite: (value: StyleProperties) => RxElement
-  pseudoRequired: (value: StyleProperties) => RxElement
-  pseudoRoot: (value: StyleProperties) => RxElement
-  pseudoTarget: (value: StyleProperties) => RxElement
-  pseudoValid: (value: StyleProperties) => RxElement
-  pseudoVisited: (value: StyleProperties) => RxElement
-
-  pseudoBefore: (value: StyleProperties) => RxElement
-  pseudoAfter: (value: StyleProperties) => RxElement
-  pseudoSelection: (value: StyleProperties) => RxElement
-  pseudoFirstLetter: (value: StyleProperties) => RxElement
-  pseudoFirstLine: (value: StyleProperties) => RxElement
-
   hover: (value: StyleProperties) => RxElement
-} & $RxElement & LayoutFunctions;
+} & $RxElement;
 
 export type ElementEvent = {
   abort?: () => void
@@ -887,37 +847,37 @@ export type ElementEvent = {
   wheel?: () => void
 }
 
-export type LayoutFunctions = {
-  absCenter: (value?: boolean) => RxElement | boolean
-  absCenterRight: (value?: Number) => RxElement | Number
-  absCenterLeft: (value?: Number) => RxElement | Number
-  absCenterTop: (value?: Number) => RxElement | Number
-  absCenterBottom: (value?: Number) => RxElement | Number
-  absPosition: (...value: Number[]) => RxElement | Number[]
-  absTopRight: (...value: Number[]) => RxElement | Number[]
-  absTopLeft: (...value: Number[]) => RxElement | Number[]
-  absBottomRight: (...value: Number[]) => RxElement | Number[]
-  absBottomLeft: (...value: Number[]) => RxElement | Number[]
-  absCenterVertical: (value?: boolean) => RxElement | boolean
-  absCenterHorizontal: (value?: boolean) => RxElement | boolean
-  addClassName: (name?: string) => RxElement
-  // animate: (args?: StyleProperties) => RxElement
-  // animation: (animation?: Animation) => RxElement
-  // aspectRatio: (value?: boolean) => RxElement
-  backgroundLinearGradient: (...value: Color[]) => RxElement | Color[]
-  // childVerticalSpacing: (margin?: number) => RxElement
-  // childHorizontalSpacing: (margin?: number) => RxElement
-  // clearFix: (value?: boolean) => RxElement
-  flexSpaceBetween: (value?: boolean) => RxElement | boolean
-  flexCenter: (value?: boolean) => RxElement | boolean
-  tag: (tag?: string) => RxElement | string
-  child: (predicate?: {[key: string]: any}) => RxElement
-  relCenterHorizontal: (value?: boolean) => RxElement | boolean
-  removeClassName: (value?: string) => RxElement
-  replaceTextTag: (text: string, tagObject: {[key: string]: typeof $RxElement}) => RxElement
-  respond: (key: string, props: StyleProperties) => RxElement
-  size: (...size: Number[]) => RxElement | Number[] | Number
-  // stack: (children: RxElement[], options: { margin?: Number, vertical?: boolean, horizontal?: boolean }) => RxElement
-  // stackVertical: (children: RxElement[]) => RxElement | boolean
-  truncateText: (value?: boolean) => RxElement | boolean
-}
+// export type LayoutFunctions = {
+//   absCenter: (value?: boolean) => RxElement | boolean
+//   absCenterRight: (value?: Number) => RxElement | Number
+//   absCenterLeft: (value?: Number) => RxElement | Number
+//   absCenterTop: (value?: Number) => RxElement | Number
+//   absCenterBottom: (value?: Number) => RxElement | Number
+//   absPosition: (...value: Number[]) => RxElement | Number[]
+//   absTopRight: (...value: Number[]) => RxElement | Number[]
+//   absTopLeft: (...value: Number[]) => RxElement | Number[]
+//   absBottomRight: (...value: Number[]) => RxElement | Number[]
+//   absBottomLeft: (...value: Number[]) => RxElement | Number[]
+//   absCenterVertical: (value?: boolean) => RxElement | boolean
+//   absCenterHorizontal: (value?: boolean) => RxElement | boolean
+//   addClassName: (name?: string) => RxElement
+//   // animate: (args?: StyleProperties) => RxElement
+//   // animation: (animation?: Animation) => RxElement
+//   // aspectRatio: (value?: boolean) => RxElement
+//   backgroundLinearGradient: (...value: Color[]) => RxElement | Color[]
+//   // childVerticalSpacing: (margin?: number) => RxElement
+//   // childHorizontalSpacing: (margin?: number) => RxElement
+//   // clearFix: (value?: boolean) => RxElement
+//   flexSpaceBetween: (value?: boolean) => RxElement | boolean
+//   flexCenter: (value?: boolean) => RxElement | boolean
+//   tag: (tag?: string) => RxElement | string
+//   child: (predicate?: {[key: string]: any}) => RxElement
+//   relCenterHorizontal: (value?: boolean) => RxElement | boolean
+//   removeClassName: (value?: string) => RxElement
+//   replaceTextTag: (text: string, tagObject: {[key: string]: typeof $RxElement}) => RxElement
+//   respond: (key: string, props: StyleProperties) => RxElement
+//   size: (...size: Number[]) => RxElement | Number[] | Number
+//   // stack: (children: RxElement[], options: { margin?: Number, vertical?: boolean, horizontal?: boolean }) => RxElement
+//   // stackVertical: (children: RxElement[]) => RxElement | boolean
+//   truncateText: (value?: boolean) => RxElement | boolean
+// }

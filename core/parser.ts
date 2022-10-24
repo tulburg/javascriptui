@@ -61,8 +61,8 @@ const Parser = {
         componentStyles += key + ': '
               + Parser.parseStyleValue(component[prop]) + '; ';
       } else if(Props.props[prop] || prop === '$events') {
-        if (component[prop] !== undefined) {
-          properties[prop.slice(1)] = component[prop];
+        if (component[prop] !== undefined && prop !== '$events') {
+          properties[Props.props[prop].split('.')[1]] = component[prop];
         } else if (Props.excludes.indexOf(prop) < 0 && component.$level !== 0) {
           // console.log(component);
           // throw new Error('Invalid property ' + prop);

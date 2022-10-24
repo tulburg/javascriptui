@@ -46,6 +46,8 @@ export default class Router {
         return this;
       };
       (<any>$RxElement.prototype)[prop] = fns;
+      (<any>Component.prototype)[prop] = fns;
+      (<any>Style.prototype)[prop] = fns;
       propIndex++;
     }
     if(this.window.Native.sheet.cssRules.length === 1) this.window.Native.writeGlobals(Config.theme || {});
@@ -72,9 +74,8 @@ export default class Router {
         return this;
       };
       (<any>$RxElement.prototype)[prop.slice(1)] = fn;
+      (<any>Component.prototype)[prop.slice(1)] = fn;
     }
-    Component.prototype = Object.assign(Component.prototype, $RxElement.prototype);
-    Style.prototype = Object.assign(Style.prototype, $RxElement.prototype);
     if((<any>window).__native_load_queue && (<any>window).__native_load_queue.length > 0) {
       (<any>window).__native_load_queue.forEach((i: Function) => i());
     }
@@ -121,7 +122,7 @@ export default class Router {
     }
   }
 
-  host(host: RxElement, routes: ConfigType.Route[]) {
+  host(host: $RxElement, routes: ConfigType.Route[]) {
     this.current.hosting = [];
     routes.forEach(route => {
       (<ConfigType.Route & { hostComponent?: Container }>route).hostComponent = host;

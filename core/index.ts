@@ -13,3 +13,4 @@ if((<any>module).hot) {
     new NewRouter();
   })
 }
+

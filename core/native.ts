@@ -93,7 +93,7 @@ class Native {
       }else data.old.$node.appendChild( typeof newNode === 'string' ? document.createTextNode(newNode) : newNode);
 
     } else if (type == NativeEventType.delete) {
-      if((<RxElement>data.old.$children[data.index]).$level === 0) {
+      if(data.old.$children[data.index].$level === 0) {
         const c = data.old.$children[data.index];
         debugger;
         const cascadeDestroy = (c0: RxElement) => {
@@ -381,82 +381,6 @@ class Native {
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
 
 const exProps = ['$children', '$node', '$className', '$root', '$level', '$rules', '$model', '$hostComponent', '__proto__'];
-
-const same = function(a: any, b: any) {
-  if(type(a) == 'object') {
-    if(type(b) != 'object') return false;
-    let count = 0; const greater = (Object.keys(a).length > Object.keys(b).length);
-    const objA = greater ? a : b;
-    const objB = greater ? b : a;
-    for(const prop in props(objA)) {
-      if(!objB.hasOwnProperty(prop)) return false;
-      const r = same(objA[prop], objB[prop]);
-      if(r == false) return false;
-      else count++;
-    }
-    if(count == Object.keys(objA).length) return true;
-  }else if(type(a) == 'array') {
-    if(type(b) != 'array') return false;
-    let count = 0;
-    for(let i = 0; i < Math.max(a.length, b.length); i++) {
-      const r = same(a[i], b[i]);
-      if(r == false) return false;
-      else count++;
-    }
-    if(count == Math.max(a.length, b.length)) return true;
-  } else {
-    return a == b;
-  }
-};
-
-const similar = function(a: any, b: any) {
-  const objA = (Object.keys(a).length > Object.keys(b).length) ? a : b;
-  const objB = (Object.keys(a).length > Object.keys(b).length) ? b : a;
-  const quest = Object.keys(objA).length * 2;
-  let test = 0;
-  for(const prop in objA) {
-    if(objB.hasOwnProperty(prop)) {
-      test += 1;
-      if(same(objB[prop], objA[prop])) {
-        test += 1;
-      }
-    }
-  }
-  return test / quest;
-};
-
-const props = (c: any) => {
-  const all: any = {};
-  const ps = Object.getOwnPropertyNames(c);
-  for(let i = 0; i < ps.length; i++) {
-    const p = ps[i];
-    if(exProps.indexOf(p) === -1 && p !== '$events') {
-      if(type(c[p] !== 'object') && c[p] !== undefined) all[p] = c[p];
-    }
-  }
-  if(c.__proxy__ && c.$children && c.$children.length > 0){
-    if(getText(c) != '') all['text'] = getText(c);
-  }
-  return all;
-};
-
-const getText = (c: $RxElement): string => {
-  if(type(c.$children[0]) === 'string') {
-    return <any>c.$children[0];
-  }
-  return undefined;
-};
-
-const visible = (arr: $RxElement[], child: $RxElement) => {
-  for(let i = 0; i < arr.length; i++) {
-    if(arr[i].$tagName === child.$tagName
-      && similar(props(arr[i]), props(child)) >= 0.5) {
-      return true;
-    }
-  }
-  return false;
-};
-
 
 export default Native;
 
