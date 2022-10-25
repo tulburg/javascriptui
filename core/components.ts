@@ -1733,7 +1733,7 @@ export class TD extends $RxElement {
   constructor() { super('td'); }
 }
 
-export class TextArea extends Input {
+export class Textarea extends Input {
   constructor() {
     super();
     this.$tagName = 'textarea';
