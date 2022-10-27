@@ -8,7 +8,8 @@ if((<any>module).hot) {
     for(let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
     }
-
+    const w: any = window;
+    if(w.Native) w.Native.sheet.disabled = true;
     const NewRouter = require('./router').default;
     new NewRouter();
   })

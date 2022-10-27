@@ -23,9 +23,7 @@ const setLock = (object: any, componentName: string, name: string | number | sym
         prop: Native().lock.key, oldValue: this, function: fn, object: undefined
       };
       const lock = Native().lock;
-      if(Native().lock.type === 'state') {
-        watcher.object = Native().components[lock.className][lock.nid].state;
-      } else if(lock.type === 'property') {
+      if(lock.type === 'property') {
         watcher.object = Native().components[lock.className][lock.nid];
       }
       if(Native().components[lock.className][lock.nid].watchlist.filter(i => {

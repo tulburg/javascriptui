@@ -76,8 +76,9 @@ export default class Router {
       (<any>$RxElement.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
     }
-    if((<any>window).__native_load_queue && (<any>window).__native_load_queue.length > 0) {
-      (<any>window).__native_load_queue.forEach((i: Function) => i());
+    const w: any = window;
+    if(w.__native_load_queue && w.__native_load_queue.length > 0) {
+      w.__native_load_queue.forEach((i: Function) => i());
     }
 
     this.loadRoute();
@@ -113,8 +114,9 @@ export default class Router {
         }
       }
     }
-    if(this.window.__native_load_complete_queue && this.window.__native_load_complete_queue.length > 0) {
-      this.window.__native_load_complete_queue.forEach((i: Function) => i());
+    const w: any = window;
+    if(w.__native_load_queue && w.__native_load_queue.length > 0) {
+      w.__native_load_queue.forEach((i: Function) => i());
     }
     if(!loaded) {
       console.error(`Path ${location.pathname} not configured`);

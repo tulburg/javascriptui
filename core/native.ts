@@ -7,13 +7,13 @@ import {NativeEventData, NativeEventType, ConfigType, RxElement} from './types';
 class Native {
 
   router: Router;
-  components: {[key: string]: { [key: string]: RxElement & {
+  components: {[key: string]: { [key: string]: $RxElement & {
     served: boolean,
     watchlist: {
       prop: string; oldValue: any; function: Function
     }[],
     args: any[],
-    instance: RxElement,
+    instance: $RxElement,
     route: ConfigType.Route,
     rootNode: Element,
     sub: ConfigType.Route
@@ -96,7 +96,7 @@ class Native {
       if(data.old.$children[data.index].$level === 0) {
         const c = data.old.$children[data.index];
         debugger;
-        const cascadeDestroy = (c0: RxElement) => {
+        const cascadeDestroy = (c0: $RxElement) => {
           if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
             c0.dispatch('destroy');
           }
@@ -109,7 +109,7 @@ class Native {
       }
 
       for(let i = 0; i < data.count; i++) {
-        const rChild = data.old.$children[data.index + i] as RxElement;
+        const rChild = data.old.$children[data.index + i] as $RxElement;
         const rNode = rChild.$node;
         if(rNode && rNode.parentNode) {
           rNode.parentNode.removeChild(rNode);
@@ -187,7 +187,7 @@ class Native {
     }
   }
 
-  patchCSS(old: RxElement, rules: CSSStyleRule[]) {
+  patchCSS(old: $RxElement, rules: CSSStyleRule[]) {
     const extract = (rule: CSSStyleRule) => {
       return rule.cssText.trim().substring(rule.cssText.indexOf('{') + 1, rule.cssText.indexOf('}') - 2)
         .trim().split(';').map(s => s.trim());
@@ -228,11 +228,11 @@ class Native {
 
   createElement(object: $RxElement | Component, updateState?: any) {
     const graphics = ['svg', 'path'] //... plus more
-    const create = (parent: Element, item: RxElement) => {
+    const create = (parent: Element, item: $RxElement) => {
       const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$xmlns || parent.namespaceURI, item.$tagName);
       const parsedProperties = Parser.parseProperties(item, updateState);
       for(const prop in parsedProperties) {
-        if(prop == 'events') {
+        if(prop == '$events') {
           for(let i = 0; i < parsedProperties[prop].length; i++) {
             const e = parsedProperties[prop][i];
             c.addEventListener(e.name, e.event, { capture: true });
@@ -258,7 +258,6 @@ class Native {
             const o: any = {};
             o[event.name] = event.event.bind(newInstance);
             event.object.$events.push(o);
-            console.log('adding listerners', o);
             c.addEventListener(event.name, event.event, { capture: true });
             this.bindings[nid].splice(i, 1);
             i--;
@@ -275,7 +274,6 @@ class Native {
         })
 
         queueMicrotask(() => {
-          console.log('got here');
           if(!updateState) {
             if(newInstance.onCreate) {
               newInstance.onCreate();
@@ -311,7 +309,7 @@ class Native {
       throw new Error('Can\'t find component '+route.name);
     }
     this.components[component.name] = this.components[component.name] || { structure: component } as any;
-    const newInstance: RxElement = new (<any>route).component();
+    const newInstance: Component = new (<any>route).component();
     const nid = newInstance.$nid;
     if(sub) this.components[component.name][nid].sub = sub;
     this.components[component.name][nid].route = this.router.current;
@@ -348,7 +346,7 @@ class Native {
       newInstance.dispatch('create');
       window.onbeforeunload = (e: any) => {
         if(newInstance.onDestroy) newInstance.onDestroy();
-        const cascadeDestroy = (c0: RxElement) => {
+        const cascadeDestroy = (c0: $RxElement) => {
           if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
             c0.dispatch('destroy');
           }

@@ -1,6 +1,6 @@
 import Parser from './parser';
 import {
-  RxElement, ElementEvent, NativeLock, StyleProperties, FlexAlignment, FlexAlignmentItem, ConfigType,
+  ElementEvent, NativeLock, StyleProperties, FlexAlignment, FlexAlignmentItem, ConfigType,
   GlobalValues, Color, BorderStyle, BorderWidth, CSSImage, Space, Break, Number
 } from './types';
 import NativeClass from './native';
@@ -47,6 +47,9 @@ export class $RxElement {
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
   }
 
+  onCreate() {}
+  onDestroy() {}
+
   addChild(...children: $RxElement[]): $RxElement {
     if(children[0] instanceof Array) {
       throw `Cannot addChild: ${children[0]} is not valid $RxElement`;
@@ -76,7 +79,8 @@ export class $RxElement {
         if(item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
       }
       resetRules(child);
-      this.$children.splice(this.$children.indexOf(child), 1);
+      this.$node.removeChild(child.node());
+      // this.$children.splice(this.$children.indexOf(child), 1);
       // this.$children = this.$children.filter(i => i !== null``);
       return this;
     }else {
@@ -665,47 +669,6 @@ export class $RxElement {
   for: (_?: string | number) => $RxElement
   default: (_?: string | number) => $RxElement
 
-  // Pseudo functions
-  globalStyle: (_: {[key: string]: StyleProperties}) => $RxElement
-  pseudoActive: (_: StyleProperties) => $RxElement
-  pseudoChecked: (_: StyleProperties) => $RxElement
-  pseudoDisabled: (_: StyleProperties) => $RxElement
-  pseudoEmpty: (_: StyleProperties) => $RxElement
-  pseudoEnabled: (_: StyleProperties) => $RxElement
-  pseudoFirstOfType: (_: StyleProperties) => $RxElement
-  pseudoFocus: (_: StyleProperties) => $RxElement
-  pseudoHover: (_: StyleProperties) => $RxElement
-  pseudoInRange: (_: StyleProperties) => $RxElement
-  pseudoInvalid: (_: StyleProperties) => $RxElement
-  pseudoLang: (_: StyleProperties) => $RxElement
-  pseudoLastChild: (_: StyleProperties) => $RxElement
-  pseudoLastOfType: (_: StyleProperties) => $RxElement
-  pseudoLink: (_: StyleProperties) => $RxElement
-  pseudoNot: (_: StyleProperties) => $RxElement
-  pseudoNthChild: (_: StyleProperties) => $RxElement
-  pseudoNthLastChild: (_: StyleProperties) => $RxElement
-  pseudoNthLastOfType: (_: StyleProperties) => $RxElement
-  pseudoNthOfType: (_: StyleProperties) => $RxElement
-  pseudoOnlyOfType: (_: StyleProperties) => $RxElement
-  pseudoOnlyChild: (_: StyleProperties) => $RxElement
-  pseudoOptional: (_: StyleProperties) => $RxElement
-  pseudoOutOfRange: (_: StyleProperties) => $RxElement
-  pseudoReadOnly: (_: StyleProperties) => $RxElement
-  pseudoReadWrite: (_: StyleProperties) => $RxElement
-  pseudoRequired: (_: StyleProperties) => $RxElement
-  pseudoRoot: (_: StyleProperties) => $RxElement
-  pseudoTarget: (_: StyleProperties) => $RxElement
-  pseudoValid: (_: StyleProperties) => $RxElement
-  pseudoVisited: (_: StyleProperties) => $RxElement
-
-  pseudoBefore: (_: StyleProperties) => $RxElement
-  pseudoAfter: (_: StyleProperties) => $RxElement
-  pseudoSelection: (_: StyleProperties) => $RxElement
-  pseudoFirstLetter: (_: StyleProperties) => $RxElement
-  pseudoFirstLine: (_: StyleProperties) => $RxElement
-
-  hover: (_: StyleProperties) => $RxElement
-
   addClassName(name: string): $RxElement {
     if(this.$node) {
       if(!this.$node.classList || !this.$node.classList.contains(name)) {
@@ -789,18 +752,6 @@ export class $RxElement {
     }else this.$children.push(text as any);
     return this;
   }
-
-  size(): Number[] | Number
-  size(_: Number[] | Number): $RxElement
-  size(_?: Number[] | Number): $RxElement | Number[] | Number {
-    if(arguments.length > 0) {
-      const v: Number[] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-      this.height(v[1]).width(v[0]);
-      this.$size = v;
-      return this;
-    }
-    return this.$size;
-  }
 }
 
 export class Component extends $RxElement {
@@ -873,7 +824,10 @@ export class Container extends $RxElement {
     return this;
   }
 }
-'A,Abbr,Applet,Area,Article,Aside,Audio,Base,BaseFont,BDO,BlockQuote,Body,BR,Canvas,Caption,Code,Col,ColGroup,Data,Details,DFN,Dialog,DIR,Div,DL,EM,Embed,FieldSet,FigCaption,Figure,Font,Footer,Form,Del,Frame,FrameSet,H1,H2,H3,H4,H5,H6,Head,Header,HR,HTML,IFrame,Image,IMG,Ins,IsIndex,Label,Link,Legend,LI,Main,Map,Mark,Menu,Meta,Meter,Nav,ObjectElement,OL,OptGroup,Option,Output,P,Param,Path,Pre,Progress,Q,Script,Section,Select,Slot,Source,Span,Strong,Summary,Table,TBody,TD,Textarea,TFoot,TH,THead,Time,TR,Track,UL,Video'.split(',').forEach(i => module.exports[i] = class extends $RxElement { constructor(){ super(i)} });
+
+'A,Abbr,Applet,Area,Article,Aside,Audio,Base,BaseFont,BDO,BlockQuote,Body,BR,Canvas,Caption,Code,Col,ColGroup,Data,Details,DFN,Dialog,DIR,Div,DL,EM,Embed,FieldSet,FigCaption,Figure,Font,Footer,Form,Del,Frame,FrameSet,H1,H2,H3,H4,H5,H6,Head,Header,HR,HTML,IFrame,Image,IMG,Ins,IsIndex,Label,Legend,LI,Main,Map,Mark,Menu,Meta,Meter,Nav,ObjectElement,OL,OptGroup,Option,Output,P,Param,Path,Pre,Progress,Q,Script,Section,Select,Slot,Source,Span,Strong,Summary,Table,TBody,TD,Textarea,TFoot,TH,THead,Time,TR,Track,UL,Video'.split(',').forEach(i => module.exports[i] = class extends $RxElement { constructor(){ super(i)} });
+
+export class Link extends A {}
 export class Input extends $RxElement {
 
   $model?: NativeLock;
@@ -924,7 +878,6 @@ export class Animation {
 }
 
 export class Style {
-
   $className: string;
   $rules: CSSStyleRule[] = [];
 
@@ -1210,53 +1163,7 @@ export class Style {
   wordSpacing: (_: 'normal' | number | string | GlobalValues) => Style
   wordWrap: (_: 'normal' | 'break-word' | 'anywhere' | GlobalValues) => Style
   writingMode: (_: 'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | GlobalValues) => Style
-
   zIndex: (_: string | GlobalValues) => Style
-  // custom specials
-  cornerRadius: (_: StyleProperties['borderRadius']) => Style
-
-  // Pseudo functions
-  globalStyle(_: {[key: string]: StyleProperties}): Style { return this }
-  pseudoActive: (_: StyleProperties) => Style
-  pseudoChecked: (_: StyleProperties) => Style
-  pseudoDisabled: (_: StyleProperties) => Style
-  pseudoEmpty: (_: StyleProperties) => Style
-  pseudoEnabled: (_: StyleProperties) => Style
-  pseudoFirstOfType: (_: StyleProperties) => Style
-  pseudoFocus: (_: StyleProperties) => Style
-  pseudoHover: (_: StyleProperties) => Style
-  pseudoInRange: (_: StyleProperties) => Style
-  pseudoInvalid: (_: StyleProperties) => Style
-  pseudoLang: (_: StyleProperties) => Style
-  pseudoLastChild: (_: StyleProperties) => Style
-  pseudoLastOfType: (_: StyleProperties) => Style
-  pseudoLink: (_: StyleProperties) => Style
-  pseudoNot: (_: StyleProperties) => Style
-  pseudoNthChild: (_: StyleProperties) => Style
-  pseudoNthLastChild: (_: StyleProperties) => Style
-  pseudoNthLastOfType: (_: StyleProperties) => Style
-  pseudoNthOfType: (_: StyleProperties) => Style
-  pseudoOnlyOfType: (_: StyleProperties) => Style
-  pseudoOnlyChild: (_: StyleProperties) => Style
-  pseudoOptional: (_: StyleProperties) => Style
-  pseudoOutOfRange: (_: StyleProperties) => Style
-  pseudoReadOnly: (_: StyleProperties) => Style
-  pseudoReadWrite: (_: StyleProperties) => Style
-  pseudoRequired: (_: StyleProperties) => Style
-  pseudoRoot: (_: StyleProperties) => Style
-  pseudoTarget: (_: StyleProperties) => Style
-  pseudoValid: (_: StyleProperties) => Style
-  pseudoVisited: (_: StyleProperties) => Style
-
-  pseudoBefore = (_: StyleProperties): Style => {
-    return this;
-  }
-  pseudoAfter: (_: StyleProperties) => Style
-  pseudoSelection: (_: StyleProperties) => Style
-  pseudoFirstLetter: (_: StyleProperties) => Style
-  pseudoFirstLine: (_: StyleProperties) => Style
-
-  hover: (_: StyleProperties) => Style
 }
 
 declare module "components" {
@@ -1312,7 +1219,6 @@ declare module "components" {
   export class Ins extends $RxElement {}
   export class IsIndex extends $RxElement {}
   export class Label extends $RxElement {}
-  export class Link extends $RxElement {}
   export class Legend extends $RxElement {}
   export class LI extends $RxElement {}
   export class Main extends $RxElement {}
