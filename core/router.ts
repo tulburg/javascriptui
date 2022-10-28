@@ -2,7 +2,7 @@
 import Config from '@src/config';
 import Props from './props';
 import { Component, Style, $RxElement, Container } from './components';
-import {ConfigType, RxElement} from './types';
+import {ConfigType} from './types';
 import Native from './native';
 
 export default class Router {

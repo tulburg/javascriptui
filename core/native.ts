@@ -2,7 +2,7 @@ import Parser from './parser';
 import { createSheet, createRules } from './styles';
 import { $RxElement, Component } from './components';
 import Router from './router';
-import {NativeEventData, NativeEventType, ConfigType, RxElement} from './types';
+import {ConfigType} from './types';
 
 class Native {
 
@@ -59,81 +59,6 @@ class Native {
       return value.map(v => this.parseStyleValue(v)).join(' ');
     }
     return value;
-  }
-
-  $notify (data: NativeEventData, type: NativeEventType) {
-    const $ = (id: string) => document.querySelector('.'+id);
-    let newNode, node: Element; // styles: any;
-    if (type == NativeEventType.insert) {
-      if(data.key != 'animations') {
-        const value = data.newValue[data.index];
-        newNode = (typeof value !== 'string') ? this.createElement(value, false) : document.createTextNode(value);
-      }
-    } else if (type == NativeEventType.update || type == NativeEventType.replace) {}
-
-    if(data.old && !data.old.$node) return;
-
-    if (type == NativeEventType.insert) {
-      node = data.old.$node;
-      if(data.index == 0) {
-        if(node) node.insertBefore(newNode, node.childNodes[0]);
-      }else {
-        node.appendChild(newNode);
-      }
-      // }
-    } else if (type == NativeEventType.update) {
-      this.patchProps(data.old, data.new);
-      this.patchCSS(data.old, data.new.$rules);
-      this.patchAttrs(data.old.$node, data.new.$node);
-    } else if(type == NativeEventType.replace) {
-      if(data.new instanceof $RxElement) this.createElement(data.new, false);
-      const newNode: any = (data.new.$node) ? data.new.$node : data.new;
-      if(data.old.$children[data.index] !== null && (<any>data.old).childNodes) {
-        data.old.$node.replaceChild(newNode, (<any>data.old).childNodes[data.index]);
-      }else data.old.$node.appendChild( typeof newNode === 'string' ? document.createTextNode(newNode) : newNode);
-
-    } else if (type == NativeEventType.delete) {
-      if(data.old.$children[data.index].$level === 0) {
-        const c = data.old.$children[data.index];
-        debugger;
-        const cascadeDestroy = (c0: $RxElement) => {
-          if(c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
-            c0.dispatch('destroy');
-          }
-          if(c0.$children.length > 0) c0.$children.forEach(child => {
-            if(child.$node && child.$node.nodeType !== child.$node.TEXT_NODE) cascadeDestroy(child);
-          });
-        }
-        cascadeDestroy(c);
-        delete (<any>this.components)[(<RxElement>c).name][(c as Component).$nid];
-      }
-
-      for(let i = 0; i < data.count; i++) {
-        const rChild = data.old.$children[data.index + i] as $RxElement;
-        const rNode = rChild.$node;
-        if(rNode && rNode.parentNode) {
-          rNode.parentNode.removeChild(rNode);
-          rChild.dispatch('destroy');
-        }else {
-          data.old.$node.removeChild(data.old.$node.childNodes[data.index + i]);
-          if(data.old.$children[data.index + i] instanceof $RxElement) data.old.$children[data.index + i].dispatch('destroy');
-        }
-      }
-    } else if (type == NativeEventType.sort) {
-      node = $(data.old.$className);
-      for(let i = 0; i < data.newValue.length; i++) {
-        for(let j = 0; j < node.childNodes.length; j++) {
-          if(data.newValue[i].className == (node.childNodes[j] as Element).className) {
-            node.appendChild(node.childNodes[j]);
-          }
-        }
-      }
-    } else if(type == NativeEventType.reverse) {
-      node = $(data.old.$className);
-      for(let i = 0; i < node.childNodes.length; i++) {
-        node.appendChild(node.childNodes[node.childNodes.length - i - 1]);
-      }
-    }
   }
 
   $toggleActive(node: Element) {
@@ -292,7 +217,7 @@ class Native {
         if(typeof item.$children[i] === 'string') {
           c.appendChild(document.createTextNode(<any>item.$children[i]));
         }else {
-          create(c, <RxElement>item.$children[i]);
+          create(c, item.$children[i]);
         }
       }
       return c;

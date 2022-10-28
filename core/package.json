@@ -1,6 +1,6 @@
 {
   "name": "@js-native/core",
-  "version": "0.0.15",
+  "version": "0.0.17",
   "description": "JS Native core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
