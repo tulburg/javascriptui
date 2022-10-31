@@ -21,9 +21,9 @@ export class $RxElement {
   $events: any = undefined;
   $className: string = undefined;
   $styles: Style[] = [];
-  $pseudo: {[key: string]: StyleProperties}[] = [];
+  $pseudos: {[key: string]: StyleProperties}[] = [];
   $medias: {[key: string]: StyleProperties | string}[] = [];
-  $global: {[key: string]: StyleProperties}[] = [];
+  $globals: {[key: string]: StyleProperties}[] = [];
 
   $hostComponent: string = (<any>window).Native.serving;
   $node: Element;
@@ -284,8 +284,8 @@ export class $RxElement {
     return this;
   }
 
-  pseudo(props: {[key: string]: StyleProperties}) {
-    this.$pseudo.push(props);
+  pseudos(props: {[key: string]: StyleProperties}) {
+    this.$pseudos.push(props);
     const rules: string[] = [], native = Native();
     for(const key in props) {
       rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
@@ -298,8 +298,8 @@ export class $RxElement {
     return this;
   }
 
-  global(props: {[key: string]: StyleProperties}) {
-    this.$global.push(props);
+  globals(props: {[key: string]: StyleProperties}) {
+    this.$globals.push(props);
     const rules: string[] = [], native = Native();
     for(const key in props) {
       rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
