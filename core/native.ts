@@ -61,100 +61,10 @@ class Native {
     return value;
   }
 
-  $toggleActive(node: Element) {
-    if(node.className.match('active')) {
-      node.className.replace(' active', '');
-    }else {
-      node.className = node.className + ' active';
-    }
-    return node.className;
-  }
-
-  patchAttrs(oldEl: Element, newEl: Element) {
-    const patches = [];
-    if(oldEl != undefined && oldEl != null) {
-      for(let i = 0; i < newEl.attributes.length; i++) {
-        let set = false;
-        for(let j = 0; j < oldEl.attributes.length; j++) {
-          if(oldEl.attributes[j].name == newEl.attributes[i].name){
-            if(oldEl.attributes[j].value != newEl.attributes[i].value) {
-              if(newEl.attributes[i].name != 'class') {
-                oldEl.attributes[j].value = newEl.attributes[i].value;
-                oldEl.setAttribute(newEl.attributes[i].name, newEl.attributes[i].value);
-              }
-            }
-            set = true;
-            patches.push({ name: newEl.attributes[i].name, value: newEl.attributes[i].value});
-          }
-        }
-        if(!set) {
-          if(newEl.attributes[i].name != 'class') {
-            oldEl.setAttribute(newEl.attributes[i].name, newEl.attributes[i].value);
-          }
-          patches.push({ name: newEl.attributes[i].name, value: newEl.attributes[i].value});
-        }
-      }
-      for(let i = 0; i < oldEl.attributes.length; i++) {
-        let found = false;
-        for(let j = 0; j < patches.length; j++) {
-          if(patches[j].name == 'class') {
-            found = true;
-          }
-          if(patches[j].name == oldEl.attributes[i].name &&
-            patches[j].value == oldEl.attributes[i].value){
-            found = true;
-          }
-        }
-        if(!found){
-          oldEl.removeAttribute(oldEl.attributes[i].name);
-        }
-      }
-    }
-  }
-
-  patchCSS(old: $RxElement, rules: CSSStyleRule[]) {
-    const extract = (rule: CSSStyleRule) => {
-      return rule.cssText.trim().substring(rule.cssText.indexOf('{') + 1, rule.cssText.indexOf('}') - 2)
-        .trim().split(';').map(s => s.trim());
-    };
-    const pair = (v: string) => {
-      const value = v.split(':').map(s => s.trim());
-      return { name: value[0], value: value[1]};
-    };
-    for(let m = 0; m < rules.length; m++) {
-      const css = extract(rules[m]);
-      css.map(style => {
-        const stylePair: { name: string, value: string } = pair(style);
-        if(old.$rules[0].style.getPropertyValue(stylePair.name) !== stylePair.value) {
-          old.$rules[0].style.setProperty(stylePair.name, stylePair.value);
-        }
-      });
-    }
-  }
-
-  patchProps(object: any, newObject: any) {
-    const props = Object.getOwnPropertyNames(newObject);
-    const oldProps = Object.getOwnPropertyNames(object);
-    for(let i = 0; i < props.length; i++) {
-      const p = props[i];
-      if(exProps.indexOf(p) === -1) {
-        object[p] = newObject[p];
-      }else if(p === '$model') { // update only the key
-        object[p].key = newObject[p].key;
-        object[p].type = newObject[p].type;
-      }
-    }
-    for(let k = 0; k < oldProps.length; k++) {
-      if(props.indexOf(oldProps[k]) < 0) {
-        object[oldProps[k]] = undefined;
-      }
-    }
-  }
-
   createElement(object: $RxElement | Component, updateState?: any) {
     const graphics = ['svg', 'path'] //... plus more
     const create = (parent: Element, item: $RxElement) => {
-      const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$xmlns || parent.namespaceURI, item.$tagName);
+      const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$attrXmlns || parent.namespaceURI, item.$tagName);
       const parsedProperties = Parser.parseProperties(item, updateState);
       for(const prop in parsedProperties) {
         if(prop == '$events') {
@@ -163,7 +73,7 @@ class Native {
             c.addEventListener(e.name, e.event, { capture: true });
           }
         }else {
-          c.setAttribute(prop === 'className' ? 'class' : prop, parsedProperties[prop])
+          c.setAttribute(prop, this.parseStyleValue(parsedProperties[prop]))
         }
       }
       item.$node = c;

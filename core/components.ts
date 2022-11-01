@@ -1,8 +1,7 @@
 import Parser from './parser';
 import {
-  ElementEvent, StyleProperties,
+  ElementEvent, StyleProperties, Attributes, Properties
 } from './types';
-import { Attributes, Properties} from './property';
 import NativeClass from './native';
 import {createRules} from './styles';
 
@@ -20,10 +19,10 @@ export class $RxElement {
   $root: $RxElement = undefined;
   $events: any = undefined;
   $className: string = undefined;
-  $styles: Style[] = [];
-  $pseudos: {[key: string]: StyleProperties}[] = [];
-  $medias: {[key: string]: StyleProperties | string}[] = [];
-  $globals: {[key: string]: StyleProperties}[] = [];
+  $style: Style[] = [];
+  $pseudo: {[key: string]: StyleProperties}[] = [];
+  $media: {[key: string]: StyleProperties | string}[] = [];
+  $global: {[key: string]: StyleProperties}[] = [];
 
   $hostComponent: string = (<any>window).Native.serving;
   $node: Element;
@@ -36,7 +35,6 @@ export class $RxElement {
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
-    return this as $RxElement
   }
 
   onCreate() {}
@@ -160,12 +158,12 @@ export class $RxElement {
     return this;
   }
 
-  styles(...styles: Style[]): any {
-    if(arguments.length == 0) return <any>this.$styles;
+  style(...styles: Style[]): any {
+    if(arguments.length == 0) return <any>this.$style;
     for(let i = 0; i < styles.length; i++) {
       if(styles[i].$className) {
         this.$className += ' ' + styles[i].$className;
-        this.$styles.push(styles[i]);
+        this.$style.push(styles[i]);
       }
     }
     return this;
@@ -174,13 +172,13 @@ export class $RxElement {
   removeStyle(...styles: Style[]): void {
     if(arguments.length == 0) throw 'Remove style: 0 arguments passed. Min. of 1 expected';
     for(let i = 0; i < styles.length; i++) {
-      this.$styles = this.$styles.filter(s => s.$className === styles[i].$className);
+      this.$style = this.$style.filter(s => s.$className === styles[i].$className);
       this.$className.replace(' ' + styles[i].$className, '');
     }
   }
 
-  medias(props: {[key: string]: StyleProperties}) {
-    this.$medias.push(props);
+  media(props: {[key: string]: StyleProperties}) {
+    this.$media.push(props);
     const rules: string[] = [], native = Native();
     Object.getOwnPropertyNames(props).forEach((key: string) => {
       let rule = '@media ' + key + '{ ';
@@ -254,7 +252,9 @@ export class $RxElement {
   }
 
   replaceTextTag(text: string, tagObject: {[key: string]: any }): $RxElement {
+    console.log(text);
     const all = text.match(/\${\w+(\(.*\))?\}?/g);
+    console.log(all);
     const children: ($RxElement | string)[] = [],
     p = (t: string) => {
       all.map((i, inx) => {
@@ -284,8 +284,8 @@ export class $RxElement {
     return this;
   }
 
-  pseudos(props: {[key: string]: StyleProperties}) {
-    this.$pseudos.push(props);
+  pseudo(props: {[key: string]: StyleProperties}) {
+    this.$pseudo.push(props);
     const rules: string[] = [], native = Native();
     for(const key in props) {
       rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
@@ -299,7 +299,7 @@ export class $RxElement {
   }
 
   globals(props: {[key: string]: StyleProperties}) {
-    this.$globals.push(props);
+    this.$global.push(props);
     const rules: string[] = [], native = Native();
     for(const key in props) {
       rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
@@ -754,7 +754,7 @@ export class Input extends $RxElement {
 export class SVG extends $RxElement {
   constructor() {
     super('svg');
-    this.xmlns('http://www.w3.org/2000/svg');
+    this.attrXmlns('http://www.w3.org/2000/svg');
   }
 }
 
