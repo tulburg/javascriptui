@@ -759,7 +759,6 @@ export class SVG extends $RxElement {
 }
 
 export class Animation {
-
   $className: string;
   name: string;
   $rule: CSSStyleRule;

@@ -2,10 +2,6 @@ import Props from './props';
 import { $RxElement } from './components';
 import {createRules} from './styles';
 
-function type(object: any) {
-  return Object.prototype.toString.apply(object).split(' ')[1].slice(0, -1).toLowerCase();
-}
-
 const Parser = {
   render: function (component: $RxElement) {
     this.parseProperties(component);

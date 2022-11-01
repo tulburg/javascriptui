@@ -212,8 +212,5 @@ class Native {
 }
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
-
-const exProps = ['$children', '$node', '$className', '$root', '$level', '$rules', '$model', '$hostComponent', '__proto__'];
-
 export default Native;
 
