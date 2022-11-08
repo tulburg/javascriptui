@@ -2,47 +2,53 @@
 import Config from '@src/config';
 import Props from './props';
 import { Component, Style, $RxElement, Container } from './components';
-import {ConfigType} from './types';
+import { ConfigType } from './types';
 import Native from './native';
 
 export default class Router {
   routes: ConfigType.Route[] = Config.routes as ConfigType.Route[];
   current: ConfigType.Route;
-  get window() : any {
+  get window(): any {
     if (typeof self !== 'undefined') { return self; }
     if (typeof window !== 'undefined') { return window; }
     if (typeof global !== 'undefined') { return global; }
     throw new Error('unable to locate global object');
   };
-  private events: {name: string, listener: (..._: any[]) => void}[];
+  private events: { name: string, listener: (..._: any[]) => void }[];
 
   constructor() {
     // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
-    if(Config.theme) this.window.Theme = Config.theme;
+    if (Config.theme) this.window.Theme = Config.theme;
     this.window.Router = this;
     new Native(this);
     this.events = [];
     this.window.Native.sheet.insertRule('app{}');
-    const altProps = Object.getOwnPropertyNames(this.window.Native.sheet.cssRules[0].style);
+    let altProps = Object.getOwnPropertyNames(document.head.style);
+    if (altProps.length === 0) altProps = Object.keys((<any>document.head.style).__proto__).filter(i => !i.match('-'))
     let propIndex = 0;
-    while(propIndex < altProps.length - 1) {
+    while (propIndex < altProps.length - 1) {
       const prop = altProps[propIndex], key = prop.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
       Object.defineProperty(this, '$' + prop, {
         writable: true,
         enumerable: true,
         configurable: true
       });
-      const fns = function() {
-        if((<any>Native).serving) return this;
+      const fns = function () {
+        if ((<any>Native).serving) return this;
+        if (prop.toLowerCase().match('webkit')) console.log(prop);
         const value = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-        if(arguments.length > 0) {
+        if (arguments.length > 0) {
           this.$rules = this.$rules || [];
-          if(this.$rules.length > 0) {
-            this.$rules[this.$rules.length - 1].style.setProperty(key, (<any>window).Native.parseStyleValue(value));
+          if (this.$rules.length > 0) {
+            try {
+              this.$rules[this.$rules.length - 1].style.setProperty(key, (<any>window).Native.parseStyleValue(value));
+            } catch (e) {
+              throw Error('Style not applied: ' + prop + ' ' + e.message);
+            }
           }
           this['$' + prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-        }else return this['$' + prop];
+        } else return this['$' + prop];
         return this;
       };
       (<any>$RxElement.prototype)[prop] = fns;
@@ -50,34 +56,34 @@ export default class Router {
       (<any>Style.prototype)[prop] = fns;
       propIndex++;
     }
-    if(this.window.Native.sheet.cssRules.length === 1) this.window.Native.writeGlobals(Config.theme || {});
+    if (this.window.Native.sheet.cssRules.length === 1) this.window.Native.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
       const split = caller.split('.'),
-      key = split[0], name = split[1];
+        key = split[0], name = split[1];
       Object.defineProperty(this, prop, {
         writable: true,
         enumerable: true,
         configurable: true
       });
-      fn = function() {
-        if((<any>Native).serving) return this;
-        if(arguments.length > 0) {
-          if(key === 'attr') {
-            if(this.$node) {
+      fn = function () {
+        if ((<any>Native).serving) return this;
+        if (arguments.length > 0) {
+          if (key === 'attr') {
+            if (this.$node) {
               this.$node.setAttribute(name, arguments.length === 1 ? arguments[0] : Array.from(arguments));
             }
           }
           this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
-        }else return this[prop];
+        } else return this[prop];
         return this;
       };
       (<any>$RxElement.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
     }
     const w: any = window;
-    if(w.__native_load_queue && w.__native_load_queue.length > 0) {
+    if (w.__native_load_queue && w.__native_load_queue.length > 0) {
       w.__native_load_queue.forEach((i: Function) => i());
     }
 
@@ -101,11 +107,11 @@ export default class Router {
       }
     }
     for (let i = 0; i < this.routes.length; i++) {
-      if(!loaded && this.routes[i].subs) {
-        for(let j = 0; j < this.routes[i].subs.length; j++) {
+      if (!loaded && this.routes[i].subs) {
+        for (let j = 0; j < this.routes[i].subs.length; j++) {
           this.current = this.routes[i];
           const data = this.pathData(this.routes[i].subs[j], true);
-          if(data) {
+          if (data) {
             this.current.data = data.data;
             // this.current.subs = [];
             this.window.Native.load('#app', this.current);
@@ -115,10 +121,10 @@ export default class Router {
       }
     }
     const w: any = window;
-    if(w.__native_load_queue && w.__native_load_queue.length > 0) {
+    if (w.__native_load_queue && w.__native_load_queue.length > 0) {
       w.__native_load_queue.forEach((i: Function) => i());
     }
-    if(!loaded) {
+    if (!loaded) {
       console.error(`Path ${location.pathname} not configured`);
       this.window.Native.unload('#app');
     }
@@ -135,28 +141,29 @@ export default class Router {
 
   loadSubs(routes: (ConfigType.Route & { hostComponent?: Container })[], fromGo?: boolean) {
     let loaded = false;
-    for(let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < routes.length; i++) {
       const route = routes[i];
       const data = this.pathData(route, true);
       if (data) {
         Object.assign(this.current.data, data.data);
-        if(!route.hostComponent) throw new Error('Route not properly hosted');
+        if (!route.hostComponent) throw new Error('Route not properly hosted');
         (<any>window).Native.load('.' + route.hostComponent.$className, route, true);
         loaded = true;
       }
     }
-    if(fromGo && !loaded) {
+    if (fromGo && !loaded) {
       console.error('Path not configured');
       this.window.Native.unload('#app');
     }
   }
 
-  go (path: string) {
-    if(path === window.location.pathname) return;
-    window.scrollTo(0,0);
+  go(path: string) {
+    if (path === window.location.pathname) return;
+    if (path.match(/^https?/)) return window.open(path, '_blank');
+    window.scrollTo(0, 0);
     window.history.pushState({}, '', location.href);
     let current = this.window.Config.useHash ? window.location.hash.slice(1) : window.location.pathname;
-    if(path === current) return;
+    if (path === current) return;
     this.window.Config.useHash ? location.hash = path : window.history.pushState({}, '', path);
     this.events.forEach(i => (i.name === 'go') && i.listener(path));
     let loaded = false;
@@ -171,15 +178,15 @@ export default class Router {
         loaded = true;
       }
     }
-    if(!loaded && this.current.hosting && this.current.hosting.length > 0) {
+    if (!loaded && this.current.hosting && this.current.hosting.length > 0) {
       this.loadSubs(this.current.hosting, true);
-    }else if(!loaded){
+    } else if (!loaded) {
       for (let i = 0; i < this.routes.length; i++) {
-        if(!loaded && this.routes[i].subs) {
-          for(let j = 0; j < this.routes[i].subs.length; j++) {
+        if (!loaded && this.routes[i].subs) {
+          for (let j = 0; j < this.routes[i].subs.length; j++) {
             this.current = this.routes[i];
             const data = this.pathData(this.routes[i].subs[j], true);
-            if(data) {
+            if (data) {
               this.current.data = data.data;
               // this.current.subs = [];
               this.window.Native.load('#app', this.current);
@@ -194,29 +201,29 @@ export default class Router {
   pathData(route: ConfigType.Route, sub: boolean = false) {
     let path = (sub && this.current.path !== '/') ? this.current.path + route.path : route.path;
     let current = this.window.Config.useHash ? window.location.hash.slice(1) : window.location.pathname;
-    if(current[current.length - 1] == '/') current = current.substring(0, current.length - 1);
-    if(path[path.length - 1] == '/') path = path.substring(0, path.length - 1);
+    if (current[current.length - 1] == '/') current = current.substring(0, current.length - 1);
+    if (path[path.length - 1] == '/') path = path.substring(0, path.length - 1);
     const variables: any = {};
     path.split('/').map((i, index) => {
-      if(i.indexOf(':') > -1) {
+      if (i.indexOf(':') > -1) {
         variables[index] = i.slice(1);
       }
     });
 
-    if(path == current) {
+    if (path == current) {
       return { path: current, data: {} };
     }
 
-    if(path.split('/').length == current.split('/').length) {
+    if (path.split('/').length == current.split('/').length) {
       const values: any = {};
       current.split('/').map((i, index) => {
-        if(variables[index]) values[variables[index]] = i;
+        if (variables[index]) values[variables[index]] = i;
       });
       const rebuild = path.split('/').map((i, index) => {
-        if(variables[index]) return values[variables[index]];
+        if (variables[index]) return values[variables[index]];
         return i;
       }).join('/');
-      if(rebuild == current) {
+      if (rebuild == current) {
         return { path: current, data: values };
       }
     }

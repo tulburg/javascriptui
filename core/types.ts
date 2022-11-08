@@ -1,21 +1,22 @@
-import {PageComponent, Container, Style} from './components';
+import { PageComponent, Container, Style } from './components';
 import NSRouter from './router';
 
 declare global {
   var Theme: {
-    global?: {[key: string]: any},
-    colors?: {[key: string]: string},
-    fonts?: {[key: string]: any},
-    dimens?: {[key: string]: any},
-    style?: {[key: string]: Style}
-  } & {[key: string]: any};
+    globals?: { [key: string]: any },
+    colors?: { [key: string]: string },
+    fonts?: { [key: string]: any },
+    dimens?: { [key: string]: any },
+    styles?: { [key: string]: Style }
+  } & { [key: string]: any };
   var Config: {
     routes: ConfigType.Route[],
-    theme?: typeof Theme
-  } & {[key: string]: any};
+    theme?: typeof Theme,
+    styleDebug?: boolean
+  } & { [key: string]: any };
   var Router: NSRouter;
   interface String {
-    watch: (_ : (v: any) => void) => void
+    watch: (_: (v: any) => void) => void
   }
 }
 
@@ -32,7 +33,7 @@ export namespace ConfigType {
 
 export type StyleProperties = {
 
-} | {[key: string]: string}
+}
 
 export type ElementEvent = {
   abort?: () => void
@@ -424,7 +425,7 @@ export namespace DataType {
   export type ViewportLength = "auto" | (string & {});
   export type VisualBox = "border-box" | "content-box" | "padding-box";
 }
-export type Globals = Number | string | Number[] | string[] |  "-moz-initial" | "inherit" | "initial" | "revert" | "revert-layer" | "unset";
+export type Globals = "-moz-initial" | "inherit" | "initial" | "revert" | "revert-layer" | "unset" | Number | Number[];
 
 export interface Attributes<T> {
   attrAbbr: (_?: string | number | string[] | number[]) => T
@@ -639,6 +640,7 @@ export interface Attributes<T> {
 }
 
 export interface Properties<T> {
+  preColor?: Globals | DataType.Color
   accentColor: (_?: Globals | DataType.Color | "auto") => T
   alignContent: (_?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "baseline" | "normal" | (string & {})) => T
   alignItems: (_?: Globals | DataType.SelfPosition | "baseline" | "normal" | "stretch" | (string & {})) => T
@@ -1734,3 +1736,1068 @@ export interface Properties<T> {
   vectorEffect: (_?: Globals | "non-scaling-stroke" | "none") => T
 }
 
+export type ArgProperties = {
+  accentColor?: Globals | DataType.Color | "auto"
+  alignContent?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "baseline" | "normal" | (string & {})
+  alignItems?: Globals | DataType.SelfPosition | "baseline" | "normal" | "stretch" | (string & {})
+  alignSelf?: Globals | DataType.SelfPosition | "auto" | "baseline" | "normal" | "stretch" | (string & {})
+  alignTracks?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "baseline" | "normal" | (string & {})
+  all?: Globals
+  animation?: Globals | DataType.SingleAnimation | (string & {})
+  animationComposition?: Globals | (string & {})
+  animationDelay?: Globals | (string & {})
+  animationDirection?: Globals | DataType.SingleAnimationDirection | (string & {})
+  animationDuration?: Globals | (string & {})
+  animationFillMode?: Globals | DataType.SingleAnimationFillMode | (string & {})
+  animationIterationCount?: Globals | "infinite" | (string & {}) | (number & {})
+  animationName?: Globals | "none" | (string & {})
+  animationPlayState?: Globals | "paused" | "running" | (string & {})
+  animationTimeline?: Globals | DataType.SingleAnimationTimeline | (string & {})
+  animationTimingFunction?: Globals | DataType.EasingFunction | (string & {})
+  appearance?: Globals | DataType.CompatAuto | "auto" | "menulist-button" | "none" | "textfield"
+  aspectRatio?: Globals | "auto" | (string & {}) | (number & {})
+  azimuth?: | Globals
+  | "behind"
+  | "center"
+  | "center-left"
+  | "center-right"
+  | "far-left"
+  | "far-right"
+  | "left"
+  | "left-side"
+  | "leftwards"
+  | "right"
+  | "right-side"
+  | "rightwards"
+  | (string & {})
+  backdropFilter?: Globals | "none" | (string & {})
+  backfaceVisibility?: Globals | "hidden" | "visible"
+  background?: Globals | DataType.FinalBgLayer | (string & {})
+  backgroundAttachment?: Globals | DataType.Attachment | (string & {})
+  backgroundBlendMode?: Globals | DataType.BlendMode | (string & {})
+  backgroundClip?: Globals | DataType.Box | (string & {})
+  backgroundColor?: Globals | DataType.Color
+  backgroundImage?: Globals | "none" | (string & {})
+  backgroundOrigin?: Globals | DataType.Box | (string & {})
+  backgroundPosition?: Globals | DataType.BgPosition | (string & {})
+  backgroundPositionX?: Globals | "center" | "left" | "right" | "x-end" | "x-start" | (string & {})
+  backgroundPositionY?: Globals | "bottom" | "center" | "top" | "y-end" | "y-start" | (string & {})
+  backgroundRepeat?: Globals | DataType.RepeatStyle | (string & {})
+  backgroundSize?: Globals | DataType.BgSize | (string & {})
+  blockOverflow?: Globals | "clip" | "ellipsis" | (string & {})
+  blockSize?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "auto"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  border?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderBlock?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderBlockColor?: Globals | DataType.Color | (string & {})
+  borderBlockEnd?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderBlockEndColor?: Globals | DataType.Color
+  borderBlockEndStyle?: Globals | DataType.LineStyle
+  borderBlockEndWidth?: Globals | DataType.LineWidth
+  borderBlockStart?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderBlockStartColor?: Globals | DataType.Color
+  borderBlockStartStyle?: Globals | DataType.LineStyle
+  borderBlockStartWidth?: Globals | DataType.LineWidth
+  borderBlockStyle?: Globals | DataType.LineStyle
+  borderBlockWidth?: Globals | DataType.LineWidth
+  borderBottom?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderBottomColor?: Globals | DataType.Color
+  borderBottomLeftRadius?: Globals | (string & {})
+  borderBottomRightRadius?: Globals | (string & {})
+  borderBottomStyle?: Globals | DataType.LineStyle
+  borderBottomWidth?: Globals | DataType.LineWidth
+  borderCollapse?: Globals | "collapse" | "separate"
+  borderColor?: Globals | DataType.Color | (string & {})
+  borderEndEndRadius?: Globals | (string & {})
+  borderEndStartRadius?: Globals | (string & {})
+  borderImage?: Globals | "none" | "repeat" | "round" | "space" | "stretch" | (string & {}) | (number & {})
+  borderImageOutset?: Globals | (string & {}) | (number & {})
+  borderImageRepeat?: Globals | "repeat" | "round" | "space" | "stretch" | (string & {})
+  borderImageSlice?: Globals | (string & {}) | (number & {})
+  borderImageSource?: Globals | "none" | (string & {})
+  borderImageWidth?: Globals | "auto" | (string & {}) | (number & {})
+  borderInline?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderInlineColor?: Globals | DataType.Color | (string & {})
+  borderInlineEnd?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderInlineEndColor?: Globals | DataType.Color
+  borderInlineEndStyle?: Globals | DataType.LineStyle
+  borderInlineEndWidth?: Globals | DataType.LineWidth
+  borderInlineStart?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderInlineStartColor?: Globals | DataType.Color
+  borderInlineStartStyle?: Globals | DataType.LineStyle
+  borderInlineStartWidth?: Globals | DataType.LineWidth
+  borderInlineStyle?: Globals | DataType.LineStyle
+  borderInlineWidth?: Globals | DataType.LineWidth
+  borderLeft?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderLeftColor?: Globals | DataType.Color
+  borderLeftStyle?: Globals | DataType.LineStyle
+  borderLeftWidth?: Globals | DataType.LineWidth
+  borderRadius?: Globals | (string & {})
+  borderRight?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderRightColor?: Globals | DataType.Color
+  borderRightStyle?: Globals | DataType.LineStyle
+  borderRightWidth?: Globals | DataType.LineWidth
+  borderSpacing?: Globals | (string & {})
+  borderStartEndRadius?: Globals | (string & {})
+  borderStartStartRadius?: Globals | (string & {})
+  borderStyle?: Globals | DataType.LineStyle | (string & {})
+  borderTop?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  borderTopColor?: Globals | DataType.Color
+  borderTopLeftRadius?: Globals | (string & {})
+  borderTopRightRadius?: Globals | (string & {})
+  borderTopStyle?: Globals | DataType.LineStyle
+  borderTopWidth?: Globals | DataType.LineWidth
+  borderWidth?: Globals | DataType.LineWidth | (string & {})
+  bottom?: Globals | "auto" | (string & {})
+  boxAlign?: Globals | "baseline" | "center" | "end" | "start" | "stretch"
+  boxDecorationBreak?: Globals | "clone" | "slice"
+  boxDirection?: Globals | "inherit" | "normal" | "reverse"
+  boxFlex?: Globals | (number & {}) | (string & {})
+  boxFlexGroup?: Globals | (number & {}) | (string & {})
+  boxLines?: Globals | "multiple" | "single"
+  boxOrdinalGroup?: Globals | (number & {}) | (string & {})
+  boxOrient?: Globals | "block-axis" | "horizontal" | "inherit" | "inline-axis" | "vertical"
+  boxPack?: Globals | "center" | "end" | "justify" | "start"
+  boxShadow?: Globals | "none" | (string & {})
+  boxSizing?: Globals | "border-box" | "content-box"
+  breakAfter?: | Globals
+  | "all"
+  | "always"
+  | "auto"
+  | "avoid"
+  | "avoid-column"
+  | "avoid-page"
+  | "avoid-region"
+  | "column"
+  | "left"
+  | "page"
+  | "recto"
+  | "region"
+  | "right"
+  | "verso"
+
+  breakBefore?: | Globals
+  | "all"
+  | "always"
+  | "auto"
+  | "avoid"
+  | "avoid-column"
+  | "avoid-page"
+  | "avoid-region"
+  | "column"
+  | "left"
+  | "page"
+  | "recto"
+  | "region"
+  | "right"
+  | "verso"
+  breakInside?: Globals | "auto" | "avoid" | "avoid-column" | "avoid-page" | "avoid-region"
+  captionSide?: Globals | "block-end" | "block-start" | "bottom" | "inline-end" | "inline-start" | "top"
+  caretColor?: Globals | DataType.Color | "auto"
+  clear?: Globals | "both" | "inline-end" | "inline-start" | "left" | "none" | "right"
+  clip?: Globals | "auto" | (string & {})
+  clipPath?: Globals | DataType.GeometryBox | "none" | (string & {})
+  color?: Globals | DataType.Color
+  printColorAdjust?: Globals | "economy" | "exact"
+  colorScheme?: Globals | "dark" | "light" | "normal" | (string & {})
+  columnCount?: Globals | "auto" | (number & {}) | (string & {})
+  columnFill?: Globals | "auto" | "balance" | "balance-all"
+  columnGap?: Globals | "normal" | (string & {})
+  columnRule?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  columnRuleColor?: Globals | DataType.Color
+  columnRuleStyle?: Globals | DataType.LineStyle | (string & {})
+  columnRuleWidth?: Globals | DataType.LineWidth | (string & {})
+  columnSpan?: Globals | "all" | "none"
+  columnWidth?: Globals | "auto"
+  columns?: Globals | "auto" | (string & {}) | (number & {})
+  contain?: Globals | "content" | "inline-size" | "layout" | "none" | "paint" | "size" | "strict" | "style" | (string & {})
+  content?: Globals | DataType.ContentList | "none" | "normal" | (string & {})
+  contentVisibility?: Globals | "auto" | "hidden" | "visible"
+  counterIncrement?: Globals | "none" | (string & {})
+  counterReset?: Globals | "none" | (string & {})
+  counterSet?: Globals | "none" | (string & {})
+  cursor?: | Globals
+  | "-moz-grab"
+  | "-webkit-grab"
+  | "alias"
+  | "all-scroll"
+  | "auto"
+  | "cell"
+  | "col-resize"
+  | "context-menu"
+  | "copy"
+  | "crosshair"
+  | "default"
+  | "e-resize"
+  | "ew-resize"
+  | "grab"
+  | "grabbing"
+  | "help"
+  | "move"
+  | "n-resize"
+  | "ne-resize"
+  | "nesw-resize"
+  | "no-drop"
+  | "none"
+  | "not-allowed"
+  | "ns-resize"
+  | "nw-resize"
+  | "nwse-resize"
+  | "pointer"
+  | "progress"
+  | "row-resize"
+  | "s-resize"
+  | "se-resize"
+  | "sw-resize"
+  | "text"
+  | "vertical-text"
+  | "w-resize"
+  | "wait"
+  | "zoom-in"
+  | "zoom-out"
+  | (string & {})
+  direction?: Globals | "ltr" | "rtl"
+  display?: | Globals
+  | DataType.DisplayOutside
+  | DataType.DisplayInside
+  | DataType.DisplayInternal
+  | DataType.DisplayLegacy
+  | "contents"
+  | "list-item"
+  | "none"
+  | (string & {})
+  emptyCells?: Globals | "hide" | "show"
+  filter?: Globals | "none" | (string & {})
+  flex?: Globals | "auto" | "content" | "fit-content" | "max-content" | "min-content" | "none" | (string & {}) | (number & {})
+  flexBasis?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-auto"
+  | "auto"
+  | "content"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  flexDirection?: Globals | "column" | "column-reverse" | "row" | "row-reverse"
+  flexFlow?: Globals | "column" | "column-reverse" | "nowrap" | "row" | "row-reverse" | "wrap" | "wrap-reverse" | (string & {})
+  flexGrow?: Globals | (number & {}) | (string & {})
+  flexShrink?: Globals | (number & {}) | (string & {})
+  flexWrap?: Globals | "nowrap" | "wrap" | "wrap-reverse"
+  float?: Globals | "inline-end" | "inline-start" | "left" | "none" | "right"
+  font?: Globals | "caption" | "icon" | "menu" | "message-box" | "small-caption" | "status-bar" | (string & {})
+  fontFamily?: Globals | DataType.GenericFamily | (string & {})
+  fontFeatureSettings?: Globals | "normal" | (string & {})
+  fontKerning?: Globals | "auto" | "none" | "normal"
+  fontLanguageOverride?: Globals | "normal" | (string & {})
+  fontOpticalSizing?: Globals | "auto" | "none"
+  fontSize?: Globals | DataType.AbsoluteSize | "larger" | "smaller" | (string & {})
+  fontSizeAdjust?: Globals | "from-font" | "none" | (string & {}) | (number & {})
+  fontSmooth?: Globals | DataType.AbsoluteSize | "always" | "auto" | "never"
+  fontStretch?: Globals | DataType.FontStretchAbsolute
+  fontStyle?: Globals | "italic" | "normal" | "oblique" | (string & {})
+  fontSynthesis?: Globals | "none" | "small-caps" | "style" | "weight" | (string & {})
+  fontVariant?: | Globals
+  | DataType.EastAsianVariantValues
+  | "all-petite-caps"
+  | "all-small-caps"
+  | "common-ligatures"
+  | "contextual"
+  | "diagonal-fractions"
+  | "discretionary-ligatures"
+  | "full-width"
+  | "historical-forms"
+  | "historical-ligatures"
+  | "lining-nums"
+  | "no-common-ligatures"
+  | "no-contextual"
+  | "no-discretionary-ligatures"
+  | "no-historical-ligatures"
+  | "none"
+  | "normal"
+  | "oldstyle-nums"
+  | "ordinal"
+  | "petite-caps"
+  | "proportional-nums"
+  | "proportional-width"
+  | "ruby"
+  | "slashed-zero"
+  | "small-caps"
+  | "stacked-fractions"
+  | "tabular-nums"
+  | "titling-caps"
+  | "unicase"
+  | (string & {})
+  fontVariantAlternates?: Globals | "historical-forms" | "normal" | (string & {})
+  fontVariantCaps?: Globals | "all-petite-caps" | "all-small-caps" | "normal" | "petite-caps" | "small-caps" | "titling-caps" | "unicase"
+  fontVariantEastAsian?: Globals | DataType.EastAsianVariantValues | "full-width" | "normal" | "proportional-width" | "ruby" | (string & {})
+  fontVariantLigatures?: | Globals
+  | "common-ligatures"
+  | "contextual"
+  | "discretionary-ligatures"
+  | "historical-ligatures"
+  | "no-common-ligatures"
+  | "no-contextual"
+  | "no-discretionary-ligatures"
+  | "no-historical-ligatures"
+  | "none"
+  | "normal"
+  | (string & {})
+  fontVariantNumeric?: | Globals
+  | "diagonal-fractions"
+  | "lining-nums"
+  | "normal"
+  | "oldstyle-nums"
+  | "ordinal"
+  | "proportional-nums"
+  | "slashed-zero"
+  | "stacked-fractions"
+  | "tabular-nums"
+  | (string & {})
+  fontVariantPosition?: Globals | "normal" | "sub" | "super"
+  fontVariationSettings?: Globals | "normal" | (string & {})
+  fontWeight?: Globals | DataType.FontWeightAbsolute | "bolder" | "lighter"
+  forcedColorAdjust?: Globals | "auto" | "none"
+  gap?: Globals | "normal" | (string & {})
+  grid?: Globals | "none" | (string & {})
+  gridArea?: Globals | DataType.GridLine | (string & {})
+  gridAutoColumns?: Globals | DataType.TrackBreadth | (string & {})
+  gridAutoFlow?: Globals | "column" | "dense" | "row" | (string & {})
+  gridAutoRows?: Globals | DataType.TrackBreadth | (string & {})
+  gridColumn?: Globals | DataType.GridLine | (string & {})
+  gridColumnEnd?: Globals | DataType.GridLine
+  gridColumnGap?: Globals | (string & {})
+  gridColumnStart?: Globals | DataType.GridLine
+  gridGap?: Globals | (string & {})
+  gridRow?: Globals | DataType.GridLine | (string & {})
+  gridRowEnd?: Globals | DataType.GridLine
+  gridRowGap?: Globals | (string & {})
+  gridRowStart?: Globals | DataType.GridLine
+  gridTemplate?: Globals | "none" | (string & {})
+  gridTemplateAreas?: Globals | "none" | (string & {})
+  gridTemplateColumns?: Globals | DataType.TrackBreadth | "none" | "subgrid" | (string & {})
+  gridTemplateRows?: Globals | DataType.TrackBreadth | "none" | "subgrid" | (string & {})
+  hangingPunctuation?: Globals | "allow-end" | "first" | "force-end" | "last" | "none" | (string & {})
+  height?: | Globals
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fit-content"
+  | "auto"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  hyphenateCharacter?: Globals | "auto" | (string & {})
+  hyphens?: Globals | "auto" | "manual" | "none"
+  imageOrientation?: Globals | "flip" | "from-image" | (string & {})
+  imageRendering?: Globals | "-moz-crisp-edges" | "-webkit-optimize-contrast" | "auto" | "crisp-edges" | "pixelated"
+  imageResolution?: Globals | "from-image" | (string & {})
+  imeMode?: Globals | "active" | "auto" | "disabled" | "inactive" | "normal"
+  initialLetter?: Globals | "normal" | (string & {}) | (number & {})
+  inlineSize?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "auto"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  inputSecurity?: Globals | "auto" | "none"
+  inset?: Globals | "auto" | (string & {})
+  insetBlock?: Globals | "auto" | (string & {})
+  insetBlockEnd?: Globals | "auto" | (string & {})
+  insetBlockStart?: Globals | "auto" | (string & {})
+  insetInline?: Globals | "auto" | (string & {})
+  insetInlineEnd?: Globals | "auto" | (string & {})
+  insetInlineStart?: Globals | "auto" | (string & {})
+  isolation?: Globals | "auto" | "isolate"
+  justifyContent?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "left" | "normal" | "right" | (string & {})
+  justifyItems?: Globals | DataType.SelfPosition | "baseline" | "left" | "legacy" | "normal" | "right" | "stretch" | (string & {})
+  justifySelf?: Globals | DataType.SelfPosition | "auto" | "baseline" | "left" | "normal" | "right" | "stretch" | (string & {})
+  justifyTracks?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "left" | "normal" | "right" | (string & {})
+  left?: Globals | "auto" | (string & {})
+  letterSpacing?: Globals | "normal"
+  lineBreak?: Globals | "anywhere" | "auto" | "loose" | "normal" | "strict"
+  lineClamp?: Globals | "none" | (number & {}) | (string & {})
+  lineHeight?: Globals | "normal" | (string & {}) | (number & {})
+  lineHeightStep?: Globals
+  listStyle?: Globals | "inside" | "none" | "outside" | (string & {})
+  listStyleImage?: Globals | "none" | (string & {})
+  listStylePosition?: Globals | "inside" | "outside"
+  listStyleType?: Globals | "none" | (string & {})
+  margin?: Globals | "auto" | (string & {})
+  marginBlock?: Globals | "auto" | (string & {})
+  marginBlockEnd?: Globals | "auto" | (string & {})
+  marginBlockStart?: Globals | "auto" | (string & {})
+  marginBottom?: Globals | "auto" | (string & {})
+  marginInline?: Globals | "auto" | (string & {})
+  marginInlineEnd?: Globals | "auto" | (string & {})
+  marginInlineStart?: Globals | "auto" | (string & {})
+  marginLeft?: Globals | "auto" | (string & {})
+  marginRight?: Globals | "auto" | (string & {})
+  marginTop?: Globals | "auto" | (string & {})
+  mask?: Globals | DataType.MaskLayer | (string & {})
+  maskBorder?: Globals | "alpha" | "luminance" | "none" | "repeat" | "round" | "space" | "stretch" | (string & {}) | (number & {})
+  maskBorderMode?: Globals | "alpha" | "luminance"
+  maskBorderOutset?: Globals | (string & {}) | (number & {})
+  maskBorderRepeat?: Globals | "repeat" | "round" | "space" | "stretch" | (string & {})
+  maskBorderSlice?: Globals | (string & {}) | (number & {})
+  maskBorderSource?: Globals | "none" | (string & {})
+  maskBorderWidth?: Globals | "auto" | (string & {}) | (number & {})
+  maskClip?: Globals | DataType.GeometryBox | "no-clip" | (string & {})
+  maskComposite?: Globals | DataType.CompositingOperator | (string & {})
+  maskImage?: Globals | "none" | (string & {})
+  maskMode?: Globals | DataType.MaskingMode | (string & {})
+  maskOrigin?: Globals | DataType.GeometryBox | (string & {})
+  maskPosition?: Globals | DataType.Position | (string & {})
+  maskRepeat?: Globals | DataType.RepeatStyle | (string & {})
+  maskSize?: Globals | DataType.BgSize | (string & {})
+  maskType?: Globals | "alpha" | "luminance"
+  mathDepth?: Globals | "auto-add" | (string & {}) | (number & {})
+  mathShift?: Globals | "compact" | "normal"
+  mathStyle?: Globals | "compact" | "normal"
+  maxBlockSize?: | Globals
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | "none"
+  | (string & {})
+  maxHeight?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fit-content"
+  | "-webkit-max-content"
+  | "-webkit-min-content"
+  | "fit-content"
+  | "intrinsic"
+  | "max-content"
+  | "min-content"
+  | "none"
+  | (string & {})
+  maxInlineSize?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | "none"
+  | (string & {})
+  maxLines?: Globals | "none" | (number & {}) | (string & {})
+  maxWidth?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fit-content"
+  | "-webkit-max-content"
+  | "-webkit-min-content"
+  | "fit-content"
+  | "intrinsic"
+  | "max-content"
+  | "min-content"
+  | "none"
+  | (string & {})
+  minBlockSize?: | Globals
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "auto"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  minHeight?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fit-content"
+  | "-webkit-max-content"
+  | "-webkit-min-content"
+  | "auto"
+  | "fit-content"
+  | "intrinsic"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  minInlineSize?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "auto"
+  | "fit-content"
+  | "max-content"
+  | "min-content"
+  | (string & {})
+  minWidth?: | Globals
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fill-available"
+  | "-webkit-fit-content"
+  | "-webkit-max-content"
+  | "-webkit-min-content"
+  | "auto"
+  | "fit-content"
+  | "intrinsic"
+  | "max-content"
+  | "min-content"
+  | "min-intrinsic"
+  | (string & {})
+  mixBlendMode?: Globals | DataType.BlendMode | "plus-lighter"
+  offset?: Globals | DataType.Position | DataType.GeometryBox | "auto" | "none" | (string & {})
+  offsetDistance?: Globals | (string & {})
+  offsetPath?: Globals | DataType.GeometryBox | "none" | (string & {})
+  offsetRotate?: Globals | "auto" | "reverse" | (string & {})
+  objectFit?: Globals | "contain" | "cover" | "fill" | "none" | "scale-down"
+  objectPosition?: Globals | DataType.Position
+  offsetAnchor?: Globals | DataType.Position | "auto"
+  opacity?: Globals | (string & {}) | (number & {})
+  order?: Globals | (number & {}) | (string & {})
+  orphans?: Globals | (number & {}) | (string & {})
+  outline?: Globals | DataType.Color | DataType.LineStyle | DataType.LineWidth | "auto" | "invert" | (string & {})
+  outlineColor?: Globals | DataType.Color | "invert"
+  outlineOffset?: Globals
+  outlineStyle?: Globals | DataType.LineStyle | "auto" | (string & {})
+  outlineWidth?: Globals | DataType.LineWidth
+  overflow?: Globals | "-moz-hidden-unscrollable" | "auto" | "clip" | "hidden" | "scroll" | "visible" | (string & {})
+  overflowAnchor?: Globals | "auto" | "none"
+  overflowBlock?: Globals | "auto" | "clip" | "hidden" | "scroll" | "visible"
+  overflowClipBox?: Globals | "content-box" | "padding-box"
+  overflowClipMargin?: Globals | DataType.VisualBox | (string & {})
+  overflowInline?: Globals | "auto" | "clip" | "hidden" | "scroll" | "visible"
+  overflowWrap?: Globals | "anywhere" | "break-word" | "normal"
+  overflowX?: Globals | "-moz-hidden-unscrollable" | "auto" | "clip" | "hidden" | "scroll" | "visible"
+  overflowY?: Globals | "-moz-hidden-unscrollable" | "auto" | "clip" | "hidden" | "scroll" | "visible"
+  overscrollBehavior?: Globals | "auto" | "contain" | "none" | (string & {})
+  overscrollBehaviorBlock?: Globals | "auto" | "contain" | "none"
+  overscrollBehaviorInline?: Globals | "auto" | "contain" | "none"
+  overscrollBehaviorX?: Globals | "auto" | "contain" | "none"
+  overscrollBehaviorY?: Globals | "auto" | "contain" | "none"
+  padding?: Globals | (string & {})
+  paddingBlock?: Globals | (string & {})
+  paddingBlockEnd?: Globals | (string & {})
+  paddingBlockStart?: Globals | (string & {})
+  paddingBottom?: Globals | (string & {})
+  paddingInline?: Globals | (string & {})
+  paddingInlineEnd?: Globals | (string & {})
+  paddingInlineStart?: Globals | (string & {})
+  paddingLeft?: Globals | (string & {})
+  paddingRight?: Globals | (string & {})
+  paddingTop?: Globals | (string & {})
+  pageBreakAfter?: Globals | "always" | "auto" | "avoid" | "left" | "recto" | "right" | "verso"
+  pageBreakBefore?: Globals | "always" | "auto" | "avoid" | "left" | "recto" | "right" | "verso"
+  pageBreakInside?: Globals | "auto" | "avoid"
+  paintOrder?: Globals | "fill" | "markers" | "normal" | "stroke" | (string & {})
+  perspective?: Globals | "none"
+  perspectiveOrigin?: Globals | DataType.Position
+  placeContent?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "baseline" | "normal" | (string & {})
+  placeItems?: Globals | DataType.SelfPosition | "baseline" | "normal" | "stretch" | (string & {})
+  placeSelf?: Globals | DataType.SelfPosition | "auto" | "baseline" | "normal" | "stretch" | (string & {})
+  pointerEvents?: Globals | "all" | "auto" | "fill" | "inherit" | "none" | "painted" | "stroke" | "visible" | "visibleFill" | "visiblePainted" | "visibleStroke"
+  position?: Globals | "-webkit-sticky" | "absolute" | "fixed" | "relative" | "static" | "sticky"
+  quotes?: Globals | "auto" | "none" | (string & {})
+  resize?: Globals | "block" | "both" | "horizontal" | "inline" | "none" | "vertical"
+  right?: Globals | "auto" | (string & {})
+  rotate?: Globals | "none" | (string & {})
+  rowGap?: Globals | "normal" | (string & {})
+  rubyAlign?: Globals | "center" | "space-around" | "space-between" | "start"
+  rubyMerge?: Globals | "auto" | "collapse" | "separate"
+  rubyPosition?: Globals | "alternate" | "inter-character" | "over" | "under" | (string & {})
+  scale?: Globals | "none" | (string & {}) | (number & {})
+  scrollBehavior?: Globals | "auto" | "smooth"
+  scrollMargin?: Globals | (string & {})
+  scrollMarginBlock?: Globals | (string & {})
+  scrollMarginBlockEnd?: Globals
+  scrollMarginBlockStart?: Globals
+  scrollMarginBottom?: Globals
+  scrollMarginInline?: Globals | (string & {})
+  scrollMarginInlineEnd?: Globals
+  scrollMarginInlineStart?: Globals
+  scrollMarginLeft?: Globals
+  scrollMarginRight?: Globals
+  scrollMarginTop?: Globals
+  scrollPadding?: Globals | "auto" | (string & {})
+  scrollPaddingBlock?: Globals | "auto" | (string & {})
+  scrollPaddingBlockEnd?: Globals | "auto" | (string & {})
+  scrollPaddingBlockStart?: Globals | "auto" | (string & {})
+  scrollPaddingBottom?: Globals | "auto" | (string & {})
+  scrollPaddingInline?: Globals | "auto" | (string & {})
+  scrollPaddingInlineEnd?: Globals | "auto" | (string & {})
+  scrollPaddingInlineStart?: Globals | "auto" | (string & {})
+  scrollPaddingLeft?: Globals | "auto" | (string & {})
+  scrollPaddingRight?: Globals | "auto" | (string & {})
+  scrollPaddingTop?: Globals | "auto" | (string & {})
+  scrollSnapAlign?: Globals | "center" | "end" | "none" | "start" | (string & {})
+  scrollSnapCoordinate?: Globals | DataType.Position | "none" | (string & {})
+  scrollSnapDestination?: Globals | DataType.Position
+  scrollSnapPointsX?: Globals | "none" | (string & {})
+  scrollSnapPointsY?: Globals | "none" | (string & {})
+  scrollSnapStop?: Globals | "always" | "normal"
+  scrollSnapType?: Globals | "block" | "both" | "inline" | "none" | "x" | "y" | (string & {})
+  scrollSnapTypeX?: Globals | "mandatory" | "none" | "proximity"
+  scrollSnapTypeY?: Globals | "mandatory" | "none" | "proximity"
+  scrollbarColor?: Globals | "auto" | (string & {})
+  scrollbarGutter?: Globals | "auto" | "stable" | (string & {})
+  scrollbarWidth?: Globals | "auto" | "none" | "thin"
+  shapeImageThreshold?: Globals | (string & {}) | (number & {})
+  shapeMargin?: Globals | (string & {})
+  shapeOutside?: Globals | DataType.Box | "margin-box" | "none" | (string & {})
+  tabSize?: Globals | (number & {}) | (string & {})
+  tableLayout?: Globals | "auto" | "fixed"
+  textAlign?: Globals | "center" | "end" | "justify" | "left" | "match-parent" | "right" | "start"
+  textAlignLast?: Globals | "auto" | "center" | "end" | "justify" | "left" | "right" | "start"
+  textCombineUpright?: Globals | "all" | "none" | (string & {})
+  textDecoration?: | Globals
+  | DataType.Color
+
+  | "auto"
+  | "blink"
+  | "dashed"
+  | "dotted"
+  | "double"
+  | "from-font"
+  | "grammar-error"
+  | "line-through"
+  | "none"
+  | "overline"
+  | "solid"
+  | "spelling-error"
+  | "underline"
+  | "wavy"
+  | (string & {})
+  textDecorationColor?: Globals | DataType.Color
+  textDecorationLine?: Globals | "blink" | "grammar-error" | "line-through" | "none" | "overline" | "spelling-error" | "underline" | (string & {})
+  textDecorationSkip?: Globals | "box-decoration" | "edges" | "leading-spaces" | "none" | "objects" | "spaces" | "trailing-spaces" | (string & {})
+  textDecorationSkipInk?: Globals | "all" | "auto" | "none"
+  textDecorationStyle?: Globals | "dashed" | "dotted" | "double" | "solid" | "wavy"
+  textDecorationThickness?: Globals | "auto" | "from-font" | (string & {})
+  textEmphasis?: Globals | DataType.Color | "circle" | "dot" | "double-circle" | "filled" | "none" | "open" | "sesame" | "triangle" | (string & {})
+  textEmphasisColor?: Globals | DataType.Color
+  textEmphasisPosition?: Globals | (string & {})
+  textEmphasisStyle?: Globals | "circle" | "dot" | "double-circle" | "filled" | "none" | "open" | "sesame" | "triangle" | (string & {})
+  textIndent?: Globals | (string & {})
+  textJustify?: Globals | "auto" | "inter-character" | "inter-word" | "none"
+  textOrientation?: Globals | "mixed" | "sideways" | "upright"
+  textOverflow?: Globals | "clip" | "ellipsis" | (string & {})
+  textRendering?: Globals | "auto" | "geometricPrecision" | "optimizeLegibility" | "optimizeSpeed"
+  textShadow?: Globals | "none" | (string & {})
+  textSizeAdjust?: Globals | "auto" | "none" | (string & {})
+  textTransform?: Globals | "capitalize" | "full-size-kana" | "full-width" | "lowercase" | "none" | "uppercase"
+  textUnderlineOffset?: Globals | "auto" | (string & {})
+  textUnderlinePosition?: Globals | "auto" | "from-font" | "left" | "right" | "under" | (string & {})
+  top?: Globals | "auto" | (string & {})
+  touchAction?: | Globals
+  | "-ms-manipulation"
+  | "-ms-none"
+  | "-ms-pinch-zoom"
+  | "auto"
+  | "manipulation"
+  | "none"
+  | "pan-down"
+  | "pan-left"
+  | "pan-right"
+  | "pan-up"
+  | "pan-x"
+  | "pan-y"
+  | "pinch-zoom"
+  | (string & {})
+  transform?: Globals | "none" | (string & {})
+  transformBox?: Globals | "border-box" | "content-box" | "fill-box" | "stroke-box" | "view-box"
+  transformOrigin?: Globals | "bottom" | "center" | "left" | "right" | "top" | (string & {})
+  transformStyle?: Globals | "flat" | "preserve-3d"
+  transition?: Globals | DataType.SingleTransition | (string & {})
+  transitionDelay?: Globals | (string & {})
+  transitionDuration?: Globals | (string & {})
+  transitionProperty?: Globals | "all" | "none" | (string & {})
+  transitionTimingFunction?: Globals | DataType.EasingFunction | (string & {})
+
+  translate?: Globals | "none" | (string & {})
+
+  unicodeBidi?: | Globals
+  | "-moz-isolate"
+  | "-moz-isolate-override"
+  | "-moz-plaintext"
+  | "-webkit-isolate"
+  | "-webkit-isolate-override"
+  | "-webkit-plaintext"
+  | "bidi-override"
+  | "embed"
+  | "isolate"
+  | "isolate-override"
+  | "normal"
+  | "plaintext"
+  userSelect?: Globals | "-moz-none" | "all" | "auto" | "contain" | "element" | "none" | "text"
+  verticalAlign?: | Globals
+
+  | "baseline"
+  | "bottom"
+  | "middle"
+  | "sub"
+  | "super"
+  | "text-bottom"
+  | "text-top"
+  | "top"
+  | (string & {})
+  visibility?: Globals | "collapse" | "hidden" | "visible"
+  whiteSpace?: Globals | "-moz-pre-wrap" | "break-spaces" | "normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap"
+  widows?: Globals | (number & {}) | (string & {})
+  width?: | Globals
+
+  | "-moz-fit-content"
+  | "-moz-max-content"
+  | "-moz-min-content"
+  | "-webkit-fit-content"
+  | "-webkit-max-content"
+  | "auto"
+  | "fit-content"
+  | "intrinsic"
+  | "max-content"
+  | "min-content"
+  | "min-intrinsic"
+  | (string & {})
+  willChange?: Globals | DataType.AnimateableFeature | "auto" | (string & {})
+  wordBreak?: Globals | "break-all" | "break-word" | "keep-all" | "normal"
+  wordSpacing?: Globals | "normal"
+  wordWrap?: Globals | "break-word" | "normal"
+  writingMode?: Globals | "horizontal-tb" | "sideways-lr" | "sideways-rl" | "vertical-lr" | "vertical-rl"
+  zIndex?: Globals | "auto" | (number & {}) | (string & {})
+  zoom?: Globals | "normal" | "reset" | (string & {}) | (number & {})
+  mozAppearance?: | Globals
+  | "-moz-mac-unified-toolbar"
+  | "-moz-win-borderless-glass"
+  | "-moz-win-browsertabbar-toolbox"
+  | "-moz-win-communications-toolbox"
+  | "-moz-win-communicationstext"
+  | "-moz-win-exclude-glass"
+  | "-moz-win-glass"
+  | "-moz-win-media-toolbox"
+  | "-moz-win-mediatext"
+  | "-moz-window-button-box"
+  | "-moz-window-button-box-maximized"
+  | "-moz-window-button-close"
+  | "-moz-window-button-maximize"
+  | "-moz-window-button-minimize"
+  | "-moz-window-button-restore"
+  | "-moz-window-frame-bottom"
+  | "-moz-window-frame-left"
+  | "-moz-window-frame-right"
+  | "-moz-window-titlebar"
+  | "-moz-window-titlebar-maximized"
+  | "button"
+  | "button-arrow-down"
+  | "button-arrow-next"
+  | "button-arrow-previous"
+  | "button-arrow-up"
+  | "button-bevel"
+  | "button-focus"
+  | "caret"
+  | "checkbox"
+  | "checkbox-container"
+  | "checkbox-label"
+  | "checkmenuitem"
+  | "dualbutton"
+  | "groupbox"
+  | "listbox"
+  | "listitem"
+  | "menuarrow"
+  | "menubar"
+  | "menucheckbox"
+  | "menuimage"
+  | "menuitem"
+  | "menuitemtext"
+  | "menulist"
+  | "menulist-button"
+  | "menulist-text"
+  | "menulist-textfield"
+  | "menupopup"
+  | "menuradio"
+  | "menuseparator"
+  | "meterbar"
+  | "meterchunk"
+  | "none"
+  | "progressbar"
+  | "progressbar-vertical"
+  | "progresschunk"
+  | "progresschunk-vertical"
+  | "radio"
+  | "radio-container"
+  | "radio-label"
+  | "radiomenuitem"
+  | "range"
+  | "range-thumb"
+  | "resizer"
+  | "resizerpanel"
+  | "scale-horizontal"
+  | "scale-vertical"
+  | "scalethumb-horizontal"
+  | "scalethumb-vertical"
+  | "scalethumbend"
+  | "scalethumbstart"
+  | "scalethumbtick"
+  | "scrollbarbutton-down"
+  | "scrollbarbutton-left"
+  | "scrollbarbutton-right"
+  | "scrollbarbutton-up"
+  | "scrollbarthumb-horizontal"
+  | "scrollbarthumb-vertical"
+  | "scrollbartrack-horizontal"
+  | "scrollbartrack-vertical"
+  | "searchfield"
+  | "separator"
+  | "sheet"
+  | "spinner"
+  | "spinner-downbutton"
+  | "spinner-textfield"
+  | "spinner-upbutton"
+  | "splitter"
+  | "statusbar"
+  | "statusbarpanel"
+  | "tab"
+  | "tab-scroll-arrow-back"
+  | "tab-scroll-arrow-forward"
+  | "tabpanel"
+  | "tabpanels"
+  | "textfield"
+  | "textfield-multiline"
+  | "toolbar"
+  | "toolbarbutton"
+  | "toolbarbutton-dropdown"
+  | "toolbargripper"
+  | "toolbox"
+  | "tooltip"
+  | "treeheader"
+  | "treeheadercell"
+  | "treeheadersortarrow"
+  | "treeitem"
+  | "treeline"
+  | "treetwisty"
+  | "treetwistyopen"
+  | "treeview"
+  mozBinding?: Globals | "none" | (string & {})
+  mozBorderBottomColors?: Globals | DataType.Color | "none" | (string & {})
+  mozBorderLeftColors?: Globals | DataType.Color | "none" | (string & {})
+  mozBorderRightColors?: Globals | DataType.Color | "none" | (string & {})
+  mozBorderTopColors?: Globals | DataType.Color | "none" | (string & {})
+  mozContextProperties?: Globals | "fill" | "fill-opacity" | "none" | "stroke" | "stroke-opacity" | (string & {})
+  mozFloatEdge?: Globals | "border-box" | "content-box" | "margin-box" | "padding-box"
+  mozForceBrokenImageIcon?: Globals | 0 | (string & {}) | 1
+  mozImageRegion?: Globals | "auto" | (string & {})
+  mozOrient?: Globals | "block" | "horizontal" | "inline" | "vertical"
+  mozOutlineRadius?: Globals | (string & {})
+  mozOutlineRadiusBottomleft?: Globals | (string & {})
+  mozOutlineRadiusBottomright?: Globals | (string & {})
+  mozOutlineRadiusTopleft?: Globals | (string & {})
+  mozOutlineRadiusTopright?: Globals | (string & {})
+  mozStackSizing?: Globals | "ignore" | "stretch-to-fit"
+  mozTextBlink?: Globals | "blink" | "none"
+  mozUserFocus?: Globals | "ignore" | "none" | "normal" | "select-after" | "select-all" | "select-before" | "select-menu" | "select-same"
+  mozUserInput?: Globals | "auto" | "disabled" | "enabled" | "none"
+  mozUserModify?: Globals | "read-only" | "read-write" | "write-only"
+  mozWindowDragging?: Globals | "drag" | "no-drag"
+  mozWindowShadow?: Globals | "default" | "menu" | "none" | "sheet" | "tooltip"
+  msAccelerator?: Globals | "false" | "true"
+  msBlockProgression?: Globals | "bt" | "lr" | "rl" | "tb"
+  msContentZoomChaining?: Globals | "chained" | "none"
+  msContentZoomLimit?: Globals | (string & {})
+  msContentZoomLimitMax?: Globals | (string & {})
+  msContentZoomLimitMin?: Globals | (string & {})
+  msContentZoomSnap?: Globals | "mandatory" | "none" | "proximity" | (string & {})
+  msContentZoomSnapPoints?: Globals | (string & {})
+  msContentZoomSnapType?: Globals | "mandatory" | "none" | "proximity"
+  msContentZooming?: Globals | "none" | "zoom"
+  msFilter?: Globals | (string & {})
+  msFlowFrom?: Globals | "none" | (string & {})
+  msFlowInto?: Globals | "none" | (string & {})
+  msGridColumns?: Globals | DataType.TrackBreadth | "none" | (string & {})
+  msGridRows?: Globals | DataType.TrackBreadth | "none" | (string & {})
+  msHighContrastAdjust?: Globals | "auto" | "none"
+  msHyphenateLimitChars?: Globals | "auto" | (string & {}) | (number & {})
+  msHyphenateLimitLines?: Globals | "no-limit" | (number & {}) | (string & {})
+  msHyphenateLimitZone?: Globals | (string & {})
+  msImeAlign?: Globals | "after" | "auto"
+  msOverflowStyle?: Globals | "-ms-autohiding-scrollbar" | "auto" | "none" | "scrollbar"
+  msScrollChaining?: Globals | "chained" | "none"
+  msScrollLimit?: Globals | (string & {})
+  msScrollLimitXMax?: Globals | "auto"
+  msScrollLimitXMin?: Globals
+  msScrollLimitYMax?: Globals | "auto"
+  msScrollLimitYMin?: Globals
+  msScrollRails?: Globals | "none" | "railed"
+  msScrollSnapPointsX?: Globals | (string & {})
+  msScrollSnapPointsY?: Globals | (string & {})
+  msScrollSnapType?: Globals | "mandatory" | "none" | "proximity"
+  msScrollSnapX?: Globals | (string & {})
+  msScrollSnapY?: Globals | (string & {})
+  msScrollTranslation?: Globals | "none" | "vertical-to-horizontal"
+  msScrollbar3dlightColor?: Globals | DataType.Color
+  msScrollbarArrowColor?: Globals | DataType.Color
+  msScrollbarBaseColor?: Globals | DataType.Color
+  msScrollbarDarkshadowColor?: Globals | DataType.Color
+  msScrollbarFaceColor?: Globals | DataType.Color
+  msScrollbarHighlightColor?: Globals | DataType.Color
+  msScrollbarShadowColor?: Globals | DataType.Color
+  msScrollbarTrackColor?: Globals | DataType.Color
+  msTextAutospace?: Globals | "ideograph-alpha" | "ideograph-numeric" | "ideograph-parenthesis" | "ideograph-space" | "none"
+  msTouchSelect?: Globals | "grippers" | "none"
+  msUserSelect?: Globals | "element" | "none" | "text"
+  msWrapFlow?: Globals | "auto" | "both" | "clear" | "end" | "maximum" | "start"
+  msWrapMargin?: Globals
+  msWrapThrough?: Globals | "none" | "wrap"
+  webkitAppearance?: | Globals
+  | "-apple-pay-button"
+  | "button"
+  | "button-bevel"
+  | "caret"
+  | "checkbox"
+  | "default-button"
+  | "inner-spin-button"
+  | "listbox"
+  | "listitem"
+  | "media-controls-background"
+  | "media-controls-fullscreen-background"
+  | "media-current-time-display"
+  | "media-enter-fullscreen-button"
+  | "media-exit-fullscreen-button"
+  | "media-fullscreen-button"
+  | "media-mute-button"
+  | "media-overlay-play-button"
+  | "media-play-button"
+  | "media-seek-back-button"
+  | "media-seek-forward-button"
+  | "media-slider"
+  | "media-sliderthumb"
+  | "media-time-remaining-display"
+  | "media-toggle-closed-captions-button"
+  | "media-volume-slider"
+  | "media-volume-slider-container"
+  | "media-volume-sliderthumb"
+  | "menulist"
+  | "menulist-button"
+  | "menulist-text"
+  | "menulist-textfield"
+  | "meter"
+  | "none"
+  | "progress-bar"
+  | "progress-bar-value"
+  | "push-button"
+  | "radio"
+  | "searchfield"
+  | "searchfield-cancel-button"
+  | "searchfield-decoration"
+  | "searchfield-results-button"
+  | "searchfield-results-decoration"
+  | "slider-horizontal"
+  | "slider-vertical"
+  | "sliderthumb-horizontal"
+  | "sliderthumb-vertical"
+  | "square-button"
+  | "textarea"
+  | "textfield"
+  webkitBorderBefore?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
+  webkitBorderBeforeColor?: Globals | DataType.Color
+  webkitBorderBeforeStyle?: Globals | DataType.LineStyle | (string & {})
+  webkitBorderBeforeWidth?: Globals | DataType.LineWidth | (string & {})
+  webkitBoxReflect?: Globals | "above" | "below" | "left" | "right" | (string & {})
+  webkitLineClamp?: Globals | "none" | (number & {}) | (string & {})
+  webkitMask?: | Globals
+  | DataType.Position
+  | DataType.RepeatStyle
+  | DataType.Box
+  | "border"
+  | "content"
+  | "none"
+  | "padding"
+  | "text"
+  | (string & {})
+  webkitMaskAttachment?: Globals | DataType.Attachment | (string & {})
+  webkitMaskClip?: Globals | DataType.Box | "border" | "content" | "padding" | "text" | (string & {})
+  webkitMaskComposite?: Globals | DataType.CompositeStyle | (string & {})
+  webkitMaskImage?: Globals | "none" | (string & {})
+  webkitMaskOrigin?: Globals | DataType.Box | "border" | "content" | "padding" | (string & {})
+  webkitMaskPosition?: Globals | DataType.Position | (string & {})
+  webkitMaskPositionX?: Globals | "center" | "left" | "right" | (string & {})
+  webkitMaskPositionY?: Globals | "bottom" | "center" | "top" | (string & {})
+  webkitMaskRepeat?: Globals | DataType.RepeatStyle | (string & {})
+  webkitMaskRepeatX?: Globals | "no-repeat" | "repeat" | "round" | "space"
+  webkitMaskRepeatY?: Globals | "no-repeat" | "repeat" | "round" | "space"
+  webkitMaskSize?: Globals | DataType.BgSize | (string & {})
+  webkitOverflowScrolling?: Globals | "auto" | "touch"
+  webkitTapHighlightColor?: Globals | DataType.Color
+  webkitTextFillColor?: Globals | DataType.Color
+  webkitTextStroke?: Globals | DataType.Color | (string & {})
+  webkitTextStrokeColor?: Globals | DataType.Color
+  webkitTextStrokeWidth?: Globals
+  webkitTouchCallout?: Globals | "default" | "none"
+  webkitUserModify?: Globals | "read-only" | "read-write" | "read-write-plaintext-only"
+  alignmentBaseline?: | Globals
+  | "after-edge"
+  | "alphabetic"
+  | "auto"
+  | "baseline"
+  | "before-edge"
+  | "central"
+  | "hanging"
+  | "ideographic"
+  | "mathematical"
+  | "middle"
+  | "text-after-edge"
+  | "text-before-edge"
+  baselineShift?: Globals | "baseline" | "sub" | "super" | (string & {})
+  clipRule?: Globals | "evenodd" | "nonzero"
+  colorInterpolation?: Globals | "auto" | "linearRGB" | "sRGB"
+  colorRendering?: Globals | "auto" | "optimizeQuality" | "optimizeSpeed"
+  dominantBaseline?: | Globals
+  | "alphabetic"
+  | "auto"
+  | "central"
+  | "hanging"
+  | "ideographic"
+  | "mathematical"
+  | "middle"
+  | "no-change"
+  | "reset-size"
+  | "text-after-edge"
+  | "text-before-edge"
+  | "use-script"
+  fill?: Globals | DataType.Paint
+  fillOpacity?: Globals | (number & {}) | (string & {})
+  fillRule?: Globals | "evenodd" | "nonzero"
+  floodColor?: Globals | DataType.Color | "currentColor"
+  floodOpacity?: Globals | (number & {}) | (string & {})
+  glyphOrientationVertical?: Globals | "auto" | (string & {}) | (number & {})
+  lightingColor?: Globals | DataType.Color | "currentColor"
+  marker?: Globals | "none" | (string & {})
+  markerEnd?: Globals | "none" | (string & {})
+  markerMid?: Globals | "none" | (string & {})
+  markerStart?: Globals | "none" | (string & {})
+  shapeRendering?: Globals | "auto" | "crispEdges" | "geometricPrecision" | "optimizeSpeed"
+  stopColor?: Globals | DataType.Color | "currentColor"
+  stopOpacity?: Globals | (number & {}) | (string & {})
+  stroke?: Globals | DataType.Paint
+  strokeDasharray?: Globals | DataType.Dasharray | "none"
+  strokeDashoffset?: Globals | (string & {})
+  strokeLinecap?: Globals | "butt" | "round" | "square"
+  strokeLinejoin?: Globals | "bevel" | "miter" | "round"
+  strokeMiterlimit?: Globals | (number & {}) | (string & {})
+  strokeOpacity?: Globals | (number & {}) | (string & {})
+  strokeWidth?: Globals | (string & {})
+  textAnchor?: Globals | "end" | "middle" | "start"
+  vectorEffect?: Globals | "non-scaling-stroke" | "none"
+} | { [key: string]: string }

@@ -1,14 +1,17 @@
 import Parser from './parser';
 import {
-  ElementEvent, StyleProperties, Attributes, Properties
+  ElementEvent, Attributes, Properties, ArgProperties
 } from './types';
-import NativeClass from './native';
-import {createRules} from './styles';
+import NativeClass, { addLoadQueue } from './native';
+import { createRules } from './styles';
 
-const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']','').toLowerCase();
-const Native = function() : NativeClass {  return (<any>window).Native || undefined };
+const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']', '').toLowerCase();
+const Native = function (): NativeClass { return (<any>window).Native || undefined };
 
-export interface $RxElement extends Attributes<$RxElement>, Properties<$RxElement> {}
+export interface $RxElement extends Attributes<$RxElement>, Properties<$RxElement> {
+  onCreate(): void;
+  onDestroy(): void;
+}
 export interface Style extends Properties<Style> {}
 
 export class $RxElement {
@@ -20,9 +23,9 @@ export class $RxElement {
   $events: any = undefined;
   $className: string = undefined;
   $style: Style[] = [];
-  $pseudo: {[key: string]: StyleProperties}[] = [];
-  $media: {[key: string]: StyleProperties | string}[] = [];
-  $global: {[key: string]: StyleProperties}[] = [];
+  $pseudo: { [key: string]: ArgProperties }[] = [];
+  $media: { [key: string]: ArgProperties | string }[] = [];
+  $global: { [key: string]: ArgProperties }[] = [];
 
   $hostComponent: string = (<any>window).Native.serving;
   $node: Element;
@@ -37,59 +40,56 @@ export class $RxElement {
     this.$className = this.$tagName[0].toLowerCase() + Math.random().toString(36).substr(2, 9);
   }
 
-  onCreate() {}
-  onDestroy() {}
-
   addChild(...children: $RxElement[]): $RxElement {
-    if(children[0] instanceof Array) {
+    if (children[0] instanceof Array) {
       throw `Cannot addChild: ${children[0]} is not valid $RxElement`;
     }
-    if(this.$children) {
-      for(let i = 0; i < children.length; i++) {
-        if(children[i].$root !== undefined) {
+    if (this.$children) {
+      for (let i = 0; i < children.length; i++) {
+        if (children[i].$root !== undefined) {
           throw `Cannot addChild: ${children[i].name} is already attached`;
         }
         const nullIndex = this.$children.indexOf(null);
-        if(nullIndex > -1) this.$children.splice(nullIndex, 1, children[i])
-          else this.$children.push(children[i]);
-        children[i].$root = this as any;
-        if(this.$node) this.$node.append(Native().createElement(children[i]));
+        if (nullIndex > -1) this.$children.splice(nullIndex, 1, children[i])
+        else this.$children.push(children[i]);
+        if (typeof children[i] !== 'string') children[i].$root = this as any;
+        if (this.$node) this.$node.append(Native().createElement(children[i]));
       }
       return this as any;
-    }else {
+    } else {
       throw `Cannot addChild: ${this.name} does not accept children`;
     }
   }
 
   removeChild(child: $RxElement): $RxElement {
-    if(this.$children.indexOf(child) > -1) {
+    if (this.$children.indexOf(child) > -1) {
       child.$root = undefined;
       const resetRules = (item: $RxElement) => {
         item.$rules = []
-        if(item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
+        if (item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
       }
       resetRules(child);
       this.$node.removeChild(child.node());
       this.$children.splice(this.$children.indexOf(child), 1);
       this.$children = this.$children.filter(i => i !== null);
       return this;
-    }else {
+    } else {
       console.warn(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
       // throw new Error(`Cannot removeChild: ${child.name} is not a child of ${this.name}`);
     }
   }
 
   removeChildren(): $RxElement {
-    if(this.$children.length > 0) {
+    if (this.$children.length > 0) {
       this.$children.forEach(child => child && child.$root ? child.$root = undefined : '');
-      while(this.$children.length > 0) this.$children.pop();
+      while (this.$children.length > 0) this.$children.pop();
     }
     return this;
   }
 
   replaceChild(child: $RxElement, newChild: $RxElement) {
-    if(this.$children.indexOf(child) > -1) {
-      if(newChild.$root != undefined) {
+    if (this.$children.indexOf(child) > -1) {
+      if (newChild.$root != undefined) {
         throw `Cannot replaceChild: ${newChild.name} is already attched`;
       }
       this.$children.splice(this.$children.indexOf(child), 1, newChild);
@@ -99,7 +99,7 @@ export class $RxElement {
       // child doesnt exist on parent
     }
 
-    if(this.$node) {
+    if (this.$node) {
       this.$node.removeChild(child.$node);
       this.$node.appendChild(newChild.$node);
     }
@@ -109,11 +109,11 @@ export class $RxElement {
   parent(): $RxElement { return this.$root; }
   children(): ($RxElement | string)[] { return this.$children; }
 
-  on(fns: ElementEvent | {[key: string]: (e?: Event) => void }): $RxElement {
+  on(fns: ElementEvent | { [key: string]: (e?: Event) => void }): $RxElement {
     this.$events = this.$events || [];
-    for(const fn in fns) {
-      if(type((<any>fns)[fn]) !== 'function') throw `${(<any>fns)[fn]} is not a function`;
-      if(type(this.$events) !== 'array') console.trace(this, this.$events);
+    for (const fn in fns) {
+      if (type((<any>fns)[fn]) !== 'function') throw `${(<any>fns)[fn]} is not a function`;
+      if (type(this.$events) !== 'array') console.trace(this, this.$events);
       this.$events.push({
         event: (<any>fns)[fn].bind(this),
         name: fn, object: this
@@ -123,7 +123,7 @@ export class $RxElement {
   }
 
   dispatch(event: string) {
-    if(!this.$node) throw `Cannot dispatch, node is not attached`;
+    if (!this.$node) throw `Cannot dispatch, node is not attached`;
     else {
       const e = new Event(event, { bubbles: false });
       this.$node.dispatchEvent(e);
@@ -132,10 +132,10 @@ export class $RxElement {
   }
 
   bind(object: any): $RxElement {
-    if((<any>window).Native.serving) {
+    if ((<any>window).Native.serving) {
       const bonds = (<any>window).Native.components[(<any>window).Native.serving].bonds || [];
-      if(bonds.indexOf(object) < 0) {
-        for(const prop in object) {
+      if (bonds.indexOf(object) < 0) {
+        for (const prop in object) {
           object[prop].source = this;
         }
         bonds.push(object);
@@ -146,22 +146,22 @@ export class $RxElement {
   }
 
   text(string?: string): $RxElement {
-    if(string != undefined) {
-      if(typeof this.$children[0] == 'string') this.$children.splice(0, 1, string as any);
+    if (string != undefined) {
+      if (typeof this.$children[0] == 'string') this.$children.splice(0, 1, string as any);
       else this.$children.unshift(string as any);
-      if(this.$node) (<any>this.$node).innerText = string;
+      if (this.$node) (<any>this.$node).innerText = string;
       return this;
     }
-    if(Object.prototype.toString.call(this.$children[0]) === '[object String]') {
+    if (Object.prototype.toString.call(this.$children[0]) === '[object String]') {
       return this.$children[0];
     }
     return this;
   }
 
   style(...styles: Style[]): any {
-    if(arguments.length == 0) return <any>this.$style;
-    for(let i = 0; i < styles.length; i++) {
-      if(styles[i].$className) {
+    if (arguments.length == 0) return <any>this.$style;
+    for (let i = 0; i < styles.length; i++) {
+      if (styles[i].$className) {
         this.$className += ' ' + styles[i].$className;
         this.$style.push(styles[i]);
       }
@@ -170,14 +170,14 @@ export class $RxElement {
   }
 
   removeStyle(...styles: Style[]): void {
-    if(arguments.length == 0) throw 'Remove style: 0 arguments passed. Min. of 1 expected';
-    for(let i = 0; i < styles.length; i++) {
+    if (arguments.length == 0) throw 'Remove style: 0 arguments passed. Min. of 1 expected';
+    for (let i = 0; i < styles.length; i++) {
       this.$style = this.$style.filter(s => s.$className === styles[i].$className);
       this.$className.replace(' ' + styles[i].$className, '');
     }
   }
 
-  media(props: {[key: string]: StyleProperties}) {
+  media(props: { [key: string]: ArgProperties }) {
     this.$media.push(props);
     const rules: string[] = [], native = Native();
     Object.getOwnPropertyNames(props).forEach((key: string) => {
@@ -200,113 +200,112 @@ export class $RxElement {
   }
 
   addClassName(name: string): $RxElement {
-    if(this.$node) {
-      if(!this.$node.classList || !this.$node.classList.contains(name)) {
+    if (this.$node) {
+      if (!this.$node.classList || !this.$node.classList.contains(name)) {
         this.$node.classList.add(name);
       }
     }
-    if(!this.$className.match(name)) {
+    if (!this.$className.match(name)) {
       this.$className = this.$className + ' ' + name;
     }
     return this;
   }
 
   removeClassName(classname?: string): $RxElement {
-    if(this.$node) {
+    if (this.$node) {
       this.$node.classList.remove(classname);
     }
-    this.$className = this.$className.replace(' '+classname, '');
+    this.$className = this.$className.replace(' ' + classname, '');
     return this;
   }
 
   tag(tag?: string): $RxElement | string {
-    if(tag !== undefined) {
+    if (tag !== undefined) {
       this.$tag = tag;
       return this;
     }
     return this.$tag;
   }
 
-  child(predicate: {[key: string]: any}): $RxElement {
+  child(predicate: { [key: string]: any }): $RxElement {
     const children = this.$children.filter(child => {
       const keys = window.Object.keys(predicate), check = keys.length;
       let valid = 0;
       keys.forEach(key => {
-        if(predicate[key] === (<any>child)['$' + key]) {
+        if (predicate[key] === (<any>child)['$' + key]) {
           valid += 1;
         }
       });
-      if(valid === check) return true;
+      if (valid === check) return true;
     });
     return children[0];
   }
 
   removeAllClassName(): $RxElement {
-    if(this.$node) {
+    if (this.$node) {
       this.$node.classList.forEach((i, index) => {
-        if(index > 0) this.$node.classList.remove(i);
+        if (index > 0) this.$node.classList.remove(i);
       });
     }
     this.$className = this.$className.replace(/ .+/, '');
     return this;
   }
 
-  replaceTextTag(text: string, tagObject: {[key: string]: any }): $RxElement {
-    console.log(text);
-    const all = text.match(/\${\w+(\(.*\))?\}?/g);
-    console.log(all);
+  replaceTextTag(text: string, tagObject: { [key: string]: any }): $RxElement {
+    const all = text.match(/\$\{\w+(\(.*?\))?\}?/g);
     const children: ($RxElement | string)[] = [],
-    p = (t: string) => {
-      all.map((i, inx) => {
-        let tag: any = i.replace('${','').replace('}',''), args = [];
-        const match = tag.match(/(\w+)\(/g);
-        if(match) {
-          tag = match[0]?.replace('(','');
-          args = i.match(/(\(.*)\)/g).map(i => i.replace('(', '').replace(')', ''));
-        }
-        children.push(t.slice(0, t.indexOf(i)));
-        children.push(tagObject[tag](...args));
-        t = t.slice(t.indexOf(i) + i.length);
-        if(inx === all.length - 1) {
-          if(t.length > 0) children.push(t);
-        }
-      });
-    };
-    if(all) {
+      p = (t: string) => {
+        all.map((i, inx) => {
+          let tag: any = i.replace('${', '').replace('}', ''), args = [];
+          const match = tag.match(/(.*)\(/g);
+          if (match) {
+            tag = match[0]?.replace('(', '');
+            args = i.match(/(\(.*)\)/g).map(i => i.replace('(', '').replace(')', ''));
+          }
+          children.push(t.slice(0, t.indexOf(i)));
+          if (!tagObject[tag]) throw "Object tag reference not found";
+          children.push(tagObject[tag](...args));
+          t = t.slice(t.indexOf(i) + i.length);
+          if (inx === all.length - 1) {
+            if (t.length > 0) children.push(t);
+          }
+        });
+      };
+    if (all) {
       p(text);
       children.forEach((child: $RxElement) => {
         const nullIndex = this.$children.indexOf(null);
-        if(nullIndex > -1) this.$children.splice(nullIndex, 1, child)
+        if (nullIndex > -1) this.$children.splice(nullIndex, 1, child)
         else this.$children.push(child);
         (type(child) === 'object') ? child.$root = this : '';
       })
-    }else this.$children.push(text as any);
+    } else this.$children.push(text as any);
     return this;
   }
 
-  pseudo(props: {[key: string]: StyleProperties}) {
+  pseudo(props: { [key: string]: ArgProperties }) {
     this.$pseudo.push(props);
     const rules: string[] = [], native = Native();
-    for(const key in props) {
-      rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+    for (const key in props) {
+      rules.push('.' + this.$className.replace(/\s/g, '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
-    if(!native.served && native.serving === this.$hostComponent) {
+    if (!native.served && native.serving === this.$hostComponent) {
       native.loadQueue[native.serving].push(() => createRules(this, rules));
-    }else {
+    } else {
       createRules(this, rules)
     }
     return this;
   }
 
-  globals(props: {[key: string]: StyleProperties}) {
+  global(props: { [key: string]: ArgProperties }) {
     this.$global.push(props);
     const rules: string[] = [], native = Native();
-    for(const key in props) {
-      rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
+    for (const key in props) {
+      rules.push('.' + this.$className.replace(/\s/g, '.') + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
     }
-    if(!native.served && native.serving === this.$hostComponent) {
+    if (!native.served && native.serving === this.$hostComponent) {
       native.loadQueue[native.serving].push(() => createRules(this, rules));
-    }else {
+    } else {
       createRules(this, rules)
     }
     return this;
@@ -318,7 +317,7 @@ export class Component extends $RxElement {
 
   $nid: string;
   $level = 0;
-  $events: {[key: string]: ((..._: any) => any)[] }[] = [] as any;
+  $events: { [key: string]: ((..._: any) => any)[] }[] = [] as any;
   $loadQueue: Function[] = [];
 
   constructor(...args: any[]) {
@@ -329,7 +328,7 @@ export class Component extends $RxElement {
     Native().components[this.name] = Native().components[this.name] || { structure: this.constructor } as any;
     Native().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;
     Native().components[this.name][this.$nid].args
-    = Native().components[this.name][this.$nid].args || args;
+      = Native().components[this.name][this.$nid].args || args;
     Native().loadQueue[Native().serving] = [];
     this.display('block');
   }
@@ -342,7 +341,7 @@ export class PageComponent extends Component {
   }
 
   get route() {
-    if(!Native().components[this.name][this.$nid]) {
+    if (!Native().components[this.name][this.$nid]) {
       throw new Error('Get route: Component doesn\'t exist or has been destroy');
     }
     return Native().components[this.name][this.$nid].route;
@@ -735,19 +734,21 @@ export class Input extends $RxElement {
 
   track?(obj: any) {
     obj.watch((v: any) => console.log(v));
-    this.on({ input: (e: any) => {
-      obj = e.target.value;
-    } })
+    this.on({
+      input: (e: any) => {
+        obj = e.target.value;
+      }
+    })
   }
 
-  value? = (v?: string | number) => {
-    if(v !== undefined) {
-      if(this.$node) {
-        if((<any>this.$node).type !== 'file') (<any>this.$node).value = v;
+  value?= (v?: string | number) => {
+    if (v !== undefined) {
+      if (this.$node) {
+        if ((<any>this.$node).type !== 'file') (<any>this.$node).value = v;
         this.$value = v;
-      }else this.$value = v;
+      } else this.$value = v;
       return this;
-    }else return this.$value;
+    } else return this.$value;
   }
 }
 
@@ -763,11 +764,11 @@ export class Animation {
   name: string;
   $rule: CSSStyleRule;
 
-  constructor(props: {[key: string]: StyleProperties} & {'from'?: StyleProperties} & {'to'?: StyleProperties}) {
+  constructor(props: { [key: string]: ArgProperties } & { 'from'?: ArgProperties } & { 'to'?: ArgProperties }) {
     this.$className = this.name = 's' + Math.random().toString(36).substr(2, 9);
     let rule = '@keyframes ' + this.$className + '{ ';
     Object.getOwnPropertyNames(props).forEach((key: string) => {
-      rule +=  key + ' {' + Parser.parseNativeStyle(props[key]) + '} ';
+      rule += key + ' {' + Parser.parseNativeStyle(props[key]) + '} ';
     });
     rule += ' }';
     createRules(this, [rule]);
@@ -778,23 +779,22 @@ export class Style {
   $className: string;
   $rules: CSSStyleRule[] = [];
 
-  constructor(props: StyleProperties) {
+  constructor(props: ArgProperties) {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
-    const rules = ['.' + this.$className + '{  }'];
-     (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
-      (<any>window).__native_load_queue.push(() => {
-        createRules(this, rules);
-        Object.getOwnPropertyNames(props).forEach(i => {
-          (<any>this)[i]((<any>props)[i]);
-        });
+    const rules = ['.' + this.$className + '{ ' + Parser.parseNativeStyle(props) + ' }'];
+    addLoadQueue(() => {
+      createRules(this, rules);
+      Object.getOwnPropertyNames(props).forEach(i => {
+        (<any>this)[i]((<any>props)[i]);
       });
+    });
   }
 
-  global(props: {[key: string]: StyleProperties}) {
+  global(props: { [key: string]: ArgProperties }) {
     (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
     (<any>window).__native_load_queue.push(() => {
       const rules: string[] = [];
-      for(const key in props) {
+      for (const key in props) {
         rules.push('.' + this.$className + ' ' + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
       }
       createRules(this, rules);
@@ -802,11 +802,11 @@ export class Style {
     return this;
   }
 
-  pseudo(props: {[key: string]: StyleProperties}) {
+  pseudo(props: { [key: string]: ArgProperties }) {
     (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
     (<any>window).__native_load_queue.push(() => {
       const rules: string[] = [];
-      for(const key in props) {
+      for (const key in props) {
         rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + Parser.parseNativeStyle(props[key]) + '} ');
       }
       createRules(this, rules);
