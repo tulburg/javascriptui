@@ -6,6 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "build-standalone": "webpack --config webpack.config.js && echo 'const exports={};' | cat - dist/jui.js > /tmp/out && mv /tmp/out dist/jui.js",
+    "dev-standalone": "webpack --watch --config webpack.config.js",
     "prepublish": "tsc"
   },
   "repository": {
@@ -20,6 +22,9 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
-    "typescript": "*"
+    "ts-loader": "^9.4.1",
+    "typescript": "*",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0"
   }
 }

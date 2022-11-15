@@ -5,12 +5,12 @@ import { Attributes } from "./types";
 export function createSheet(data: string[]): CSSStyleSheet {
   const allStyles = document.head.getElementsByTagName('style');
   const id = 'n' + Math.random().toString(36).substr(2, 9);
-  const style: any = Array.from(allStyles).find(i => i.id === (<any>window).Native.sheedId);
+  const style: any = Array.from(allStyles).find(i => i.id === (<any>window).UI.sheetId);
   if (style) style.disabled = true;
   const newStyle = document.createElement('style');
   newStyle.appendChild(document.createTextNode(''));
   newStyle.setAttribute('id', id);
-  (<any>window).Native.sheedId = id;
+  (<any>window).UI.sheetId = id;
   document.head.appendChild(newStyle);
   for (let i = 0; i < data.length; i++) {
     if (data[i].trim().length > 0 && !data[i].trim().match('{ }')) {
@@ -26,7 +26,7 @@ export function createSheet(data: string[]): CSSStyleSheet {
 };
 
 export function createRules(object: any, rules: string[]) {
-  const sheet = ((<any>window).Native as any).sheet;
+  const sheet = ((<any>window).UI as any).sheet;
   rules.forEach(css => {
     const length = sheet.cssRules.length;
     try {
@@ -96,7 +96,7 @@ export function parseProperties(component: Element | any, state?: boolean): Attr
 export function parseNativeStyle(obj: ELEMENT | any) {
   let objStyles = '';
   for (let prop in obj) {
-    if (ELEMENT.prototype[prop] || (<any>window).Native === undefined) {
+    if (ELEMENT.prototype[prop] || (<any>window).UI === undefined) {
       const key = prop.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
       objStyles += key + ': '
         + parseStyleValue(obj[prop]) + '; ';

@@ -32,7 +32,7 @@ class UI {
   lock: { key: string, className: string, nid: string, type: 'property' | 'state' };
 
   constructor(router: Router) {
-    (<any>window).Native = this;
+    (<any>window).UI = this;
     this.components = {} as any;
     this.router = router;
     this.sheet = createSheet([]);
