@@ -1,4 +1,4 @@
-import { A, Container, H1, H2, H4, H5, Image, IMG, LI, P, PageComponent, Span, Style, SVG, UL } from 'javascriptui';
+import { A, Container, H2, H4, H5, Image, IMG, LI, P, PageComponent, Span, Style, SVG, UL } from '@javascriptui/core';
 import { CodeBlock, GlassBox, Layout, SoftButton, Toggle } from './config';
 
 export default class App extends PageComponent {
@@ -233,7 +233,7 @@ export default class App extends PageComponent {
               new P().text('Copyright ©' + new Date().getFullYear()).color(Theme.colors?.textLight),
               new P().text('All rights reserved.').color(Theme.colors?.textXLight).whiteSpace('nowrap'),
               new Container().display('flex').marginTop(15).gap(15).addChild(
-                ...Config.socialLinks.map(link => {
+                ...Config.socialLinks.map((link: any) => {
                   return new A().attrHref(link.href).attrTarget('_blank').addChild(
                     new Image().attrSrc(link.src).attrAlt(link.alt).attrWidth(24).attrHeight(24),
                   )

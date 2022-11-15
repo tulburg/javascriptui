@@ -1,7 +1,7 @@
-import { ELEMENT, Button, Container, Input, Label, P, Style, SVG, Textarea } from 'javascriptui';
+import { ELEMENT, Button, Container, Input, Label, P, Style, SVG, Textarea } from '@javascriptui/core';
 import App from './app';
 import Docs from './docs';
-import Playground from './playground';
+// import Playground from './playground';
 
 const Theme = {
   globals: {
@@ -113,7 +113,7 @@ export default {
     { path: '/', component: App, name: 'App' },
     { path: '/docs', component: Docs, name: 'Docs' },
     { path: '/docs/:section/', component: Docs, name: 'Docs' },
-    { path: '/playground', component: Playground, name: 'Playground' }
+    // { path: '/playground', component: Playground, name: 'Playground' }
   ],
   codeblocks: {
     lessCode: `const nital = ["batten", "hatton", "fatten", "platen"];
@@ -428,7 +428,7 @@ export class FormInput extends Container {
   inputElement(): Input { return this.mainInput; }
 }
 
-declare module "javascriptui" {
+declare module "@javascriptui/core" {
   interface ELEMENT {
     fillAbsolute: (fill: boolean) => ELEMENT
     backdropFilterPolyfill: (arg: string) => ELEMENT

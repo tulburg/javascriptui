@@ -1,4 +1,4 @@
-import { ELEMENT, A, Button, Container, H1, H3, LI, OL, P, PageComponent, Span, Strong, SVG, UL } from "javascriptui";
+import { ELEMENT, A, Button, Container, H1, H3, LI, OL, P, PageComponent, Span, Strong, SVG, UL } from "@javascriptui/core";
 import { TopBar } from "./app";
 import { CodeBlock } from "./config";
 

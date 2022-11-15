@@ -1,5 +1,6 @@
-import { Container, IFrame, PageComponent, Select, Option, P, Pre, Span } from "javascriptui";
-import * as monaco from 'monaco-editor';
+import { Container, IFrame, PageComponent, Select, Option, P, Pre, Span } from "@javascriptui/core";
+import { languages, editor } from 'monaco-editor';
+const monaco = { languages, editor };
 
 // @ts-ignore
 import type_source from '!!raw-loader!./lib/types.ts';
@@ -37,9 +38,9 @@ export class App extends Component {
             inputNode.value = '';
             this.updateUI();
           }
-        } 
+        }
       })
-    
+
     this.itemList = new Container();
 
     this.backgroundColor('#f0f0f0').padding([25, 50]).addChild(
@@ -55,7 +56,7 @@ export class App extends Component {
           .borderBottom('1px solid #e0e0fe').display('flex').justifyContent('space-between')
           .addChild(
             new Button().text('remove').color('red').on({
-              click: () => { 
+              click: () => {
                 this.items.splice(this.items.indexOf(item), 1);
                 this.updateUI();
               }
@@ -115,7 +116,7 @@ class App extends PageComponent {
     this.text("Dogs").fontSize(32).color('black').textAlign('center')
       .padding(50).fontFamily('arial').display('flex').alignItems('center')
       .flexDirection('column');
-    
+
     fetch("https://dog.ceo/api/breed/borzoi/images")
       .then(res => res.json()).then(data => {
         const photos = data.message.splice(0, 10);
@@ -272,7 +273,7 @@ export default class Playground extends PageComponent {
 
                 client.getSyntacticDiagnostics(model1.uri.toString()).then(res => {
                   if (res.length > 0) {
-                    // console.error(res[0]) 
+                    // console.error(res[0])
                   };
                 })
 

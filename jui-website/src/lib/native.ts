@@ -1,5 +1,5 @@
-import { Props } from './props';
-import { StyleProperties, Attributes, Properties } from 'types';
+import Props from './props';
+import { StyleProperties, Attributes, Properties, ElementEvent } from './types';
 let createSheet: any;
 export const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']', '').toLowerCase();
 
@@ -108,7 +108,6 @@ export class ELEMENT {
   $size: Number[];
   // get name() { return this.constructor.name };
   //
-  onCreate: any;
 
   constructor(tagName?: string) {
     this.$tagName = tagName || this.$tagName;
@@ -609,7 +608,7 @@ export class Input extends ELEMENT {
 export class SVG extends ELEMENT {
   constructor() {
     super('svg');
-    this.xmlns('http://www.w3.org/2000/svg');
+    this.attrXmlns('http://www.w3.org/2000/svg');
   }
 }
 

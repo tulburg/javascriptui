@@ -5,10 +5,10 @@ var WriteFilePlugin = require('write-file-webpack-plugin');
 var MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'node_modules/javascriptui/instance.ts'),
+  entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/dist/instance'),
   target: 'web',
   devServer: {
-    historyApiFallback: true 
+    historyApiFallback: true
   },
   plugins: [
     new WriteFilePlugin(),
@@ -17,7 +17,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/index.html'),
       inject: true
     }),
-    new MonacoWebpackPlugin()
+    // new MonacoWebpackPlugin()
   ],
   resolve: {
     alias: {
@@ -40,6 +40,6 @@ module.exports = {
       { test: /\.(woff(2)?|ttf|eot|svg)?$/, type: 'asset/resource' },
       { test: /\.css$/, use: ['style-loader', 'css-loader' ] }
     ]
-  } 
+  }
 };
 
