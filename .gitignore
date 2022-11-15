@@ -20,26 +20,9 @@ npm-debug.log*
 !scripts/*.js
 
 .idea/
-.sass-cache/
-.tmp/
-.versions/
-coverage/
 node_modules/
-tmp/
-temp/
-hooks/
-platforms/
-plugins/
-plugins/android.json
-plugins/ios.json
 www/
 $RECYCLE.BIN/
-
-design/
-
-.DS_Store
-Thumbs.db
-UserInterfaceState.xcuserstate
 
 **/*.backup
 
@@ -54,3 +37,4 @@ UserInterfaceState.xcuserstate
 
 dist/**
 core/dist/**
+**/dist/**

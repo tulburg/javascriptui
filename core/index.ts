@@ -1,17 +1,31 @@
-import Router from "./router";
+export {
+  ELEMENT,
+  Component,
+  PageComponent,
+  Button,
+  Container,
+  Link,
+  Input,
+  SVG,
+  Animation,
+  Style,
+  A, Abbr, Applet, Area, Article, Aside,
+  Audio, Base, BaseFont, BDO, BlockQuote,
+  Body, BR, Canvas, Caption, Code, Col,
+  ColGroup, Data, Details, DFN, Dialog,
+  DIR, Div, DL, EM, Embed, FieldSet,
+  FigCaption, Figure, Font, Footer,
+  Form, Del, Frame, FrameSet, H1, H2,
+  H3, H4, H5, H6, Head, Header, HR, HTML,
+  IFrame, Image, IMG, Ins, IsIndex,
+  Label, Legend, LI, Main, Map,
+  Mark, Menu, Meta, Meter, Nav,
+  ObjectElement, OL, OptGroup,
+  Option, Output, P, Param, Path,
+  Pre, Progress, Q, Script, Section,
+  Select, Slot, Source, Span,
+  Strong, Summary, Table, TBody,
+  TD, Textarea, TFoot, TH, THead,
+  Time, TR, Track, UL, Video
+} from './lib/components';
 
-new Router();
-
-if((<any>module).hot) {
-  (<any>module).hot.accept('./router', () => {
-    const highestTimeoutId: any = setTimeout(';');
-    for(let i = 0; i < highestTimeoutId; i++) {
-      clearTimeout(i);
-    }
-
-    const NewRouter = require('./router').default;
-    new NewRouter();
-  })
-}
-
-console.log('wonderful');

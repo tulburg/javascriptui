@@ -4,11 +4,7 @@
     "target": "es6",
     "declaration": true,
     "baseUrl": ".",
-    "outDir": "./dist",
-    "paths": {
-      "*": ["*", "./dist/*", "../../src/*", "../../../src/*"],
-      "config": ["src/config.ts", "../src/config.ts", "../../src/config.ts", "../../../src/config.ts", "../../../../src/config.ts"]
-    },
+    "outDir": "./dist"
   },
   "include": [
     "./*.ts"

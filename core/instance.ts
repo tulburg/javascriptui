@@ -1,16 +1,19 @@
-import Router from "./router";
+import Router from "./lib/router";
 
 new Router();
 
-if((<any>module).hot) {
-  (<any>module).hot.accept('./router', () => {
+if ((<any>module).hot) {
+  (<any>module).hot.accept('./lib/router', () => {
     const highestTimeoutId: any = setTimeout(';');
-    for(let i = 0; i < highestTimeoutId; i++) {
+    for (let i = 0; i < highestTimeoutId; i++) {
       clearTimeout(i);
     }
     const w: any = window;
-    if(w.Native) w.Native.sheet.disabled = true;
-    const NewRouter = require('./router').default;
+    if (w.Native) {
+      w.Native.sheet.disabled = true;
+      w.Native.hot = true;
+    }
+    const NewRouter = require('./lib/router').default;
     new NewRouter();
   })
 }
