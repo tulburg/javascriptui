@@ -1,4 +1,4 @@
-import { A, Container, H1, PageComponent, Style } from 'javascriptui/lib/components';
+import { A, Container, H1, PageComponent, Style } from '@javascriptui/core';
 
 export default class App extends PageComponent {
 

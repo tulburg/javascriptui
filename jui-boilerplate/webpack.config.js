@@ -4,7 +4,7 @@ var WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
   mode: 'production',
-  entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/instance.js'),
+  entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/dist/instance.js'),
   target: 'web',
   plugins: [
     new WriteFilePlugin(),
@@ -15,7 +15,10 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    alias: {
+      '@src': path.resolve(__dirname, 'src')
+    }
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
