@@ -1,6 +1,6 @@
 {
   "name": "@javascriptui/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JavascriptUI core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,6 +19,7 @@
     "user": "0.0.0"
   },
   "devDependencies": {
+    "@types/node": "^18.11.9",
     "typescript": "*"
   }
 }
