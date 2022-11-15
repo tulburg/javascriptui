@@ -1,21 +1,20 @@
-import Parser from './parser';
-import { createSheet, createRules } from './styles';
-import { $RxElement, Component } from './components';
+import { createSheet, createRules, parseNativeStyle, parseProperties } from './utils';
+import { ELEMENT, Component } from './components';
 import Router from './router';
 import { ConfigType } from './types';
 
-class Native {
+class UI {
 
   router: Router;
   components: {
     [key: string]: {
-      [key: string]: $RxElement & {
+      [key: string]: ELEMENT & {
         served: boolean,
         watchlist: {
           prop: string; oldValue: any; function: Function
         }[],
         args: any[],
-        instance: $RxElement,
+        instance: ELEMENT,
         route: ConfigType.Route,
         rootNode: Element,
         sub: ConfigType.Route
@@ -45,7 +44,7 @@ class Native {
     const globals = theme.globals || theme.Globals;
     if (globals) {
       for (const key in globals) {
-        if (type(globals[key]) === 'object') styles.push(key + ' { ' + Parser.parseNativeStyle(globals[key]) + ' } ');
+        if (type(globals[key]) === 'object') styles.push(key + ' { ' + parseNativeStyle(globals[key]) + ' } ');
         else if (type(globals[key]) === 'string') styles.push(key + ' {' + globals[key] + ' } ');
       }
       return createRules(this, styles);
@@ -65,11 +64,11 @@ class Native {
     return value;
   }
 
-  createElement(object: $RxElement | Component, updateState?: any) {
+  createElement(object: ELEMENT | Component, updateState?: any) {
     const graphics = ['svg', 'path'] //... plus more
-    const create = (parent: Element, item: $RxElement) => {
+    const create = (parent: Element, item: ELEMENT) => {
       const c = graphics.indexOf(item.$tagName) < 0 ? document.createElement(item.$tagName) : document.createElementNS((<any>item).$attrXmlns || parent.namespaceURI, item.$tagName);
-      const parsedProperties = Parser.parseProperties(item, updateState);
+      const parsedProperties = parseProperties(item, updateState);
       for (const prop in parsedProperties) {
         if (prop == '$events') {
           for (let i = 0; i < parsedProperties[prop].length; i++) {
@@ -174,7 +173,10 @@ class Native {
     queueMicrotask(() => {
       window.onbeforeunload = (e: any) => {
         if (newInstance.onDestroy) newInstance.onDestroy();
-        const cascadeDestroy = (c0: $RxElement) => {
+        const cascadeDestroy = (c0: ELEMENT) => {
+          c0.$events.forEach((event: any) => {
+            c0.node().removeEventListener(event.name, event.event);
+          });
           if (c0.$events && c0.$events.find((ev: any) => ev.name === 'destroy')) {
             c0.dispatch('destroy');
           }
@@ -205,10 +207,5 @@ class Native {
 }
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']', '').toLowerCase();
-export default Native;
-export function addLoadQueue(fn: () => void) {
-  const w: any = window;
-  w.__native_load_queue = w.__native_load_queue || [];
-  w.__native_load_queue.push(fn);
-}
+export default UI;
 

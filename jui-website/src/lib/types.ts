@@ -1,40 +1,3 @@
-import { PageComponent, Container, Style } from './components';
-import NSRouter from './router';
-
-declare global {
-  var Theme: {
-    globals?: { [key: string]: any },
-    colors?: { [key: string]: string },
-    fonts?: { [key: string]: any },
-    dimens?: { [key: string]: any },
-    styles?: { [key: string]: Style }
-  } & { [key: string]: any };
-  var Config: {
-    routes: ConfigType.Route[],
-    theme?: typeof Theme,
-    styleDebug?: boolean
-  } & { [key: string]: any };
-  var Router: NSRouter;
-  interface String {
-    watch: (_: (v: any) => void) => void
-  }
-}
-
-export namespace ConfigType {
-  export interface Route {
-    path: string;
-    component: typeof PageComponent;
-    name: string;
-    subs?: Route[];
-    data?: any,
-    hosting?: (Route & { hostComponent?: Container })[],
-  }
-}
-
-export type StyleProperties = {
-
-}
-
 export type ElementEvent = {
   abort?: () => void
   animationcancel?: () => void
@@ -1736,7 +1699,7 @@ export interface Properties<T> {
   vectorEffect: (_?: Globals | "non-scaling-stroke" | "none") => T
 }
 
-export type ArgProperties = {
+export type StyleProperties = {
   accentColor?: Globals | DataType.Color | "auto"
   alignContent?: Globals | DataType.ContentDistribution | DataType.ContentPosition | "baseline" | "normal" | (string & {})
   alignItems?: Globals | DataType.SelfPosition | "baseline" | "normal" | "stretch" | (string & {})

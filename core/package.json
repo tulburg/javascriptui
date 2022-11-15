@@ -1,7 +1,7 @@
 {
-  "name": "@js-native/core",
-  "version": "0.0.19",
-  "description": "JS Native core package",
+  "name": "@javascriptui/core",
+  "version": "0.0.1",
+  "description": "JavascriptUI core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,14 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jsnative/core.git"
+    "url": "git://github.com/tulburg/javascriptui.git"
   },
-  "author": "jsnative",
+  "author": "Tolu Oluwagbemi<demos_08_dovish@icloud.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jsnative/core/issues"
-  },
-  "homepage": "https://github.com/jsnative/core#readme",
+  "homepage": "javascriptui.dev",
   "dependencies": {
     "user": "0.0.0"
   },

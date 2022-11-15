@@ -1,5 +1,0 @@
-# Specify filepatterns you want git to ignore.
-
-dist/**
-dist/**/**/**
-node_modules/**

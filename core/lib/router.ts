@@ -1,9 +1,9 @@
 //@ts-ignore
 import Config from '@src/config';
 import Props from './props';
-import { Component, Style, $RxElement, Container } from './components';
+import { Component, Style, ELEMENT, Container } from './components';
 import { ConfigType } from './types';
-import Native from './native';
+import UI from './ui';
 
 export default class Router {
   routes: ConfigType.Route[] = Config.routes as ConfigType.Route[];
@@ -21,7 +21,7 @@ export default class Router {
     this.window.Config = Config;
     if (Config.theme) this.window.Theme = Config.theme;
     this.window.Router = this;
-    new Native(this);
+    new UI(this);
     this.events = [];
     this.window.Native.sheet.insertRule('app{}');
     let altProps = Object.getOwnPropertyNames(document.head.style);
@@ -35,14 +35,18 @@ export default class Router {
         configurable: true
       });
       const fns = function () {
-        if ((<any>Native).serving) return this;
-        if (prop.toLowerCase().match('webkit')) console.log(prop);
+        if ((<any>UI).serving) return this;
         const value = arguments.length === 1 ? arguments[0] : Array.from(arguments);
         if (arguments.length > 0) {
           this.$rules = this.$rules || [];
           if (this.$rules.length > 0) {
             try {
-              this.$rules[this.$rules.length - 1].style.setProperty(key, (<any>window).Native.parseStyleValue(value));
+              const parsedValue = (<any>window).Native.parseStyleValue(value);
+              this.$rules[this.$rules.length - 1].style.setProperty(
+                key,
+                parsedValue.indexOf('!') > -1 ? parsedValue.replace(/\!important/g, '') : parsedValue,
+                parsedValue.indexOf('!') > -1 ? 'important' : ''
+              );
             } catch (e) {
               throw Error('Style not applied: ' + prop + ' ' + e.message);
             }
@@ -51,7 +55,7 @@ export default class Router {
         } else return this['$' + prop];
         return this;
       };
-      (<any>$RxElement.prototype)[prop] = fns;
+      (<any>ELEMENT.prototype)[prop] = fns;
       (<any>Component.prototype)[prop] = fns;
       (<any>Style.prototype)[prop] = fns;
       propIndex++;
@@ -68,7 +72,7 @@ export default class Router {
         configurable: true
       });
       fn = function () {
-        if ((<any>Native).serving) return this;
+        if ((<any>UI).serving) return this;
         if (arguments.length > 0) {
           if (key === 'attr') {
             if (this.$node) {
@@ -79,7 +83,7 @@ export default class Router {
         } else return this[prop];
         return this;
       };
-      (<any>$RxElement.prototype)[prop.slice(1)] = fn;
+      (<any>ELEMENT.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
     }
     const w: any = window;
@@ -130,7 +134,7 @@ export default class Router {
     }
   }
 
-  host(host: $RxElement, routes: ConfigType.Route[]) {
+  host(host: ELEMENT, routes: ConfigType.Route[]) {
     this.current.hosting = [];
     routes.forEach(route => {
       (<ConfigType.Route & { hostComponent?: Container }>route).hostComponent = host;
