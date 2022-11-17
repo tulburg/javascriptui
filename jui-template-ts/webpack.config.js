@@ -4,24 +4,29 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/'),
+  entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/dist/instance'),
   target: 'web',
+  devServer: {
+    historyApiFallback: true
+  },
   plugins: [
     new WriteFilePlugin(),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, 'dist/index.html'),
       template: path.resolve(__dirname, 'src/index.html'),
       inject: true
-    }) 
+    })
   ],
   resolve: {
+    alias: {
+      '@src': path.resolve(__dirname, 'src')
+    },
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
-    library: 'js-native',
+    library: 'javascriptui',
     libraryTarget: 'umd',
     publicPath: '/'
   },
@@ -33,6 +38,6 @@ module.exports = {
       { test: /\.(woff(2)?|ttf|eot|svg)?$/, type: 'asset/resource' },
       { test: /\.css$/, use: ['style-loader', 'css-loader' ] }
     ]
-  } 
+  }
 };
 

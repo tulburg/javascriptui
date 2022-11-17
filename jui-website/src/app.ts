@@ -87,7 +87,7 @@ export default class App extends PageComponent {
           }),
           new Container().marginTop(50).addChild(
             new Container().display('flex').gap(25).addChild(
-              new SoftButton('Get started', () => {}, true),
+              new SoftButton('🚀 Get started', () => Router.go('/docs'), true),
               new SoftButton('View on Github', () => Router.go('https://github.com/tulburg/javascriptui')),
               new SoftButton('Try playground', () => Router.go('/playground')),
             ).media({
@@ -169,7 +169,7 @@ export default class App extends PageComponent {
                             .flexDirection('column').alignItems('center')
                             .addChild(
                               new IMG().attrAlt("Photo " + (index + 1))
-                                .borderRadius(100).border('4px solid white')
+                                .borderRadius(100).border('4px solid white').attrWidth(100).attrHeight(100)
                                 .attrSrc(photo + '?random=' + (index + 1)),
                               new Span().text(nital[index]).fontSize(16)
                                 .color('#303030').backgroundColor('white')
@@ -264,28 +264,23 @@ export default class App extends PageComponent {
   }
 
   onCreate() {
-    const style = document.createElement('style');
-    style.innerHTML = "@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap')";
-    document.head.appendChild(style);
-
-    const codeStyle = document.createElement('style');
-    codeStyle.innerHTML = "@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap')";
-    document.head.appendChild(codeStyle);
-
-    const highlightImport = document.createElement('script');
-    highlightImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js');
-    highlightImport.onload = () => {
-      const tsImport = document.createElement('script');
-      tsImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/typescript.min.js');
-      document.head.appendChild(tsImport);
-      const githubImport = document.createElement('style');
-      githubImport.innerHTML = "@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css')";
-      document.head.appendChild(githubImport);
-      const lineNumber = document.createElement('script');
-      lineNumber.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js');
-      document.head.appendChild(lineNumber);
+    if (!document.head.querySelector('#highlight-import')) {
+      const highlightImport = document.createElement('script');
+      highlightImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js');
+      highlightImport.setAttribute('id', 'highlight-import');
+      highlightImport.onload = () => {
+        const tsImport = document.createElement('script');
+        tsImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/typescript.min.js');
+        document.head.appendChild(tsImport);
+        const githubImport = document.createElement('style');
+        githubImport.innerHTML = "@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css')";
+        document.head.appendChild(githubImport);
+        const lineNumber = document.createElement('script');
+        lineNumber.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js');
+        document.head.appendChild(lineNumber);
+      }
+      document.head.appendChild(highlightImport)
     }
-    document.head.appendChild(highlightImport)
   }
 }
 
@@ -323,6 +318,9 @@ export class TopBar extends Container {
       .addChild(
         ...topLinks.map(link => new LI().display('flex').addChild(
           new A().text(link.title).attrHref(link.href).style(Theme.styles?.linkStyle as Style).padding([10, 24])
+            .on({
+              click(e: any) { e.preventDefault(); Router.go(link.href); }
+            })
         ))
       );
     this.display('flex').justifyContent('space-between').alignItems('center').addChild(
@@ -366,6 +364,9 @@ export class TopBar extends Container {
         new Container().addChild(
           ...topLinks.map(link => {
             return new A().text(link.title).attrHref(link.href).style(Theme.styles?.linkStyle as Style).padding([0, 12])
+              .on({
+                click(e: any) { e.preventDefault(); Router.go(link.href) }
+              })
           })
         ).media({
           '(max-width: 520px)': { display: 'none' }

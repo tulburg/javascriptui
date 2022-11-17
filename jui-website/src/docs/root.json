@@ -3,7 +3,7 @@
     [
       ["block", "Quick introduction",
         [["html", "JavascriptUI is a Javascript only framework for building web interfaces. It is designed for quick and easy UI development of all sizes. This framework is specifically built for high performance and all out customizations.",
-          ["list", "unordered", 
+          ["list", "unordered",
             [
               ["list-item", "Try it on the ${a(playground,/playground)}"],
               ["list-item", "Try ${a(REPL,https://replit.com/@tulburg/js-native-boilerplate#src/app.ts)} or ${a(stackblitz,https://stackblitz.com/edit/express-simple-g1ygzr?file=src%2Fapp.ts)}"],
@@ -18,7 +18,7 @@
           [ "html", "To create a project with ${bold(NPM)}",
             [ "code", "bnB4IGluaXQgamF2YXNjcmlwdHVp" ]
           ],
-          ["html", "Or with yarn", 
+          ["html", "Or with yarn",
             ["code", "eWFybiBpbml0IGphdmFzY3JpcHR1aQ=="]
           ]
         ]
@@ -27,52 +27,53 @@
   ],
   ["section", "Basic concepts",
     [
-      ["block", "Basic concepts",
+      ["block", "Overview",
         [
-          ["html", "JUI takes inspiration from SwiftUI. All functions can be called in a chain. i.e.",
+          ["html", "All functions can be called in a chain. i.e.",
             ["code", "new Container().display('flex').justifyContent('center')"]
           ],
           ["html", "The only exceptions are getter functions. A getter function is used to get the value created by the setter function. Usually, preceded by a string. i.e. ${code($display)} or ${code($justifyContent)}"],
-          ["html", "All functions can both work as getters and setters. The difference is the value passed. If a value is passed, it performs as setter and if no value is passed, it performs as a getter.", 
+          ["html", "All functions can both work as getters and setters. The difference is the value passed. If a value is passed, it performs as setter and if no value is passed, it performs as a getter.",
             ["code", "Ly8gc2V0dGVyIGZ1bmN0aW9uCmNvbnN0IGgxID0gbmV3IEgxKCkudGV4dCgnSGVsbG8gd29ybGQnKTsKIAovLyBnZXR0ZXIgZnVuY3Rpb24KY29uc29sZS5sb2coaDEudGV4dCgpKQovLyBvdXRwdXQ6IEhlbGxvIHdvcmxk"]
           ]
         ]
       ],
-      ["block", "Class structure", 
+      ["block", "Class structure",
         [
-          ["html", "Elements in JUI are defined as classes. That is, all html tags i.e. ${bold(H1)}, ${bold(A)}, ${bold(IMG)}, ${bold(EM)}, ${bold(DIV)}, ${bold(Span)} etc. Use any of these, simply by calling ${code(new)} i.e.", 
+          ["html", "Elements in JUI are defined as classes. That is, all html tags i.e. ${bold(H1)}, ${bold(A)}, ${bold(IMG)}, ${bold(EM)}, ${bold(DIV)}, ${bold(Span)} etc. Use any of these, simply by calling ${code(new)} i.e.",
             ["code", "new Div();"]
           ],
           ["html", "Document tree are created with the ${code(addChild)} function i.e.",
             ["code", "bmV3IENvbnRhaW5lcigpLmRpc3BsYXkoJ2ZsZXgnKS5hZGRDaGlsZCgKICBuZXcgSDEoKS50ZXh0KCdIZWxsbyB3b3JsZCcpCikKCi8vIG91dHB1dAo8ZGl2PgogIDxoMT5IZWxsbyB3b3JsZDwvaDE+CjwvZGl2Pg=="]
           ],
           ["html", "Check other element functions in ${a(Element functions,/docs/element-functions)}"],
-          ["html", "Create your own custom elements with its own features and styling by simply extending these base elements.", 
+          ["html", "Create your own custom elements with its own features and styling by simply extending these base elements.",
             ["code", "Y2xhc3MgRmxleENvbnRhaW5lciBleHRlbmRzIERpdiB7CiAgY29uc3RydWN0b3IoKSB7CiAgICBzdXBlcigpOwogICAgdGhpcy5kaXNwbGF5KCdmbGV4JykuYmFja2dyb3VuZENvbG9yKCdibHVlJyk7CiAgfQp9"]
           ]
         ]
       ],
       ["block", "Writting CSS",
         [
-          ["html", "Elements in JavascriptUI are styled by calling the CSS properties on the class object in their camelCase form.", 
+          ["html", "Elements in JavascriptUI are styled by calling the CSS properties on the class object in their camelCase form.",
             ["code", "new H1().text('Hi!').fontSize(12).fontWeight('bold').color('red');"]
           ],
           ["tip", "These CSS properties are according to what is available in the active client browser. JUI is only exposing the existing browser API"],
           ["html", "Read more about CSS in ${a(Styling elements,/docs/styling-elements)}"]
         ]
       ],
-      ["block", "HTML Attributes", 
+      ["block", "HTML Attributes",
         [
-          ["html", "HTML attributes can be called in similar fashion as explained above. Only starting with the ${code(attr)} keyword.", 
+          ["html", "HTML attributes can be called in similar fashion as CSS setters & getters explained above. Only starting with the ${code(attr)} keyword.",
             ["code", "new A().text('Call to action').attrHref('/jui-docs').attrTarget('_self');"]
           ]
         ]
       ],
-      ["block", "Event listeners", 
+      ["block", "Event listeners",
         [
-          ["html", "All events listeners in JUI can be added by using the ${code(on)} function i.e.", 
+          ["html", "All events listeners in JUI can be added by using the ${code(on)} function i.e.",
             ["code", "bmV3IEJ1dHRvbigpLnRleHQoJ0NsaWNrJykub24oewogIGNsaWNrOiAoKSA9PiBjb25zb2xlLmxvZygnY2xpY2tlZCEnKSwKICBtb3VzZW1vdmU6IGUgPT4gY29uc29sZS5sb2coZS5jbGllbnRYKSwKICBtb3VzZXVwOiBlID0+IGNvbnNvbGUubG9nKGUuY2xpZW50WSkKfSk7"]
-          ]
+          ],
+          ["html", "Read more about the ${a(on function, /docs/element-functions#on)}"]
         ]
       ]
     ]
@@ -84,35 +85,81 @@
           [ "html", "JavascriptUI projects all have a config file. This config file is used to host all project configuration including the routing and theme.",
             [ "code", "Ly8gY29uZmlnLnRzCmV4cG9ydCBkZWZhdWx0IHsKICByb3V0ZXM6IFsKICAgIHsgcGF0aDogJy8nLCBjb21wb25lbnQ6IEFwcCwgbmFtZTogJ0FwcCcgfSwKICBdLAogIGFwaUJhc2U6ICdodHRwOi8vbG9jYWxob3N0OjMyMDAvdjEvYXBpJwp9" ]
           ],
-          ["html", "You can attach any non sensitive items in your config to be accessed throughout your project by simply calling ${code(Config)}. For example: ", 
+          ["html", "You can attach any non sensitive items in your config to be accessed throughout your project by simply calling ${code(Config)}. For example: ",
             ["code", "Ly8gY29uZmlnLnRzCmV4cG9ydCBkZWZhdWx0IHsKICByb3V0ZXM6IFsKICAgIHsgcGF0aDogJy8nLCBjb21wb25lbnQ6IEFwcCwgbmFtZTogJ0FwcCcgfSwKICBdLAogIGFwaUJhc2U6ICdodHRwOi8vbG9jYWxob3N0OjMyMDAvdjEvYXBpJwp9CiAKLy8gdXNhZ2UgYXBwLnRzCi8vIC4uLgpjb25zdCByZXEgPSBhd2FpdCBmZXRjaChDb25maWcuYXBpQmFzZSArICcvdXNlci1pbmZvJyk7CmlmKHJlcSkgewogIGNvbnN0IHVzZXJJbmZvID0gYXdhaXQgcmVxLmpzb24oKTsKICBuZXcgUCgpLnRleHQodXNlckluZm8ubmFtZSk7Cn0="]
           ]
         ]
       ],
       [ "block", "Router",
         [
-          [ "html", "As you already know, routes are created on the config file as an array of objects i.e.",
+          [ "html", "Routes are created on the config file as an array of objects i.e.",
             ["code", "{ path: '/login', component: Login, name: 'Login' }"]
           ],
           ["html", "The router object like all global APIs can easily be accessed by calling ${code(Router)}"],
-          ["html", "For example, to go to a login page in the example above:", 
+          ["html", "For example, to go to a login page in the example above:",
             ["code", "Router.go('/login'); "]
           ],
           ["html", "Use ${code(Router.current)} to get the current page with component, data, name & path."],
-          ["html", "For routes with data i.e.", 
+          ["html", "For routes with data i.e.",
             ["code", "{ path: '/user/:id/:page', component: UserPage, name: 'UserPage' }"]
           ],
-          ["html", "The data is accessible by using the api ${code(Router.current.data)} which returns an object i.e.", 
+          ["html", "The data is accessible by using the api ${code(Router.current.data)} which returns an object i.e.",
             ["code", "Ly8gY29uZmlnLnRzCnsgcGF0aDogJy91c2VyLzppZC86cGFnZScsIGNvbXBvbmVudDogVXNlclBhZ2UsIG5hbWU6ICdVc2VyUGFnZScgfQoKLy8gdXJsID0gaHR0cDovL2xvY2FsaG9zdDo5MDkwL3VzZXIvNTc1ODk0L3Byb2ZpbGUtcGFnZQovLyB1c2VycGFnZS50cwpjb25zb2xlLmxvZyhSb3V0ZXIuY3VycmVudC5kYXRhKQovLyB7IGlkOiAnNTc1ODk0JywgcGFnZTogJ3Byb2ZpbGUtcGFnZScgfQ=="]
           ]
         ]
       ],
-      [ "block", "Theme", 
+      [ "block", "Theme",
         [
           [ "html", "Your styling and custom measurements including colors, styles, fonts, dimensions etc can be grouped into a theme. This theme object will be registered in your config and will be accessible in all your files by simply calling ${code(Theme)}. For example:",
             ["code", "Ly8gY29uZmlnLnRzCmV4cG9ydCBkZWZhdWx0IHsKICB0aGVtZTogewogICAgY29sb3JzOiB7CiAgICAgIHRleHRQcmltYXJ5OiAnIzU1MDA1NScKICAgIH0KICB9Cn0KCi8vIGFwcC50cwpuZXcgQnV0dG9uKCkudGV4dCgnY2xpY2sgbWUhJykuY29sb3IoVGhlbWUuY29sb3JzLnRleHRQcmltYXJ5KTs="]
           ],
           ["html", "Your object in the themes are not limited to colors, styles, fonts etc. You can add your own custom objects depending on your use case or design system. i.e. ${code(spacing)}, ${code(gradients)} etc. This allows you to create/use multiple themes depending on your need."]
+        ]
+      ]
+    ]
+  ],
+  ["section", "Styling elements",
+    [
+      ["block", "Overview",
+        [
+          ["html", "CSS properties can be called in their camelCase form.",
+            ["code", "new H1().text('Hi!').fontSize(12).fontWeight('bold').color('red')"]
+          ],
+          ["tip", "These CSS properties are according to what is available in the active client browser. JUI is only exposing the existing browser API"],
+          ["html", "You can also group these styles in its own class i.e.",
+            ["code", "new Style({ fontSize: 12, fontWeight: 'bold', color: 'red' })"]
+          ],
+          ["html", "Style definition is unique as it takes named properties. All customization or extension still applies. For example:",
+            ["code", "Y29uc3QgbGlua1N0eWxlID0gbmV3IFN0eWxlKHsgdGV4dERlY29yYXRpb246ICdub25lJywgY29sb3I6ICd3aGl0ZScgfSk7CmxpbmtTdHlsZS5mb250U2l6ZSgxMikuZm9udFdlaWdodCgnYm9sZCcpOw=="]
+          ],
+          ["html", "Or you could extend the Style base class to create your own unique style. And even further extend your style for more customization",
+            ["code", "Y2xhc3MgTm9ybWFsTGlua3MgZXh0ZW5kcyBTdHlsZSB7CiAgY29uc3RydWN0b3IocHJvcHMpIHsKICAgIHN1cGVyKHByb3BzKTsKICAgIHRoaXMudGV4dERlY29yYXRpb24oJ25vbmUnKS5jb2xvcignd2hpdGUnKTsKICB9Cn07CiAKY2xhc3MgSG92ZXJTdHlsZSBleHRlbmRzIE5vcm1hbExpbmtzIHsKICBjb25zdHJ1Y3Rvcihwcm9wcykgewogICAgc3VwZXIocHJvcHMpOwogICAgdGhpcy5wc2V1ZG8oewogICAgICAnOmhvdmVyJzogeyB0ZXh0RGVjb3JhdGlvbjogJ3VuZGVybGluZScgfQogICAgfSkKICB9Cn0="]
+          ],
+          ["html", "Use these styles on any element using ${code(style)}. i.e.",
+            ["code", "Y29uc3QgZm9vID0gbmV3IExpbmsoKS5hdHRySHJlZignL2ZvbycpLnN0eWxlKGxpbmtTdHlsZSk7CmNvbnN0IGJhciA9IG5ldyBMaW5rKCkuYXR0ckhyZWYoJy9iYXInKS5zdHlsZShuZXcgTm9ybWFsTGlua3Moe30pKTsKY29uc3QgaG92ZXJfYmFyID0gbmV3IExpbmsoKS5hdHRySHJlZignL2hvdmVyLWJhcicpLnN0eWxlKG5ldyBIb3ZlclN0eWxlKHt9KSk7"]
+          ],
+          ["tip", "You can apply multiple styles on an element"]
+        ]
+      ],
+      ["block", "Pseudo",
+        [
+          ["html", "Pseudo properties are accessible by calling pseudo on the current instance. i.e.",
+            ["code", "bmV3IEEoKS50ZXh0KCdsaW5rJykucHNldWRvKHsKICAnOmhvdmVyJzogeyBjb2xvcjogJ2JsdWUnLCB0ZXh0RGVjb3JhdGlvbjogJ3VuZGVybGluZScgfSwKICAnOmJlZm9yZSc6IHsgY29udGVudDogJyIiJywgYmFja2dyb3VuZENvbG9yOiAncmVkJywgd2lkdGg6IDQsIGhlaWdodDogJzEwMCUnIH0KfSk7CiAKLy8gb3V0cHV0IGNzcwphOmhvdmVyIHsgY29sb3I6IGJsdWU7IHRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5lIH0KYTpiZWZvcmUgeyBjb250ZW50OiAiIjsgYmFja2dyb3VuZC1jb2xvcjogcmVkOyB3aWR0aDogNHB4OyBoZWlnaHQ6IDEwMCUgfQ=="]
+          ]
+        ]
+      ],
+      ["block", "Global",
+        [
+          ["html", "Global properties are used in similar ways. For example: If you will like all anchors in a div to have the same ${code(color)} property.",
+            ["code", "Y29uc3QgbGlua3MgPSBbJ2h0dHBzOi8vamF2YXNjcmlwdHVpLmRldicsICdodHRwczovL2phdmFzY3JpcHR1aS5vcmcnXTsKY29uc3QgYW5jaG9yQ29udGFpbmVyID0gbmV3IENvbnRhaW5lcigpLmFkZENoaWxkKAogIC4uLmxpbmtzLm1hcChsaW5rID0+IG5ldyBBKCkudGV4dChsaW5rKS5hdHRySHJlZihsaW5rKSkKKTsKCmFuY2hvckNvbnRhaW5lci5nbG9iYWwoewogIGE6IHsgY29sb3I6ICdibHVlJyB9Cn0pCgovLyBvdXRwdXQgY3NzCmNvbnRhaW5lciBhIHsgY29sb3I6IGJsdWUgfQ=="]
+          ]
+        ]
+      ],
+      ["block", "Media",
+        [
+          ["html", "Media queries also fall under this category. You can simply create a query by calling the ${code(media)} function. For example:",
+            ["code", "bmV3IENvbnRhaW5lcigpLmRpc3BsYXkoJ2ZsZXgnKS5tZWRpYSh7CiAgJyhtYXgtd2lkdGg6IDEyMDBweCkgYW5kIChtaW4td2lkdGg6IDcwMHB4KSc6IHsKICAgIGZvbnRTaXplOiAzMiwgcGFkZGluZ0xlZnQ6IDIwCiAgfQp9KQoKLy8gb3V0cHV0IGNzcwpAbWVkaWEgKG1heC13aWR0aDogMTIwMHB4KSBhbmQgKG1pbi13aWR0aDogNzAwcHgpIHsKICBjb250YWluZXIgeyBmb250LXNpemU6IDMycHg7IHBhZGRpbmctbGVmdDogMjBweCB9Cn0="]
+          ]
         ]
       ]
     ]
@@ -126,121 +173,128 @@
           ]
         ]
       ],
-      ["block", "removeChild", 
+      ["block", "removeChild",
         [
-          ["html", "Method to remove a current child of a parent element", 
+          ["html", "Method to remove a current child of a parent element",
             ["code", "Y29uc3QgZm9vQ29udGFpbmVyID0gbmV3IENvbnRhaW5lcigpOwpjb25zdCBmb28gPSBuZXcgSDEoKS50ZXh0KCdmb28nKTsKZm9vQ29udGFpbmVyLmFkZENoaWxkKGZvbyk7CgovLyBvdXRwdXQgaHRtbAo8ZGl2PgogIDxoMT5mb288L2gxPgo8L2Rpdj4KIApmb29Db250YWluZXIucmVtb3ZlQ2hpbGQoZm9vKTsKCi8vIG91dHB1dCBodG1sCjxkaXY+PC9kaXY+"]
           ]
         ]
       ],
-      ["block", "replaceChild", 
+      ["block", "replaceChild",
         [
-          ["html", "Method to replace a child element with a new element", 
+          ["html", "Method to replace a child element with a new element",
             ["code", "Y29uc3QgZm9vQ29udGFpbmVyID0gbmV3IENvbnRhaW5lcigpOwpjb25zdCBmb28gPSBuZXcgSDEoKS50ZXh0KCdmb28nKTsKZm9vQ29udGFpbmVyLmFkZENoaWxkKGZvbyk7CgovLyBvdXRwdXQgaHRtbAo8ZGl2PgogIDxoMT5mb288L2gxPgo8L2Rpdj4KCmZvb0NvbnRhaW5lci5yZXBsYWNlQ2hpbGQoZm9vLCBuZXcgU3BhbigpLnRleHQoJ2JhcicpKTsKCi8vIG91dHB1dCBodG1sCjxkaXY+CiAgPHNwYW4+YmFyPC9zcGFuPgo8L2Rpdj4="]
           ]
         ]
       ],
-      ["block", "node", 
+      ["block", "node",
         [
           ["html", "Returns the DOM node of the element."],
           ["tip", "This will not be defined/available until the element is created"],
           ["code", "bmV3IENvbnRhaW5lcigpLm9uKHsgCiAgY3JlYXRlOiBmdW5jdGlvbigpIHsKICAgIGNvbnNvbGUubG9nKHRoaXMubm9kZSgpKQogIH0KfSk7"]
         ]
       ],
-      ["block", "parent", 
+      ["block", "parent",
         [
-          ["html", "Returns the parent element of the element", 
+          ["html", "Returns the parent element of the element",
             ["code", "Y29uc3QgZm9vID0gbmV3IENvbnRhaW5lcigpOwpjb25zdCBiYXIgPSBuZXcgU3BhbigpOwpmb28uYWRkQ2hpbGQoYmFyKTsKCmJhci5wYXJlbnQoKTsKCi8vIG91dHB1dDogZm9v"]
           ]
         ]
       ],
-      ["block", "children", 
+      ["block", "children",
         [
-          ["html", "Method to get the list of children of the element", 
+          ["html", "Method to get the list of children of the element",
             ["code", "Y29uc3QgZm9vID0gbmV3IENvbnRhaW5lcigpOwpjb25zdCBiYXIgPSBuZXcgSDEoKTsKY29uc3QgZm9vYmFyID0gbmV3IFAoKTsKZm9vLmFkZENoaWxkKGJhciwgZm9vYmFyKTsKCmZvby5jaGlsZHJlbigpOwoKLy8gb3V0cHV0OiBbYmFyLCBmb29iYXJd"]
           ]
         ]
       ],
-      ["block", "on", 
+      ["block", "on",
         [
-          ["html", "Add event listeners to the element", 
+          ["html", "Add event listeners to the element",
             ["code", "bmV3IENvbnRhaW5lcigpLm9uKHsKICBjbGljazogKCkgPT4gY29uc29sZS5sb2coJ2NsaWNrZWQnKSwKICBjcmVhdGVkKCkgewogICAgY29uc29sZS5sb2coJ2dvdCBjcmVhdGVkJyk7CiAgfSwKICBkZXN0cm95OiBmdW5jdGlvbigpIHsKICAgIGNvbnNvbGUubG9nKCdvaCBubyEnKTsKICB9Cn0p"]
+          ],
+          ["html", "All event listeners' ${code(this)} reference binds differently depending on usage. If the ${code(function)} keyword is used or otherwise i.e. ",
+            ["code", "bmV3IEJ1dHRvbigpLnRleHQoJ2J1dHRvbicpLm9uKHsKICBjbGljaygpIHsKICAgIHRoaXMudGV4dCgnSSBoYXZlIGJlZW4gY2xpY2tlZCEnKQogIH0KfSk="]
+          ],
+          ["html", "${code(this)} in this context will point to the current instance of ${code(Button)}"],
+          ["html", "On the other hand, if it is created with the arrow function, ${code(this)} will bind to the current class. For example:",
+            ["code", "Y2xhc3MgTHVja0NvbXBvbmVudCBleHRlbmRzIENvbXBvbmVudCB7CiAga2V5QnV0dG9uOiBCdXR0b247CiAga2V5TGFiZWw6IExhYmVsOwogIGNvbnN0cnVjdG9yKCkgewogICAgdGhpcy5rZXlMYWJlbCA9IG5ldyBMYWJlbCgpLnRleHQoJ0NsaWNrIGZvciBsdWNrJykuYXR0ckZvcignYnV0dG9uJyk7CiAgICB0aGlzLmtleUJ1dHRvbiA9IG5ldyBCdXR0b24oKS50ZXh0KCdsdWNrJykub24oewogICAgICBjbGljazogKCkgPT4gewogICAgICAgIHRoaXMua2V5TGFiZWwudGV4dCgnTHVjayBpcyBlbmFibGVkIScpOwogICAgICB9CiAgICB9KQogIH0KfQ=="]
           ]
         ]
       ],
-      ["block", "dispatch", 
+      ["block", "dispatch",
         [
-          ["html", "Emits an event to the element", 
+          ["html", "Emits an event to the element",
             ["code", "Y29uc3QgZm9vID0gbmV3IENvbnRhaW5lcigpLm9uKHsKICBjdXN0b21FdmVudDogKCkgPT4gY29uc29sZS5sb2coJ2V2ZW50IGNsaWNrZWQhJykKfSk7Cgpmb28uZGlzcGF0Y2goJ2N1c3RvbUV2ZW50Jyk7CgovLyBvdXRwdXQ6ICdldmVudCBjYWxsZWQhJw=="]
           ]
         ]
       ],
-      ["block", "text", 
+      ["block", "text",
         [
           ["html", "Add a text node to the element list of children"],
           ["tip", "It is best practise to call this before addChild"],
           ["code", "bmV3IENvbnRhaW5lcigpLnRleHQoJ0hlbGxvIHdvcmxkIScpOwoKLy8gb3V0cHV0IGh0bWwKPGRpdj5IZWxsbyB3b3JsZCE8L2Rpdj4="]
         ]
       ],
-      ["block", "style", 
+      ["block", "style",
         [
-          ["html", "Add a new css style to the elements CSS styles", 
+          ["html", "Add a new css style to the elements CSS styles",
             ["code", "Y29uc3QgbGlua1N0eWxlID0gbmV3IFN0eWxlKHsKICBmb250U2l6ZTogMTIsIGZvbnRXZWlnaHQ6ICdib2xkJywgdGV4dERlY29yYXRpb246ICdub25lJwp9KTsKbmV3IEEoKS5zdHlsZShsaW5rU3R5bGUpOwoKLy8gb3V0cHV0IGNzcwphIHsgZm9udC1zaXplOiAxMnB4OyBmb250LXdlaWdodDogYm9sZDsgdGV4dC1kZWNvcmF0aW9uOiAnbm9uZScgfQ=="]
           ]
         ]
       ],
-      ["block", "removeStyle", 
+      ["block", "removeStyle",
         [
-          ["html", "Remove style from CSS styles on the element", 
+          ["html", "Remove style from CSS styles on the element",
             ["code", "Y29uc3QgbGlua1N0eWxlID0gbmV3IFN0eWxlKHsKICBmb250U2l6ZTogMTIsIGZvbnRXZWlnaHQ6ICdib2xkJywgdGV4dERlY29yYXRpb246ICdub25lJwp9KTsKY29uc3QgYSA9IG5ldyBBKCkuc3R5bGUobGlua1N0eWxlKTsKCmEucmVtb3ZlU3R5bGUobGlua1N0eWxlKTsKCi8vIG91dHB1dCBjc3MKYSB7IH0="]
           ]
         ]
       ],
-      ["block", "media", 
+      ["block", "media",
         [
-          ["html", "Adds a media queries to CSS styles on the element", 
+          ["html", "Adds a media queries to CSS styles on the element",
             ["code", "bmV3IENvbnRhaW5lcigpLm1lZGlhKHsKICAnKG1heC13aWR0aDogNjAwcHgpJzogewogICAgcGFkZGluZ0xlZnQ6IDAsIGZvbnRTaXplOiAxMgogIH0KfSkKCi8vIG91dHB1dCBjc3MKQG1lZGlhKG1heC13aWR0aDogNjAwcHgpIHsKICBkaXYgeyBwYWRkaW5nLWxlZnQ6IDBweDsgZm9udC1zaXplOiAxMnB4OyB9Cn0="]
           ]
         ]
       ],
       ["block", "addClassName",
         [
-          ["html", "Add a class to the classList of element node", 
+          ["html", "Add a class to the classList of element node",
             ["code", "bmV3IENvbnRhaW5lcigpLmFkZENsYXNzTmFtZSgncGFuZScpOwoKLy8gb3V0cHV0IGh0bWwKPGRpdiBjbGFzcz0icGFuZSI+PC9kaXY+"]
           ]
         ]
       ],
       ["block", "removeClassName",
         [
-          ["html", "Remove a class from the classList of element node", 
+          ["html", "Remove a class from the classList of element node",
             ["code", "Y29uc3QgZm9vID0gbmV3IENvbnRhaW5lcigpLmFkZENsYXNzTmFtZSgncGFuZScpOwpmb28ucmVtb3ZlQ2xhc3NOYW1lKCdwYW5lJyk7CgovLyBvdXRwdXQgaHRtbAo8ZGl2PjwvZGl2Pg=="]
           ]
         ]
       ],
       ["block", "child",
         [
-          ["html", "Find a child from the element from the specified properties", 
+          ["html", "Find a child from the element from the specified properties",
             ["code", "Y29uc3QgY2hpbGQxID0gbmV3IFNwYW4oKS50ZXh0KCdmb28nKS5kaXNwbGF5KCdmbGV4Jyk7CmNvbnN0IGNoaWxkMiA9IG5ldyBTcGFuKCkudGV4dCgnYmFyJykuZGlzcGxheSgnZmxleCcpOwpjb25zdCBwYXJlbnQgPSBuZXcgQ29udGFpbmVyKCkuYWRkQ2hpbGQoY2hpbGQxLCBjaGlsZDIpOwoKcGFyZW50LmNoaWxkKHsgZGlzcGxheTogJ2ZsZXgnLCB0ZXh0OiAnZm9vJyB9KTsKLy8gb3V0cHV0OiBjaGlsZDE="]
           ]
         ]
       ],
       ["block", "replaceTextTag",
         [
-          ["html", "Method to concatenate text and elements as child of element", 
+          ["html", "Method to concatenate text and elements as child of element",
             ["code", "bmV3IENvbnRhaW5lcigpLnJlcGxhY2VUZXh0VGFnKCdoZWxsbyAke3dvcmxkfScsIHsKICB3b3JsZDogKCkgPT4gbmV3IFNwYW4oKS50ZXh0KCd3b3JsZCcpCn0pOwoKLy8gb3V0cHV0IGh0bWwKPGRpdj4KICBIZWxsbyA8c3Bhbj53b3JsZDwvc3Bhbj4KPC9kaXY+"]
           ]
         ]
       ],
       ["block", "pseudo",
         [
-          ["html", "Add a pseudo-class css to the css styles on the element", 
+          ["html", "Add a pseudo-class css to the css styles on the element",
             ["code", "bmV3IExpbmsoKS5wc2V1ZG8oewogICc6aG92ZXInOiB7IGZvbnRTaXplOiAxMiwgYmFja2dyb3VuZENvbG9yOiAncmVkJyB9LAogICc6YWN0aXZlJzogeyBmb250V2VpZ2h0OiAnYm9sZCcgfQp9KTsKCi8vIG91dHB1dCBjc3MKYTpob3ZlciB7IGZvbnQtc2l6ZTogMTJweDsgYmFja2dyb3VuZC1jb2xvcjogJ3JlZCcgfQphOmFjdGl2ZSB7IGZvbnQtd2VpZ2h0OiBib2xkIH0="]
           ]
         ]
       ],
       ["block", "global",
         [
-          ["html", "Add a global css rule to the css styles on the element. Properties in global properties will be applied to all children of this element.", 
+          ["html", "Add a global css rule to the css styles on the element. Properties in global properties will be applied to all children of this element.",
             ["code", "Y29uc3QgZm9vID0gbmV3IENvbnRhaW5lcigpLmdsb2JhbCh7CiAgYTogeyBmb250U2l6ZTogMjQgfQp9KTsKCmZvby5hZGRDaGlsZChuZXcgQSgpKQoKLy8gb3V0cHV0IGNzcwpmb28gYSB7IGZvbnQtc2l6ZTogMTJweDsgfQ=="]
           ]
         ]

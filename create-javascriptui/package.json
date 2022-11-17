@@ -1,6 +1,6 @@
 {
   "name": "create-javascriptui",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "main": "bin/cli.js",
   "scripts": {
     "start": "node start.js app",
@@ -10,5 +10,11 @@
   "keywords": [],
   "author": "Tolu Oluwagbemi<demos_08_dovish@icloud.com>",
   "license": "MIT",
-  "devDependencies": {}
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "enquirer": "^2.3.6",
+    "fs-extra": "^10.1.0",
+    "semver": "^7.3.8",
+    "tmp": "^0.2.1"
+  }
 }

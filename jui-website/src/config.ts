@@ -48,10 +48,10 @@ const Theme = {
       '--code-background': '#141414',
       '--code-title': '#caaa68',
       '--code-keyword': '#87cacd',
-      '--code-string': '#517a4a',
+      '--code-string': '#c4ffb9',
       '--code-line-number': '#575757',
       '--code-attr': '#79c0ff',
-      '--code': '#c9d1d9',
+      '--code': '#ffffff',
 
       '--doc-link': '#d5d5d5',
       '--console-error': '#e5e5e5'
@@ -72,11 +72,11 @@ const Theme = {
       '--gradient-opacity': '0.8',
 
       '--code-background': '#FFFFFF',
-      '--code-title': '#d89203',
-      '--code-keyword': '#23888c',
-      '--code-string': '#517a4a',
+      '--code-title': '#d58f00',
+      '--code-keyword': '#099504',
+      '--code-string': '#4d4d4d',
       '--code-line-number': '#bfbfbf',
-      '--code-attr': '#0083f8',
+      '--code-attr': '#006ac9',
       '--code': '#1a1c1d',
 
       '--doc-link': '#303030',
@@ -117,6 +117,7 @@ export default {
   ],
   codeblocks: {
     lessCode: `const nital = ["batten", "hatton", "fatten", "platen"];
+
 new Container().display('flex').gap(10).addChild(
   ...Array(nital.length).fill('https://picsum.photos/100')
     .map((photo, index) => {

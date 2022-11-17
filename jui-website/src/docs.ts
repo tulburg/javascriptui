@@ -80,24 +80,23 @@ export default class Docs extends PageComponent {
   }
 
   onCreate() {
-    const codeStyle = document.createElement('style');
-    codeStyle.innerHTML = "@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap')";
-    document.head.appendChild(codeStyle);
-
-    const highlightImport = document.createElement('script');
-    highlightImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js');
-    highlightImport.onload = () => {
-      const tsImport = document.createElement('script');
-      tsImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/typescript.min.js');
-      document.head.appendChild(tsImport);
-      const githubImport = document.createElement('style');
-      githubImport.innerHTML = "@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css')";
-      document.head.appendChild(githubImport);
-      const lineNumber = document.createElement('script');
-      lineNumber.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js');
-      document.head.appendChild(lineNumber);
+    if (!document.head.querySelector('#highlight-import')) {
+      const highlightImport = document.createElement('script');
+      highlightImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js');
+      highlightImport.setAttribute('id', 'highlight-import');
+      highlightImport.onload = () => {
+        const tsImport = document.createElement('script');
+        tsImport.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/typescript.min.js');
+        document.head.appendChild(tsImport);
+        const githubImport = document.createElement('style');
+        githubImport.innerHTML = "@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css')";
+        document.head.appendChild(githubImport);
+        const lineNumber = document.createElement('script');
+        lineNumber.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js');
+        document.head.appendChild(lineNumber);
+      }
+      document.head.appendChild(highlightImport)
     }
-    document.head.appendChild(highlightImport);
     queueMicrotask(() => {
       if (location.hash) {
         const el: any = document.querySelector(location.hash);
