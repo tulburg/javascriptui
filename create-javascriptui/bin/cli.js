@@ -253,7 +253,7 @@ async function start() {
   if(project === undefined) {
     const temp_name = await callPrompt('Choose a project name:');
     this.projectName = temp_name.trim().replace(/\s/, '-').toLowerCase();
-  }
+  }else this.projectName = project;
 
   fs.ensureDir(path.join(root, this.projectName));
 
@@ -271,7 +271,7 @@ async function start() {
   if(template === undefined) {
     const typescript = await callPrompt('Do you want to use Typescript?', true);
     this.template = typescript ? 'jui-template-ts' : 'jui-template';
-  }
+  }else this.template = template;
 
   checkThatNpmCanReadCwd();
 
@@ -296,7 +296,7 @@ async function start() {
 
       fs.writeFileSync(
         path.join(root, this.projectName, 'package.json'),
-        JSON.stringify(Object.assign(this.packageJSON, installPackage), null, 2) + os.EOL
+        JSON.stringify(Object.assign(installPackage, this.packageJSON), null, 2) + os.EOL
       );
 
       const allDeps = Object.keys(dependencies).concat(Object.keys(devDependencies));
