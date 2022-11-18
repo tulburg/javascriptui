@@ -27,6 +27,10 @@ async function callPrompt(message, options = false) {
     : await new Input({ message }).run()
 }
 
+function isUsingYarn() {
+  return (process.env.npm_config_user_agent || '').indexOf('yarn') === 0;
+}
+
 function isSafeToCreateProjectIn(root, name) {
   const validFiles = [
     '.DS_Store',
@@ -304,14 +308,16 @@ async function start() {
       log(`Installing...
 `);
       process.chdir(oldDir);
-      const install = spawn('npm', ['i', '--save'].concat(allDeps), { stdio: 'inherit'});
-      // install.stdout.on('data', data => log(data.toString()));
-      // install.stderr.on('data', data => log(data.toString()));
+      let install;
+      if(isUsingYarn()) {
+        install = spawn('yarn', ['add'].concat(allDeps), { stdio: 'inherit'});
+      }else install = spawn('npm', ['i', '--save'].concat(allDeps), { stdio: 'inherit'});
+
       install.on('exit', () => {
         log(`
 Installation complete!
 
-Run ${chalk.greenBright('cd ' + this.projectName + ' && npm start')} to begin`)
+Run ${chalk.greenBright('cd ' + this.projectName + ' && ' + (isUsingYarn() ? 'yarn' : 'npm') +' start')} to begin`)
       })
     }
   }
