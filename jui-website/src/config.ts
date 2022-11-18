@@ -1,7 +1,7 @@
 import { ELEMENT, Button, Container, Input, Label, P, Style, SVG, Textarea } from '@javascriptui/core';
 import App from './app';
 import Docs from './docs';
-// import Playground from './playground';
+import Playground from './playground';
 
 const Theme = {
   globals: {
@@ -113,7 +113,7 @@ export default {
     { path: '/', component: App, name: 'App' },
     { path: '/docs', component: Docs, name: 'Docs' },
     { path: '/docs/:section/', component: Docs, name: 'Docs' },
-    // { path: '/playground', component: Playground, name: 'Playground' }
+    { path: '/playground', component: Playground, name: 'Playground' }
   ],
   codeblocks: {
     lessCode: `const nital = ["batten", "hatton", "fatten", "platen"];
@@ -165,7 +165,7 @@ new Container().display('flex').gap(10).addChild(
     </defs>`,
   topLinks: [
     { title: "Docs", href: "/docs" },
-    { title: 'Playground', href: '/playground' },
+    { title: 'Playground', href: 'https://javascriptui.org/playground' },
     { title: "Help", href: "/help" },
     { title: "Donate", href: "/donate" },
   ],

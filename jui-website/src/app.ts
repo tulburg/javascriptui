@@ -89,7 +89,7 @@ export default class App extends PageComponent {
             new Container().display('flex').gap(25).addChild(
               new SoftButton('🚀 Get started', () => Router.go('/docs'), true),
               new SoftButton('View on Github', () => Router.go('https://github.com/tulburg/javascriptui')),
-              new SoftButton('Try playground', () => Router.go('/playground')),
+              new SoftButton('Try playground', () => Router.go('https://javascriptui.org/playground')),
             ).media({
               '(max-width: 560px)': { flexWrap: 'wrap', gap: 15 },
               '(max-width: 420px)': { alignItems: 'baseline' }

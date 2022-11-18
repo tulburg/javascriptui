@@ -17,7 +17,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/index.html'),
       inject: true
     }),
-    // new MonacoWebpackPlugin()
+    new MonacoWebpackPlugin()
   ],
   resolve: {
     alias: {
@@ -28,7 +28,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
-    library: 'js-native',
+    library: 'javascriptui',
     libraryTarget: 'umd',
     publicPath: '/'
   },

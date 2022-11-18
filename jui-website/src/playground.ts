@@ -1,13 +1,17 @@
 import { Container, IFrame, PageComponent, Select, Option, P, Pre, Span } from "@javascriptui/core";
-import { languages, editor } from 'monaco-editor';
-const monaco = { languages, editor };
+import { languages, editor, Uri } from 'monaco-editor';
+const monaco = { languages, editor, Uri };
 
 // @ts-ignore
-import type_source from '!!raw-loader!./lib/types.ts';
+import type_source from '!!raw-loader!./lib/types.d';
 // @ts-ignore
 import native from '!!raw-loader!./lib/native.ts';
 // @ts-ignore
 import props from '!!raw-loader!./lib/props.ts';
+// @ts-ignore
+import component from '!!raw-loader!./lib/component.d';
+
+
 import { TopBar } from "./app";
 
 const CACHE = "jui::last-save";
@@ -374,39 +378,20 @@ export default class Playground extends PageComponent {
     babelScript.setAttribute('src', 'https://unpkg.com/@babel/standalone/babel.min.js');
     document.head.appendChild(babelScript);
 
-    // try {
-    //   monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-    //     experimentalDecorators: true,
-    //     allowSyntheticDefaultImports: true,
-    //     moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-    //     esModuleInterop: false,
-    //     strict: false,
-    //     typeRoots: ["node_modules/@types", "types.ts"]
-    //   });
-    // } catch (e) {}
-
-    // monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
-    // monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-    //   noSemanticValidation: false,
-    //   noSyntaxValidation: false
-    // })
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs
+    })
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `declare module 'types' {${type_source}} `,
+      `declare module 'types' {${type_source}}`,
       'types.ts'
     );
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `declare module 'javascriptui' {${props + native}} `,
-      'javascriptui'
+      `declare module 'javascriptui' {${component}}`,
+      'javascriptui.ts'
     );
 
-    this.monacoEditor = monaco.editor.create(this.editor.node() as HTMLElement, {
-      language: 'typescript',
-      theme,
-      fontSize: 14,
-      fontFamily: '"Source Code Pro"',
-      minimap: { enabled: false },
-      value: localStorage.getItem(CACHE) || `import { PageComponent } from 'javascriptui';
+    const value = localStorage.getItem(CACHE) || `import { PageComponent } from 'javascriptui';
 
 export default class App extends PageComponent {
   constructor() {
@@ -414,7 +399,17 @@ export default class App extends PageComponent {
     this.text("Hello world").fontSize(32).color('black').textAlign('center')
       .padding(50).fontFamily('arial')
   }
-}`
+}`;
+
+    // monaco.editor.createModel(`${component}`, 'typescript', monaco.Uri.parse('ts:filename/component.ts'))
+
+    this.monacoEditor = monaco.editor.create(this.editor.node() as HTMLElement, {
+      language: 'typescript',
+      theme,
+      fontSize: 14,
+      fontFamily: '"Source Code Pro"',
+      minimap: { enabled: false },
+      value
     });
 
     this.monacoEditor.getModel()?.updateOptions({
