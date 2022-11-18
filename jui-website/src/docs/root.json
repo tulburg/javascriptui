@@ -16,10 +16,10 @@
       [ "block", "Start a project",
         [
           [ "html", "To create a project with ${bold(NPM)}",
-            [ "code", "bnB4IGluaXQgamF2YXNjcmlwdHVp" ]
+            [ "code", "npm init javascriptui" ]
           ],
           ["html", "Or with yarn",
-            ["code", "eWFybiBpbml0IGphdmFzY3JpcHR1aQ=="]
+            ["code", "yarn create javascriptui"]
           ]
         ]
       ]
