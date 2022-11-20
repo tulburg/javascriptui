@@ -1,103 +1,108 @@
-# TSDX User Guide
+# JavascriptUI (JUI)
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+The standard Javascript interface design framework for the WEB! It is designed for quick and easy UI development of all sizes. This framework is specifically built for high performance and all out customizations.
 
-> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
+## Get started
 
-> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
+- Try it on the [playground](https://javascriptui.dev/playground)
+- Try it on [stackblitz](https://stackblitz.com/edit/express-simple-g1ygzr?file=src%2Fapp.ts)
+- Read the [documentation](https://javascriptui.dev)
 
-## Commands
+## Start a project
 
-TSDX scaffolds your new library inside `/src`.
-
-To run TSDX, use:
+To create a project with *NPM*
 
 ```bash
-npm start # or yarn start
+npm init javascriptui
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
+or with yarn
 
-To do a one-off build, use `npm run build` or `yarn build`.
-
-To run tests, use `npm test` or `yarn test`.
-
-## Configuration
-
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle Analysis
-
-[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
+```bash
+yarn create javascriptui
 ```
 
-### Rollup
+## Usage
 
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
+### Basic concepts
 
-### TypeScript
+All functions can be call in a chain i.e.
 
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
+```typescript
+new Container().display('flex').justifyContent('center')
+```
+The only exceptions are getter functions. A getter function is used to get the value created by the setter function. Usually, preceded by a string. i.e. `$display` or `$justifyContent`
 
-## Continuous Integration
+All functions can both work as getters and setters. The difference is the value passed. If a value is passed, it performs as setter and if no value is passed, it performs as a getter.
 
-### GitHub Actions
+```typescript
+// setter function
+const h1 = new H1().text('Hello world');
+ 
+// getter function
+console.log(h1.text())
+// output: Hello world
+```
+#
+### Class structure
+Elements in JUI are defined as classes. That is, all html tags i.e. `H1`, `A`, `IMG`, `EM`, `DIV`, `Span` etc. Use any of these, simply by calling `new` i.e.
 
-Two actions are added by default:
-
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
-}
+```typescript
+new Div();
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+Document tree are created with the `addChild` function.
+Check other element functions in [Element functions](https://javascriptui.dev/docs/element-functions)
 
-## Module Formats
+```typescript
+new Container().display('flex').addChild(
+  new H1().text('Hello world')
+)
+```
 
-CJS, ESModules, and UMD module formats are supported.
+Output html:
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+```html
+<div>
+  <h1>Hello world</h1>
+</div>
+```
 
-## Named Exports
+#
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+### Writing CSS
+Elements in JavascriptUI are styled by calling the CSS properties on the class object in their camelCase form.
 
-## Including Styles
+```typescript
+new H1().text('Hi!').fontSize(12).fontWeight('bold').color('red');
+```
+> These CSS properties are according to what is available in the active client browser. JUI is only exposing the existing browser API
+Read more about CSS in [Styling elements](https://javascriptui.dev/docs/styling-elements)
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+#
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+### HTML Attributes
+HTML attributes can be called in similar fashion as explained above. Only starting with the `attr` keyword.
 
-## Publishing to NPM
+```typescript
+new A().text('Call to action').attrHref('/jui-docs').attrTarget('_self');
+```
 
-We recommend using [np](https://github.com/sindresorhus/np).
+#
+
+### Event listeners
+All events listeners in JUI can be added by using the `on` function i.e.
+
+```typescript
+new Button().text('Click').on({
+  click: () => console.log('clicked!'),
+  mousemove: e => console.log(e.clientX),
+  mouseup: e => console.log(e.clientY)
+});
+```
+Read the full documentation about [Themes](https://javascriptui.dev/docs/globals#theme), [Styles](https://javascriptui.dev/docs/styling-elements#overview), [Router](https://javascriptui.dev/docs/globals#router), [Config](https://javascriptui.dev/docs/globals#config) and [more](https://javascriptui.dev/docs/element-functions)
+
+#
+
+# Contributing
+We would love to have you on board to make JUI even better. Please see [contribution.md](/contribution.md) for more information.
