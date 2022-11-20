@@ -2,6 +2,8 @@ import { ELEMENT } from "./components";
 import Props from "./props";
 import { Attributes } from "./types";
 
+declare let window: any;
+
 export function createSheet(data: string[]): CSSStyleSheet {
   const allStyles = document.head.getElementsByTagName('style');
   const id = 'n' + Math.random().toString(36).substr(2, 9);
@@ -96,7 +98,7 @@ export function parseProperties(component: Element | any, state?: boolean): Attr
 export function parseNativeStyle(obj: ELEMENT | any) {
   let objStyles = '';
   for (let prop in obj) {
-    if (ELEMENT.prototype[prop] || (<any>window).UI === undefined) {
+    if (ELEMENT.prototype[prop] || window.UI === undefined || window.UI.standalone) {
       const key = prop.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
       objStyles += key + ': '
         + parseStyleValue(obj[prop]) + '; ';

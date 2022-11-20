@@ -40,7 +40,7 @@ export default class Router {
           this.$rules = this.$rules || [];
           if (this.$rules.length > 0) {
             try {
-              const parsedValue = this.window.UI.parseStyleValue(value);
+              const parsedValue = (<any>window).UI.parseStyleValue(value);
               this.$rules[this.$rules.length - 1].style.setProperty(
                 key,
                 parsedValue.indexOf('!') > -1 ? parsedValue.replace(/\!important/g, '') : parsedValue,
