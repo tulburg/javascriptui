@@ -4,7 +4,7 @@ import {
 import { createRules, parseNativeStyle, addLoadQueue } from './utils';
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']', '').toLowerCase();
-const Native = function (): any { return (<any>window).Native || undefined };
+const UI = function (): any { return (<any>window).UI || undefined };
 
 export interface ELEMENT extends Attributes<ELEMENT>, Properties<ELEMENT> {
   onCreate(): void;
@@ -25,7 +25,7 @@ export class ELEMENT {
   $media: { [key: string]: StyleProperties | string }[] = [];
   $global: { [key: string]: StyleProperties }[] = [];
 
-  $hostComponent: string = Native().serving;
+  $hostComponent: string = UI().serving;
   $node: Element;
   $rules: CSSStyleRule[] = [];
 
@@ -51,7 +51,7 @@ export class ELEMENT {
         if (nullIndex > -1) this.$children.splice(nullIndex, 1, children[i])
         else this.$children.push(children[i]);
         if (typeof children[i] !== 'string') children[i].$root = this as any;
-        if (this.$node) this.$node.append(Native().createElement(children[i]));
+        if (this.$node) this.$node.append(UI().createElement(children[i]));
       }
       return this as any;
     } else {
@@ -184,7 +184,7 @@ export class ELEMENT {
     }
   }) {
     this.$media.push(props);
-    const rules: string[] = [], native = Native();
+    const rules: string[] = [], native = UI();
     Object.getOwnPropertyNames(props).forEach((key: string) => {
       let rule = '@media ' + key + '{ ';
       if (props[key].global) {
@@ -302,7 +302,7 @@ export class ELEMENT {
 
   pseudo(props: { [key: string]: StyleProperties }) {
     this.$pseudo.push(props);
-    const rules: string[] = [], native = Native();
+    const rules: string[] = [], native = UI();
     for (const key in props) {
       rules.push('.' + this.$className.replace(/\s/g, '.') + key + ' {' + parseNativeStyle(props[key]) + '} ');
     }
@@ -316,7 +316,7 @@ export class ELEMENT {
 
   global(props: { [key: string]: StyleProperties }) {
     this.$global.push(props);
-    const rules: string[] = [], native = Native();
+    const rules: string[] = [], native = UI();
     for (const key in props) {
       rules.push('.' + this.$className.replace(/\s/g, '.') + ' ' + key + ' {' + parseNativeStyle(props[key]) + '} ');
     }
@@ -341,12 +341,12 @@ export class Component extends ELEMENT {
     super('component');
     this.$nid = Math.random().toString(36).substr(2, 9);
     this.$tagName = this.name.length > 2 ? this.name : this.name + this.$nid;
-    Native().serving = this.name + "-" + this.$nid;
-    Native().components[this.name] = Native().components[this.name] || { structure: this.constructor } as any;
-    Native().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;
-    Native().components[this.name][this.$nid].args
-      = Native().components[this.name][this.$nid].args || args;
-    Native().loadQueue[Native().serving] = [];
+    UI().serving = this.name + "-" + this.$nid;
+    UI().components[this.name] = UI().components[this.name] || { structure: this.constructor } as any;
+    UI().components[this.name][this.$nid] = { served: false, watchlist: [] } as any;
+    UI().components[this.name][this.$nid].args
+      = UI().components[this.name][this.$nid].args || args;
+    UI().loadQueue[UI().serving] = [];
     this.display('block');
   }
 
@@ -358,10 +358,10 @@ export class PageComponent extends Component {
   }
 
   get route() {
-    if (!Native().components[this.name][this.$nid]) {
+    if (!UI().components[this.name][this.$nid]) {
       throw new Error('Get route: Component doesn\'t exist or has been destroy');
     }
-    return Native().components[this.name][this.$nid].route;
+    return UI().components[this.name][this.$nid].route;
   }
 }
 
@@ -758,7 +758,7 @@ export class Input extends ELEMENT {
     })
   }
 
-  value = (v?: string | number) => {
+  value?= (v?: string | number) => {
     if (v !== undefined) {
       if (this.$node) {
         if ((<any>this.$node).type !== 'file') (<any>this.$node).value = v;

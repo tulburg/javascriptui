@@ -214,7 +214,7 @@ const Props: {
     '$attrXmlns': 'attr.xmlns'
   },
   excludes: [
-    '$native',
+    '$ui',
     '$children',
     '$level',
     '$model',

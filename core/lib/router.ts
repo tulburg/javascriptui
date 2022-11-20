@@ -17,13 +17,12 @@ export default class Router {
   private events: { name: string, listener: (..._: any[]) => void }[];
 
   constructor() {
-    // window.Bus = window.Bus || new Bus();
     this.window.Config = Config;
     if (Config.theme) this.window.Theme = Config.theme;
     this.window.Router = this;
     new UI(this);
     this.events = [];
-    this.window.Native.sheet.insertRule('app{}');
+    this.window.UI.sheet.insertRule('app{}');
     let altProps = Object.getOwnPropertyNames(document.head.style);
     if (altProps.length === 0) altProps = Object.keys((<any>document.head.style).__proto__).filter(i => !i.match('-'))
     let propIndex = 0;
@@ -41,7 +40,7 @@ export default class Router {
           this.$rules = this.$rules || [];
           if (this.$rules.length > 0) {
             try {
-              const parsedValue = (<any>window).Native.parseStyleValue(value);
+              const parsedValue = this.window.UI.parseStyleValue(value);
               this.$rules[this.$rules.length - 1].style.setProperty(
                 key,
                 parsedValue.indexOf('!') > -1 ? parsedValue.replace(/\!important/g, '') : parsedValue,
@@ -60,7 +59,7 @@ export default class Router {
       (<any>Style.prototype)[prop] = fns;
       propIndex++;
     }
-    if (this.window.Native.sheet.cssRules.length === 1) this.window.Native.writeGlobals(Config.theme || {});
+    if (this.window.UI.sheet.cssRules.length === 1) this.window.UI.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
@@ -106,7 +105,7 @@ export default class Router {
         this.current = route;
         // this.current.subs = [];
         this.current.data = data.data;
-        this.window.Native.load('#app', route);
+        this.window.UI.load('#app', route);
         loaded = true;
       }
     }
@@ -118,7 +117,7 @@ export default class Router {
           if (data) {
             this.current.data = data.data;
             // this.current.subs = [];
-            this.window.Native.load('#app', this.current);
+            this.window.UI.load('#app', this.current);
             loaded = true;
           }
         }
@@ -130,7 +129,7 @@ export default class Router {
     }
     if (!loaded) {
       console.error(`Path ${location.pathname} not configured`);
-      this.window.Native.unload('#app');
+      this.window.UI.unload('#app');
     }
   }
 
@@ -151,13 +150,13 @@ export default class Router {
       if (data) {
         Object.assign(this.current.data, data.data);
         if (!route.hostComponent) throw new Error('Route not properly hosted');
-        (<any>window).Native.load('.' + route.hostComponent.$className, route, true);
+        (<any>window).UI.load('.' + route.hostComponent.$className, route, true);
         loaded = true;
       }
     }
     if (fromGo && !loaded) {
       console.error('Path not configured');
-      this.window.Native.unload('#app');
+      this.window.UI.unload('#app');
     }
   }
 
@@ -178,7 +177,7 @@ export default class Router {
         this.current = route;
         // this.current.subs = [];
         this.current.data = data.data;
-        this.window.Native.load('#app', route);
+        this.window.UI.load('#app', route);
         loaded = true;
       }
     }
@@ -193,7 +192,7 @@ export default class Router {
             if (data) {
               this.current.data = data.data;
               // this.current.subs = [];
-              this.window.Native.load('#app', this.current);
+              this.window.UI.load('#app', this.current);
               loaded = true;
             }
           }

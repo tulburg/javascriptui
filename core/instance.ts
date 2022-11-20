@@ -9,9 +9,9 @@ if ((<any>module).hot) {
       clearTimeout(i);
     }
     const w: any = window;
-    if (w.Native) {
-      w.Native.sheet.disabled = true;
-      w.Native.hot = true;
+    if (w.UI) {
+      w.UI.sheet.disabled = true;
+      w.UI.hot = true;
     }
     const NewRouter = require('./lib/router').default;
     new NewRouter();
