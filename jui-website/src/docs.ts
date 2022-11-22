@@ -21,7 +21,7 @@ export default class Docs extends PageComponent {
         new Container().position('fixed').width(180).padding([50, 0]).paddingTop(25)
           .maxHeight('100vh').overflow('scroll').boxSizing('border-box')
           .addChild(
-            new A().display('flex').alignItems('center').attrHref('/').on({
+            new A().display('flex').alignItems('center').display('block').marginBottom(50).attrHref('/').on({
               click(e) {
                 e?.preventDefault();
                 Router.go('/');
@@ -138,8 +138,8 @@ const format = (item: any) => {
       return new CodeBlock(decodeBase64(item[1])).marginTop(15).marginBottom(15)
     }
     case 'tip': {
-      return new Container().borderRadius(8).backgroundColor('#fff4c5').text(item[1])
-        .padding([15, 20]).border('1px solid rgba(0,170,0,.25)').color('#303030');
+      return new Container().borderRadius(8).backgroundColor('#d8d8d8').text(item[1])
+        .padding([10, 20]).border('1px solid rgba(0,170,0,.25)').color('#101010').lineHeight('1.3');
     }
     case 'html': {
       return new Container().addChild(

@@ -1,7 +1,7 @@
 import { ELEMENT, Button, Container, Input, Label, P, Style, SVG, Textarea } from '@javascriptui/core';
-// import App from './app';
-// import Docs from './docs';
-import Playground from './playground';
+import App from './app';
+import Docs from './docs';
+// import Playground from './playground';
 
 const Theme = {
   globals: {
@@ -110,9 +110,9 @@ export default {
   theme: Theme,
   styleDebug: true,
   routes: [
-    { path: '/', component: Playground, name: 'Playground' },
-    // { path: '/docs', component: Docs, name: 'Docs' },
-    // { path: '/docs/:section/', component: Docs, name: 'Docs' },
+    { path: '/', component: App, name: 'App' },
+    { path: '/docs', component: Docs, name: 'Docs' },
+    { path: '/docs/:section/', component: Docs, name: 'Docs' },
     // { path: '/playground', component: Playground, name: 'Playground' }
   ],
   codeblocks: {
@@ -164,10 +164,10 @@ new Container().display('flex').gap(10).addChild(
     </filter>
     </defs>`,
   topLinks: [
-    { title: "Docs", href: "https://javascriptui.dev/docs" },
-    { title: 'Playground', href: '/playground' },
-    { title: "Help", href: "https://javascriptui.dev/" },
-    { title: "Donate", href: "https://javascriptui.dev/" },
+    { title: "Docs", href: "/docs" },
+    { title: 'Playground', href: 'https://playground.javascriptui.dev' },
+    { title: "Help", href: "/" },
+    { title: "Donate", href: "/" },
   ],
   socialLinks: [
     { src: require('./assets/twitter.svg'), alt: 'twitter logo', href: 'https://twitter.com/tulburg' },

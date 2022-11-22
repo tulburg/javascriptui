@@ -5,10 +5,9 @@
         [["html", "JavascriptUI is a Javascript only framework for building web interfaces. It is designed for quick and easy UI development of all sizes. This framework is specifically built for high performance and all out customizations.",
           ["list", "unordered",
             [
-              ["list-item", "Try it on the ${a(playground,/playground)}"],
-              ["list-item", "Try ${a(REPL,https://replit.com/@tulburg/js-native-boilerplate#src/app.ts)} or ${a(stackblitz,https://stackblitz.com/edit/express-simple-g1ygzr?file=src%2Fapp.ts)}"],
-              ["list-item", "Watch a quick ${a(video [3min],https://youtube.com?watch=v47c4834)}"],
-              ["list-item", "Checkout list of ${a(features,/features)}"]
+              ["list-item", "Try it on the ${a(playground,https://playground.javascriptui.dev)}"],
+              ["list-item", "Try ${a(stackblitz,https://stackblitz.com/edit/express-simple-g1ygzr?file=src%2Fapp.ts)}"],
+              ["list-item", "Watch a quick ${a(video [3min],https://youtu.be/QadVsDdTBvE)}"]
             ]
           ]
         ]]

@@ -328,7 +328,7 @@ export class TopBar extends Container {
         showLogo ? new A().display('flex').alignItems('center').attrHref('/').on({
           click(e) {
             e?.preventDefault();
-            Router.go('https://javascriptui.dev');
+            Router.go('/');
           }
         }).addChild(
           new SVG().attrWidth(391).attrHeight(67).attrViewbox('0 0 391 67')

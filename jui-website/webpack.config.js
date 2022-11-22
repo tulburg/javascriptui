@@ -2,7 +2,7 @@
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WriteFilePlugin = require('write-file-webpack-plugin');
-var MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+// var MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'node_modules/@javascriptui/core/dist/instance'),
@@ -17,7 +17,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src/index.html'),
       inject: true
     }),
-    new MonacoWebpackPlugin()
+    // new MonacoWebpackPlugin()
   ],
   resolve: {
     alias: {
