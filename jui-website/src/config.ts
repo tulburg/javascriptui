@@ -164,14 +164,14 @@ new Container().display('flex').gap(10).addChild(
     </filter>
     </defs>`,
   topLinks: [
-    { title: "Docs", href: "/docs" },
+    { title: "Docs", href: "https://javascriptui.dev/docs" },
     { title: 'Playground', href: '/playground' },
-    { title: "Help", href: "/help" },
-    { title: "Donate", href: "/donate" },
+    { title: "Help", href: "https://javascriptui.dev/" },
+    { title: "Donate", href: "https://javascriptui.dev/" },
   ],
   socialLinks: [
     { src: require('./assets/twitter.svg'), alt: 'twitter logo', href: 'https://twitter.com/tulburg' },
-    { src: require('./assets/github.svg'), alt: 'github logo', href: 'https://github.com/tulburg' }
+    { src: require('./assets/github.svg'), alt: 'github logo', href: 'https://github.com/tulburg/javascriptui' }
   ]
 }
 
