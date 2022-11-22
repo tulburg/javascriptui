@@ -21,7 +21,7 @@ export default class App extends PageComponent {
     const footerLinks = [
       [
         { heading: true, title: 'Channels' },
-        { href: 'https://github.com/tulburg', title: 'Github' },
+        { href: 'https://github.com/tulburg/javascriptui', title: 'Github' },
         { href: 'https://twitter.com/tulburg', title: 'Twitter' },
         { href: 'https://discord.com/tulburg', title: 'Discord' },
       ],
@@ -89,7 +89,7 @@ export default class App extends PageComponent {
             new Container().display('flex').gap(25).addChild(
               new SoftButton('🚀 Get started', () => Router.go('/docs'), true),
               new SoftButton('View on Github', () => Router.go('https://github.com/tulburg/javascriptui')),
-              new SoftButton('Try playground', () => Router.go('/playground')),
+              new SoftButton('Try playground', () => Router.go('https://playground.javascriptui.dev')),
             ).media({
               '(max-width: 560px)': { flexWrap: 'wrap', gap: 15 },
               '(max-width: 420px)': { alignItems: 'baseline' }
@@ -202,8 +202,8 @@ export default class App extends PageComponent {
                     '(max-width: 860px)': { fontSize: 22 }
                   }),
                 new Container().display('flex').gap(25).addChild(
-                  new SoftButton('Join us', () => {}, true),
-                  new SoftButton('Become a sponsor', () => {})
+                  new SoftButton('Join us', () => { Router.go('https://github.com/tulburg/javascriptui') }, true),
+                  new SoftButton('Become a sponsor', () => { Router.go('https://github.com/tulburg/javascriptui') })
                 ).media({
                   '(max-width: 860px)': { marginTop: 'auto' },
                   '(max-width: 420px)': { flexDirection: 'column', alignItems: 'baseline' }
