@@ -21,7 +21,7 @@ export default class App extends PageComponent {
               ...[
                 { title: 'Github', url: 'https://github.com/tulburg/javascriptui' },
                 { title: 'Twitter', url: 'https://twitter.com/tulburg' },
-                { title: 'Documentation', url: 'https://javascriptui.dev' }
+                { title: 'Documentation', url: 'https://javascriptui.dev/docs' }
               ].map(link => {
                 return new A().attrHref(link.url).attrTarget('_blank').text(link.title).style(linkStyle)
               })
