@@ -373,7 +373,7 @@ export declare class Input extends ELEMENT {
   $value?: any;
   constructor();
   track?(obj: any): void;
-  value: (v?: string | number) => any;
+  value?: (v?: string | number) => any;
 }
 export declare class SVG extends ELEMENT {
   constructor();

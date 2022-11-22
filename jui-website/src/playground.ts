@@ -35,7 +35,7 @@ export class App extends Component {
     super();
     this.inputField = new Input().width(200).padding([5, 15]).boxSizing('border-box')
       .attrPlaceholder('Enter an item').on({
-        keyup: (e) => {
+        keyup: (e: KeyboardEvent) => {
           if(e.key === 'Enter') {
             const inputNode: any = this.inputField.node();
             this.items.push(inputNode.value);
