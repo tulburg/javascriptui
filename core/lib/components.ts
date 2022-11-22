@@ -92,7 +92,6 @@ export class ELEMENT {
       while (this.$children.length > 0) this.$children.pop().remove();
     }
     this.$children = [];
-    console.log(this.$node.childNodes);
   }
 
   replaceChild(child: ELEMENT, newChild: ELEMENT) {
@@ -136,10 +135,11 @@ export class ELEMENT {
     return this;
   }
 
-  dispatch(event: string) {
+  dispatch(event: string, data?: any) {
     if (!this.$node) throw `Cannot dispatch, node is not attached`;
     else {
-      const e = new Event(event, { bubbles: false });
+      const e: any = new Event(event, { bubbles: false });
+      if (data) e.data = data;
       this.$node.dispatchEvent(e);
     }
     return this;

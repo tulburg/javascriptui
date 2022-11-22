@@ -41,8 +41,11 @@ window.Config = {
 
 export default class Standalone extends UI {
   standalone = true;
+  loadQueue: { [key: string]: Function[] } = {} as any;
   constructor(selector: string, root: any, theme?: any) {
     super(undefined);
+
+    if (theme) this.writeGlobals(theme);
 
     let altProps = Object.getOwnPropertyNames(document.head.style);
     if (altProps.length === 0) altProps = Object.keys((<any>document.head.style).__proto__).filter(i => !i.match('-'))
