@@ -1,5 +1,5 @@
 import { A, Container, H2, H4, H5, Image, IMG, LI, P, PageComponent, Span, Style, SVG, UL } from '@javascriptui/core';
-import { CodeBlock, GlassBox, Layout, SoftButton, Toggle } from './config';
+import { CodeBlock, GlassBox, Layout, SoftButton, Toggle } from '../theme';
 
 export default class App extends PageComponent {
   constructor() {
@@ -16,28 +16,6 @@ export default class App extends PageComponent {
       { title: 'Extensible everything', description: 'Themes, styles, components all extensible and inheritable' },
       { title: 'Performance like never before', description: 'Create all resuable tokens once and for all, for your design system' },
       { title: 'Styling has never been easier', description: 'All CSS & Styling issues solved. Yes all! Take back control' }
-    ];
-
-    const footerLinks = [
-      [
-        { heading: true, title: 'Channels' },
-        { href: 'https://github.com/tulburg/javascriptui', title: 'Github' },
-        { href: 'https://twitter.com/tulburg', title: 'Twitter' },
-        { href: 'https://discord.com/tulburg', title: 'Discord' },
-      ],
-      [
-        { heading: true, title: 'Resources' },
-        { href: '/docs', title: 'Installation' },
-        { href: '/docs', title: 'Documentation' },
-        { href: '/docs/element-functions', title: 'API References' },
-        { href: '/change-log', title: 'Change log' },
-      ],
-      [
-        { heading: true, title: 'More info' },
-        { href: '/blog', title: 'Blog' },
-        { href: '/about', title: 'About' },
-        { href: '/faq', title: 'FAQs' }
-      ]
     ];
 
     const nital = ["batten", "hatton", "fatten", "platen"];
@@ -210,7 +188,7 @@ export default class App extends PageComponent {
                 }),
                 new Container().position('absolute').zIndex('-1').right(40).bottom(-10)
                   .addChild(
-                    new Image().attrSrc(require('./assets/group.svg')).attrAlt('group image').attrHeight(150)
+                    new Image().attrSrc(require('../assets/group.svg')).attrAlt('group image').attrHeight(150)
                       .attrWidth(340)
                   ).media({
                     '(max-width: 420px)': {
@@ -227,36 +205,7 @@ export default class App extends PageComponent {
               '(max-width: 420px)': { height: 460 }
             })
         ).marginTop(75),
-        new Layout(
-          new Container().display('grid').gridTemplateColumns('auto auto auto auto 1fr').gap(100).addChild(
-            new Container().addChild(
-              new P().text('Copyright ©' + new Date().getFullYear()).color(Theme.colors?.textLight),
-              new P().text('All rights reserved.').color(Theme.colors?.textXLight).whiteSpace('nowrap'),
-              new Container().display('flex').marginTop(15).gap(15).addChild(
-                ...Config.socialLinks.map((link: any) => {
-                  return new A().attrHref(link.href).attrTarget('_blank').addChild(
-                    new Image().attrSrc(link.src).attrAlt(link.alt).attrWidth(24).attrHeight(24),
-                  )
-                })
-              )
-            ).media({
-              '(max-width: 580px)': { gridArea: '2' },
-              '(max-width: 360px)': { gridArea: '4' }
-            }),
-            ...footerLinks.map(links => {
-              return new Container().display('flex').flexDirection('column').gap(15).addChild(
-                ...links.map(link => {
-                  if (link.heading) return new Span().text(link.title).color(Theme.colors?.white);
-                  else return new A().text(link.title).attrHref(link.href).style(Theme.styles?.linkStyle as Style)
-                })
-              )
-            })
-          ).media({
-            '(max-width: 860px)': { gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 50 },
-            '(max-width: 580px)': { gridTemplateColumns: '1fr 1fr' },
-            '(max-width: 360px)': { gridTemplateColumns: '1fr', paddingLeft: 50 }
-          })
-        ).marginTop(50).paddingBottom(150)
+        new Footer()
       ).media({
         '(max-width: 1024px)': { padding: [0, 25] },
         '(max-width: 560px)': { padding: [0, 20] }
@@ -393,3 +342,40 @@ export class TopBar extends Container {
   }
 }
 
+export class Footer extends Container {
+  constructor() {
+    super();
+    this.addChild(
+      new Layout(
+        new Container().display('grid').gridTemplateColumns('auto auto auto auto 1fr').gap(100).addChild(
+          new Container().addChild(
+            new P().text('Copyright ©' + new Date().getFullYear()).color(Theme.colors?.textLight),
+            new P().text('All rights reserved.').color(Theme.colors?.textXLight).whiteSpace('nowrap'),
+            new Container().display('flex').marginTop(15).gap(15).addChild(
+              ...Config.socialLinks.map((link: any) => {
+                return new A().attrHref(link.href).attrTarget('_blank').addChild(
+                  new Image().attrSrc(link.src).attrAlt(link.alt).attrWidth(24).attrHeight(24),
+                )
+              })
+            )
+          ).media({
+            '(max-width: 580px)': { gridArea: '2' },
+            '(max-width: 360px)': { gridArea: '4' }
+          }),
+          ...Config.footerLinks.map(links => {
+            return new Container().display('flex').flexDirection('column').gap(15).addChild(
+              ...links.map(link => {
+                if (link.heading) return new Span().text(link.title).color(Theme.colors?.white);
+                else return new A().text(link.title).attrHref(link.href).style(Theme.styles?.linkStyle as Style)
+              })
+            )
+          })
+        ).media({
+          '(max-width: 860px)': { gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 50 },
+          '(max-width: 580px)': { gridTemplateColumns: '1fr 1fr' },
+          '(max-width: 360px)': { gridTemplateColumns: '1fr', paddingLeft: 50 }
+        })
+      ).marginTop(50).paddingBottom(150)
+    )
+  }
+}
