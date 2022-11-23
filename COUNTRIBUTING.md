@@ -1,10 +1,10 @@
 # Welcome to JUI contributing guide <!-- omit in toc -->
-Thank you for investing your time in contributing to our project! Any contribution you make will be reflected on our project :sparkles:.
+Thank you for investing your time in contributing to our project! Any contribution you make will be greatly appreciated :sparkles:.
 
 In this guide you will get an overview of the contribution workflow from opening an issue, creating a PR, reviewing and merging the PR.
 Use the table of content on the top left corner of this document to get to a specific section of this quide quickly.
 
-# New Contributor guide
+# Guide
 
 To get an overview of the project, read the [README](README.md). Here are some resources to help you get started with open source contributions:
 
@@ -16,36 +16,24 @@ To get an overview of the project, read the [README](README.md). Here are some r
 
 ## Getting started
 
+## Steps
+
+There are a few things you'll need in order to properly start hacking on it.
+
+1. [Fork it](http://help.github.com/fork-a-repo/)
+2. Install dependencies and initialize environment
+3. Hack, in no particular order:
+   - Write enough code
+   - Write tests for that code
+   - Check that other tests pass
+   - Repeat until you're satisfied
+4. Submit a pull request
+
 ### Issues
 
 #### Create a new issue
 
-If you spot a problem with the docs, [search if an issue already exists](https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-issues-and-pull-requests#search-by-the-title-body-or-comments). If a related issue doesn't exist, you can open a new issue using a relevant [issue form](https://github.com/github/tulburg/javascriptui/issues/new/choose). 
-
-### Make changes
-#### Make changes in the UI
-
-Click **Make a contribution** at the bottom of any docs page to make small changes such as a typo, sentence fix, or a broken link. This takes you to the `.md` file where you can make your changes and [create a pull request](#pull-request) for a review. 
-
-#### Make changes locally
-
-1. [Install Git LFS](https://docs.github.com/en/github/managing-large-files/versioning-large-files/installing-git-large-file-storage).
-
-2. Fork the repository.
-- Using GitHub Desktop:
-- [Getting started with GitHub Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/getting-started-with-github-desktop) will guide you through setting up Desktop.
-- Once Desktop is set up, you can use it to [fork the repo](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/cloning-and-forking-repositories-from-github-desktop)!
-
-- Using the command line:
-- [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
-
-3. Install or update to **Node.js v16**. For more information, see [the development guide](contributing/development.md).
-
-4. Create a working branch and start with your changes!
-
-### Commit your update
-
-Commit the changes once you are happy with them. Don't forget to [self-review](/contributing/self-review.md) to speed up the review process:zap:.
+If you spot a problem with the docs, [search if an issue already exists](https://github.com/tulburg/javascriptui/issues). ([how to](https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-issues-and-pull-requests#search-by-the-title-body-or-comments)). If a related issue doesn't exist, you can open a new issue using a relevant [issue form](https://github.com/tulburg/javascriptui/issues/new/choose). 
 
 ### Pull Request
 
@@ -62,4 +50,4 @@ Once you submit your PR, a Docs team member will review your proposal. We may as
 
 Congratulations :tada::tada: The JUI team thanks you :sparkles:. 
 
-Now that you are part of the JUI community, see how else you can [contribute to JUI][/issues]
+Now that you are part of the JUI community, see how else you can [contribute to JUI](/issues)
