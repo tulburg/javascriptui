@@ -1,5 +1,5 @@
 import { ELEMENT, A, Container, H1, H3, LI, OL, P, PageComponent, Span, Strong, SVG, UL } from "@javascriptui/core";
-import { TopBar } from "./app";
+import { TopBar, Footer } from "./app";
 import { CodeBlock } from "../theme";
 
 const docs = require('../docs/root.json');
@@ -129,7 +129,11 @@ const format = (item: any) => {
     case 'list': {
       return item[1] === 'unordered' ? new UL().marginLeft(50).marginTop(25).addChild(
         ...item[2].map((item: any) => format(item))
-      ) : new OL().addChild(...item[2].map((i: any) => format(i)))
+      ) : new OL().marginLeft(50).marginTop(25).addChild(
+        ...item[2].map((i: any) => format(i))
+      ).global({
+        li: { fontSize: 16, fontWeight: 'bold', color: Theme.colors.text, marginTop: 16 }
+      })
     }
     case 'list-item': {
       return new LI().replaceTextTag(item[1], argProps).color(Theme.colors?.textLight)

@@ -1,6 +1,7 @@
 import App from './pages/app';
 import Docs from './pages/docs';
 import Help from './pages/help';
+import Blog from './pages/blog';
 // import Playground from './pages/playground';
 import Theme from './theme';
 
@@ -11,7 +12,9 @@ export default {
     { path: '/', component: App, name: 'App' },
     { path: '/docs', component: Docs, name: 'Docs' },
     { path: '/docs/:section/', component: Docs, name: 'Docs' },
-    { path: '/help', component: Help, name: 'Help' }
+    { path: '/help', component: Help, name: 'Help' },
+    { path: '/blog', component: Blog, name: 'Blog' },
+    { path: '/blog/:slug', component: Blog, name: 'Blog' }
     // { path: '/playground', component: Playground, name: 'Playground' }
   ],
   codeblocks: {
@@ -65,7 +68,7 @@ new Container().display('flex').gap(10).addChild(
   topLinks: [
     { title: "Docs", href: "/docs" },
     { title: 'Playground', href: 'https://playground.javascriptui.dev' },
-    { title: "Help", href: "/help" },
+    { title: "Blog", href: "/blog" },
     // { title: "Donate", href: "https://github.com/tulburg/javascriptui" },
   ],
   socialLinks: [

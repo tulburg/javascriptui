@@ -201,7 +201,7 @@ export class ELEMENT {
     }
   }) {
     this.$media.push(props);
-    const rules: string[] = [], native = UI();
+    const rules: string[] = [];
     Object.getOwnPropertyNames(props).forEach((key: string) => {
       let rule = '@media ' + key + '{ ';
       if (props[key].global) {
@@ -220,7 +220,11 @@ export class ELEMENT {
       rule += ' }';
       rules.push(rule);
     });
-    native.loadQueue[native.serving].push(() => createRules(this, rules));
+    if (!UI().served && UI().serving === this.$hostComponent) {
+      UI().loadQueue[UI().serving].push(() => createRules(this, rules));
+    } else {
+      createRules(this, rules);
+    }
     return this;
   }
 

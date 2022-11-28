@@ -1,0 +1,49 @@
+[
+  [
+    {
+      "id": "mod-8lfvdv0",
+      "name": "image",
+      "data": "https://res.cloudinary.com/dwdhnu6bs/image/upload/w_640,c_scale/v1669630468/problem-solving-close-up-view-hand-business-woman-stopping-falling-blocks-table-concept-about-taking-responsibility-min_fcdoto.jpg"
+    },
+    {
+      "id": "mod-nu9ps5x",
+      "name": "paragraph",
+      "data": "General design decisions always fall into two categories: Design for aesthetics & usage or a solution to an unavoidable problem. Reactivity falls in the later category."
+    },
+    {
+      "id": "mod-ai6t7aw",
+      "name": "paragraph",
+      "data": "Reactivity is a solution to the problem of reference. In template based frameworks, you hardly have reference or any usable pointer to what is rendered on the page. That’s why React for example will provide you with the value of the reference as well as a function to update it, and as well, have to re-render the component/page to reflect these small changes. Even with these solutions, the problem still persists which is why React further provides a `Ref` keyword for the ability to update what is rendered on the page:"
+    },
+    {
+      "id": "mod-bettkld",
+      "name": "code",
+      "data": "function MyComponent() {\n  const [name, setName] = useState('Taylor');\n\n  render() {\n    return <h1>{name}</h1>\n  }\n}\n\nfunction handleClick() {\n  setName('Robin');\n}"
+    },
+    {
+      "id": "mod-3jjqncc",
+      "name": "paragraph",
+      "data": "JavascriptUI does not share this problem. You have access to the true reference of everything you create. And it is not limited to the HTML that is rendered or CSS, even the internal workings of the DOM elements that are rendered on the page are available for you to manipulate to your satisfaction. Including each element’s DOM life-cycle even before they reflect in the browser."
+    },
+    {
+      "id": "mod-hv29w10",
+      "name": "paragraph",
+      "data": "As well as giving you the reference and control on how HTML is rendered, JavascriptUI also gives you access to the rendered Node. i.e."
+    },
+    {
+      "id": "mod-onrls8s",
+      "name": "code",
+      "data": "ELEMENT.node()"
+    },
+    {
+      "id": "mod-6b7zf8g",
+      "name": "paragraph",
+      "data": "Note that ELEMENT.node() is not only available when it is attached to the DOM, it is available before, that is, onCreate - meaning when the element is created. This is long before it is attached to the DOM, so the browser will not need to repaint or do any further work on any changes you make, since it is not yet attached."
+    },
+    {
+      "id": "mod-kihw49u",
+      "name": "paragraph",
+      "data": "This not only gives you access to prepare your elements with html & css, but also allows you to do all necessary DOM manipulation before the browser renders the node. This has a strong performance edge even over the native browser rendering."
+    }
+  ]
+]

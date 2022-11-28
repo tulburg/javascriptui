@@ -21,6 +21,37 @@
             ["code", "yarn create javascriptui"]
           ]
         ]
+      ],
+      ["block", "Features",
+        [
+          ["list", "ordered",
+            [
+              ["list-item", "Performance"],
+              ["html", "JavascriptUI uses only Javascript, the advantage doesn’t just stop at fixing ALL known and common issues with CSS & HTML. But the performance is also outstanding. A simple app built with JavascriptUI boots faster and runs better than even native / vanilla implementation. And since it doesn’t load CSS or HTML, it also loads faster on the network with the smallest bundle size possible."],
+              ["list-item", "Lowest learning curve"],
+              ["html", "Without any special convention or a new approach to development & design, just the simple way of using Javascript to set & get values. JavascriptUI has the lowest learning curve. You can get started with 0 difficulty."],
+              ["list-item", "Compile bundle size"],
+              ["html", "JavascriptUI used only javascript to both design and build the DOM. This dramatically reduces the bundle size to less than ⅓ of the nearest framework. Not just because it's using only one language, but because everything with JavascriptUI is reusable. And not just components, every element, style, component, page. Everything!"],
+              ["list-item", "Mutability & Extensibility"],
+              ["html", "When you create anything in JavascriptUI, they are created with their own styles and css rules. This means whenever you extend any component, style or element, you share the rules they already have, but you can also extend these rules by simply adding yours without any extra steps. "],
+              ["list-item", "Browser language"],
+              ["html", "A strong advantage of JavascriptUI is that all CSS rules are parsed and validated by the browser. During development, if a rule is problematic or invalid. The browser will indicate immediately"]
+            ]
+          ],
+          ["html", "${bold(More features)}"],
+          ["list", "unordered",
+            [
+              ["list-item", "Highly maintainable code"],
+              ["list-item", "Structurally built for Design & Design systems"],
+              ["list-item", "Single file architecture"],
+              ["list-item", "No CSS-in-JS"],
+              ["list-item", "Easy routing implementation"],
+              ["list-item", "Global functions"],
+              ["list-item", "In-build event emitters"],
+              ["list-item", "Customize to your preference"]
+            ]
+          ]
+        ]
       ]
     ]
   ],

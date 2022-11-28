@@ -4,6 +4,7 @@ import { CodeBlock, GlassBox, Layout, SoftButton, Toggle } from '../theme';
 export default class App extends PageComponent {
   constructor() {
     super();
+    document.title = "JavascriptUI | Docs";
 
     const mains = [
       { title: 'Only Javascript', description: 'No messy HTML or 10,000 lines of CSS, just javascript' },
@@ -98,8 +99,9 @@ export default class App extends PageComponent {
             }),
           new Container().display('flex').color(Theme.colors?.white).marginTop(15).addChild(
             new P().text('... and there\'s more, lots more.').fontWeight('100').color(Theme.colors?.textLight),
-            new A().text('Show me more!').attrHref('/features').fontWeight('bold').color(Theme.colors?.white)
+            new A().text('Show me more!').attrHref('/docs/get-started#features').fontWeight('bold').color(Theme.colors?.white)
               .marginLeft(8).textDecoration('none').pseudo({ ':hover': { textDecoration: 'underline' } })
+              .on({ click(e) { e.preventDefault(); Router.go('/docs/get-started#features') } })
           ).media({
             '(max-width: 420px)': { display: 'block', marginTop: 10 }
           })
@@ -289,6 +291,9 @@ export class TopBar extends Container {
             <path d="M352.792 54.152C363.736 54.152 372.448 47.456 372.448 34.928V1.952H362.512V34.208C362.512 40.904 358.84 44.432 352.792 44.432C346.888 44.432 343.144 40.904 343.144 34.208V1.952H333.208V34.928C333.208 47.456 341.92 54.152 352.792 54.152ZM390.834 53V1.952H380.754V53H390.834Z" fill="var(--white)"/>
             `;
               }
+            }).media({
+              '(max-width: 560px)': { height: 28, width: 164 },
+              '(max-width: 420px)': { height: 24, width: 140 }
             })
         ) : '' as any,
         leftMenu !== undefined
@@ -306,7 +311,9 @@ export class TopBar extends Container {
         ...socialLinks.map(link => {
           return new A().attrHref(link.href).attrTarget('_blank').display('flex').alignItems('center').addChild(
             new Image().attrSrc(link.src).attrAlt(link.alt).attrWidth(24).attrHeight(24),
-          )
+          ).media({
+            '(max-width: 520px)': { display: location.href.match('/blog') ? 'none' : 'block' }
+          })
         })
       ),
       new Container().display('flex').addChild(
