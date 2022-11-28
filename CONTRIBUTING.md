@@ -20,7 +20,7 @@ To get an overview of the project, read the [README](README.md). Here are some r
 
 There are a few things you'll need in order to properly start hacking on it.
 
-1. [Fork it](http://help.github.com/fork-a-repo/)
+1. [Fork it](http://github.com/tulburg/javascriptui)
 2. Install dependencies and initialize environment
 3. Hack, in no particular order:
    - Write enough code
@@ -50,4 +50,4 @@ Once you submit your PR, a Docs team member will review your proposal. We may as
 
 Congratulations :tada::tada: The JUI team thanks you :sparkles:. 
 
-Now that you are part of the JUI community, see how else you can [contribute to JUI](/issues)
+Now that you are part of the JUI community, see how else you can [contribute to JUI](https://github.com/tulburg/javascriptui/issues)
