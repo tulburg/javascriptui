@@ -63,7 +63,13 @@ export class ELEMENT {
     if (this.$children.indexOf(child) > -1) {
       child.$root = undefined;
       const resetRules = (item: ELEMENT) => {
-        item.$rules = []
+        item.$rules.forEach(rule => {
+          queueMicrotask(() => {
+            const arr = Array.from(UI().sheet.rules);
+            UI().sheet.deleteRule(arr.indexOf(rule));
+          });
+        })
+        item.$rules = [];
         if (item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
       }
       resetRules(child);
@@ -83,6 +89,17 @@ export class ELEMENT {
         this.$root.$children.splice(this.$children.indexOf(this), 1);
       }
       this.$root = undefined;
+      const resetRules = (item: ELEMENT) => {
+        item.$rules.forEach(rule => {
+          queueMicrotask(() => {
+            const arr = Array.from(UI().sheet.rules);
+            UI().sheet.deleteRule(arr.indexOf(rule));
+          });
+        })
+        item.$rules = [];
+        if (item.$children.length > 0) item.$children.forEach(i => type(i) === 'object' && resetRules(i));
+      }
+      resetRules(this);
     }
     this.$node && this.$node.remove();
   }
@@ -302,12 +319,12 @@ export class ELEMENT {
 
   pseudo(props: { [key: string]: StyleProperties }) {
     this.$pseudo.push(props);
-    const rules: string[] = [], native = UI();
+    const rules: string[] = [];
     for (const key in props) {
       rules.push('.' + this.$className.replace(/\s/g, '.') + key + ' {' + parseNativeStyle(props[key]) + '} ');
     }
-    if (!native.served && native.serving === this.$hostComponent) {
-      native.loadQueue[native.serving].push(() => createRules(this, rules));
+    if (!UI().served && UI().serving === this.$hostComponent) {
+      UI().loadQueue[UI().serving].push(() => createRules(this, rules));
     } else {
       createRules(this, rules)
     }
@@ -316,12 +333,12 @@ export class ELEMENT {
 
   global(props: { [key: string]: StyleProperties }) {
     this.$global.push(props);
-    const rules: string[] = [], native = UI();
+    const rules: string[] = [];
     for (const key in props) {
       rules.push('.' + this.$className.replace(/\s/g, '.') + ' ' + key + ' {' + parseNativeStyle(props[key]) + '} ');
     }
-    if (!native.served && native.serving === this.$hostComponent) {
-      native.loadQueue[native.serving].push(() => createRules(this, rules));
+    if (!UI().served && UI().serving === this.$hostComponent) {
+      UI().loadQueue[UI().serving].push(() => createRules(this, rules));
     } else {
       createRules(this, rules)
     }
@@ -799,7 +816,7 @@ export class Style {
   constructor(props: StyleProperties) {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{ ' + parseNativeStyle(props) + ' }'];
-    addLoadQueue(() => {
+    UI().addLoadQueue(() => {
       createRules(this, rules);
       Object.getOwnPropertyNames(props).forEach(i => {
         (<any>this)[i]((<any>props)[i]);
@@ -808,8 +825,7 @@ export class Style {
   }
 
   global(props: { [key: string]: StyleProperties }) {
-    (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
-    (<any>window).__native_load_queue.push(() => {
+    UI().addLoadQueue(() => {
       const rules: string[] = [];
       for (const key in props) {
         rules.push('.' + this.$className + ' ' + key + ' {' + parseNativeStyle(props[key]) + '} ');
@@ -820,8 +836,7 @@ export class Style {
   }
 
   pseudo(props: { [key: string]: StyleProperties }) {
-    (<any>window).__native_load_queue = (<any>window).__native_load_queue || [];
-    (<any>window).__native_load_queue.push(() => {
+    UI().addLoadQueue(() => {
       const rules: string[] = [];
       for (const key in props) {
         rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + parseNativeStyle(props[key]) + '} ');

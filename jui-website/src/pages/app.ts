@@ -44,8 +44,8 @@ export default class App extends PageComponent {
                 '(max-width: 960px)': { width: 320 },
                 '(max-width: 520px)': { width: 240 }
               }),
-              new P().text('Meet the standard javascript interface design framework for the web')
-                .fontSize(30).color(Theme.colors?.white).maxWidth(680).fontWeight('100')
+              new P().text('Meet the javascript interface design standard for the web')
+                .fontSize(30).color(Theme.colors?.white).maxWidth(600).fontWeight('100')
                 .media({
                   '(max-width: 768px)': { fontSize: 24 }
                 })

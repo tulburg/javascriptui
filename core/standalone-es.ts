@@ -42,7 +42,8 @@ window.Config = {
 export default class Standalone extends UI {
   standalone = true;
   loadQueue: { [key: string]: Function[] } = {} as any;
-  constructor(selector: string, root: any, theme?: any) {
+  serving = 'main-component';
+  constructor(selector: string | Element, root: any, args?: any, theme?: any) {
     super(undefined);
 
     if (theme) this.writeGlobals(theme);
@@ -114,10 +115,15 @@ export default class Standalone extends UI {
       w.__native_load_queue.forEach((i: Function) => i());
     }
 
-    document.querySelector(selector).appendChild(this.createElement(new root()));
+    this.loadQueue[this.serving] = [];
+
+    ((<any>(typeof selector === 'string' ? document.querySelector(selector) : selector)).appendChild(this.createElement(new root(args))));
     if (this.serving) {
-      this.loadQueue[this.serving].forEach((i: any) => Function.prototype.call.apply(i));
-      this.loadQueue[this.serving] = [];
+      queueMicrotask(() => {
+        this.loadQueue[this.serving].forEach((i: any) => Function.prototype.call.apply(i));
+        this.loadQueue[this.serving] = [];
+        this.served = true;
+      });
     }
   }
 }

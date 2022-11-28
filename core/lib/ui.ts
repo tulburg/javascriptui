@@ -204,6 +204,11 @@ class UI {
     const parent = document.querySelector(parentSelector);
     if (parent && parent.childNodes.length > 0) parent.removeChild(parent.childNodes[0]);
   }
+
+  addLoadQueue(fn: () => void) {
+    this.loadQueue[this.serving] = this.loadQueue[this.serving] || [];
+    this.loadQueue[this.serving].push(fn);
+  }
 }
 
 const type = (o: any) => Object.prototype.toString.call(o).substr(8).replace(']', '').toLowerCase();

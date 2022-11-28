@@ -66,7 +66,7 @@ new Container().display('flex').gap(10).addChild(
     { title: "Docs", href: "/docs" },
     { title: 'Playground', href: 'https://playground.javascriptui.dev' },
     { title: "Help", href: "/help" },
-    { title: "Donate", href: "https://github.com/tulburg/javascriptui" },
+    // { title: "Donate", href: "https://github.com/tulburg/javascriptui" },
   ],
   socialLinks: [
     { src: require('./assets/twitter.svg'), alt: 'twitter logo', href: 'https://twitter.com/tulburg' },
@@ -77,7 +77,7 @@ new Container().display('flex').gap(10).addChild(
       { heading: true, title: 'Channels' },
       { href: 'https://github.com/tulburg/javascriptui', title: 'Github' },
       { href: 'https://twitter.com/tulburg', title: 'Twitter' },
-      { href: 'https://discord.com/tulburg', title: 'Discord' },
+      // { href: 'https://discord.com/tulburg', title: 'Discord' },
     ],
     [
       { heading: true, title: 'Resources' },
@@ -90,7 +90,7 @@ new Container().display('flex').gap(10).addChild(
       { heading: true, title: 'More info' },
       { href: '/blog', title: 'Blog' },
       { href: '/help', title: 'Help' },
-      { href: '/faq', title: 'FAQs' }
+      // { href: '/faq', title: 'FAQs' }
     ]
   ]
 }
