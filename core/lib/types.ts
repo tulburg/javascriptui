@@ -1639,6 +1639,7 @@ export interface Properties<T> {
     | "square-button"
     | "textarea"
     | "textfield") => T
+  webkitBackgroundClip: (_?: Globals | DataType.Box | "border" | "content" | "padding" | "text" | (string & {})) => T
   webkitBorderBefore: (_?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})) => T
   webkitBorderBeforeColor: (_?: Globals | DataType.Color) => T
   webkitBorderBeforeStyle: (_?: Globals | DataType.LineStyle | (string & {})) => T
@@ -2708,6 +2709,7 @@ export type StyleProperties = {
   | "square-button"
   | "textarea"
   | "textfield"
+  webkitBackrgoundClip?: Globals | DataType.Box | "border" | "content" | "padding" | "text" | (string & {})
   webkitBorderBefore?: Globals | DataType.LineWidth | DataType.LineStyle | DataType.Color | (string & {})
   webkitBorderBeforeColor?: Globals | DataType.Color
   webkitBorderBeforeStyle?: Globals | DataType.LineStyle | (string & {})

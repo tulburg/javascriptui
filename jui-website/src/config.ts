@@ -80,7 +80,7 @@ new Container().display('flex').gap(10).addChild(
       { heading: true, title: 'Channels' },
       { href: 'https://github.com/tulburg/javascriptui', title: 'Github' },
       { href: 'https://twitter.com/tulburg', title: 'Twitter' },
-      // { href: 'https://discord.com/tulburg', title: 'Discord' },
+      { href: 'https://discord.gg/nyjV9fbB89', title: 'Discord' },
     ],
     [
       { heading: true, title: 'Resources' },

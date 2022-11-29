@@ -1,4 +1,4 @@
-import { A, Container, H2, H4, H5, Image, IMG, LI, P, PageComponent, Span, Style, SVG, UL } from '@javascriptui/core';
+import { A, Container, Form, H2, H4, H5, Image, IMG, LI, Input, P, PageComponent, Span, Style, SVG, UL } from '@javascriptui/core';
 import { CodeBlock, GlassBox, Layout, SoftButton, Toggle } from '../theme';
 
 export default class App extends PageComponent {
@@ -8,7 +8,7 @@ export default class App extends PageComponent {
 
     const mains = [
       { title: 'Only Javascript', description: 'No messy HTML or 10,000 lines of CSS, just javascript' },
-      { title: '0 Learning curve', description: 'It\'s the same Javascript you know & love, no extra secret' },
+      { title: 'Lowest Learning curve', description: 'It\'s the same Javascript you know & love, no extra secret' },
       { title: 'Smallest bundle size', description: 'Bundle size less than 1/3 of the nearest framework' },
       { title: 'Highly customizable', description: 'Make it your own, for your design systems and far more' }
     ];
@@ -114,7 +114,10 @@ export default class App extends PageComponent {
                 .display('none').padding(40).paddingBottom(0)
                 .addChild(
                   new H2().text('Do more. With less code').fontSize(40).color(Theme.colors?.white).marginBottom(0)
-                    .lineHeight('1'),
+                    .lineHeight('1').media({
+                      '(max-width: 768px)': { fontSize: 32 },
+                      '(max-width: 520px)': { fontSize: 28 }
+                    }),
                   new P().text('No magic tricks, just straightforward talking to the browser').color(Theme.colors?.textLight)
                     .fontSize(24).margin(0)
                 ).media({
@@ -182,7 +185,7 @@ export default class App extends PageComponent {
                     '(max-width: 860px)': { fontSize: 22 }
                   }),
                 new Container().display('flex').gap(25).addChild(
-                  new SoftButton('Join us', () => { Router.go('https://github.com/tulburg/javascriptui') }, true),
+                  new SoftButton('Join us', () => { Router.go('https://discord.gg/nyjV9fbB89') }, true),
                   new SoftButton('Become a sponsor', () => { Router.go('https://github.com/tulburg/javascriptui') })
                 ).media({
                   '(max-width: 860px)': { marginTop: 'auto' },
@@ -354,6 +357,25 @@ export class Footer extends Container {
     super();
     this.addChild(
       new Layout(
+        new Container().display('flex').flexDirection('column').padding([40, 0]).addChild(
+          new P().text('Subscribe to our newsletter').color(Theme.colors.text),
+          new Form().attrAction('https://www.getrevue.co/profile/tulburg/add_subscriber').attrMethod('post')
+            .attrTarget('blank').display('flex').marginTop(10).addChild(
+              new Input().attrPlaceholder('Your email address...').attrType('email').attrName('member[email]')
+                .fontSize(15).color('#000000').padding([10, 15]).height(40).borderRadius(6)
+                .marginRight(10).border('0').media({
+                  '(max-width: 420px)': { width: '100%' }
+                }),
+              new SoftButton('Subscribe', () => {}).attrType('submit').attrName('member[subscribe]')
+                .media({
+                  '(max-width: 340px)': { marginTop: 15 }
+                })
+            ).media({
+              '(max-width: 340px)': { flexDirection: 'column' }
+            })
+        )
+      ).borderTop('1px solid ' + Theme.colors.border).marginTop(50),
+      new Layout(
         new Container().display('grid').gridTemplateColumns('auto auto auto auto 1fr').gap(100).addChild(
           new Container().addChild(
             new P().text('Copyright ©' + new Date().getFullYear()).color(Theme.colors?.textLight),
@@ -382,7 +404,7 @@ export class Footer extends Container {
           '(max-width: 580px)': { gridTemplateColumns: '1fr 1fr' },
           '(max-width: 360px)': { gridTemplateColumns: '1fr', paddingLeft: 50 }
         })
-      ).marginTop(50).paddingBottom(150)
+      ).marginTop(25).paddingBottom(150)
     )
   }
 }

@@ -64,7 +64,7 @@ export default class Blog extends PageComponent {
         this.mainContainer.display('grid').gridTemplateColumns('240px auto')
           .addChild(
             new Container().addChild(
-              new P().text('7 min read').color(Theme.colors.textLight),
+              new P().text('2 min read').color(Theme.colors.textLight),
               new Span().text('SHARE').fontSize(12).color(Theme.colors.textXLight)
                 .margin([10, 0]).display('inline-flex').media({
                   '(max-width: 920px)': { margin: 0, alignItems: 'center' }
