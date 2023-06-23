@@ -820,33 +820,36 @@ export class Style {
   constructor(props: StyleProperties) {
     this.$className = 's' + Math.random().toString(36).substr(2, 9);
     const rules = ['.' + this.$className + '{ ' + parseNativeStyle(props) + ' }'];
-    UI().addLoadQueue(() => {
+    const fn = () => {
       createRules(this, rules);
       Object.getOwnPropertyNames(props).forEach(i => {
-        (<any>this)[i]((<any>props)[i]);
+        (<any>this)[i] && (<any>this)[i]((<any>props)[i]);
       });
-    });
+    }
+    UI() ? UI().addLoadQueue(fn) : addLoadQueue(fn);
   }
 
   global(props: { [key: string]: StyleProperties }) {
-    UI().addLoadQueue(() => {
+    const fn = () => {
       const rules: string[] = [];
       for (const key in props) {
         rules.push('.' + this.$className + ' ' + key + ' {' + parseNativeStyle(props[key]) + '} ');
       }
       createRules(this, rules);
-    });
+    }
+    UI() ? UI().addLoadQueue(fn) : addLoadQueue(fn);
     return this;
   }
 
   pseudo(props: { [key: string]: StyleProperties }) {
-    UI().addLoadQueue(() => {
+    const fn = () => {
       const rules: string[] = [];
       for (const key in props) {
         rules.push('.' + this.$className.replace(' ', '.') + key + ' {' + parseNativeStyle(props[key]) + '} ');
       }
       createRules(this, rules);
-    });
+    }
+    UI() ? UI().addLoadQueue(fn) : addLoadQueue(fn);
     return this;
   }
 }

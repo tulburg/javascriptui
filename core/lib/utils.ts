@@ -87,7 +87,7 @@ export function parseProperties(component: Element | any, state?: boolean): Attr
         if (prop !== '$events') properties[Props.props[prop].split('.')[1]] = component[prop];
         else properties[prop] = component[prop];
       } else if (Props.excludes.indexOf(prop) < 0 && component.$level !== 0) {
-        throw new Error('Invalid property ' + prop);
+        console.warn('Invalid property ' + prop);
       }
     }
   }
@@ -107,7 +107,7 @@ export function parseNativeStyle(obj: ELEMENT | any) {
         const root = prop.replace('$', '');
         objStyles += `${root}: ${obj[root]}; `;
       } else if (Props.excludes.indexOf(prop.toLowerCase()) < 0 && obj.$level != 0) {
-        throw new Error('Invalid css property ' + prop + ': ' + obj[prop]);
+        console.warn('Invalid css property ' + prop + ': ' + obj[prop]);
       }
     }
   }

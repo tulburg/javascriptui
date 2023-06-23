@@ -1,9 +1,9 @@
 //@ts-ignore
 import Config from '@src/config';
+import UI from './ui';
 import Props from './props';
 import { Component, Style, ELEMENT, Container } from './components';
 import { ConfigType } from './types';
-import UI from './ui';
 
 export default class Router {
   routes: ConfigType.Route[] = Config.routes as ConfigType.Route[];
@@ -76,6 +76,9 @@ export default class Router {
           if (key === 'attr') {
             if (this.$node) {
               this.$node.setAttribute(name, arguments.length === 1 ? arguments[0] : Array.from(arguments));
+              if (arguments.length === 1 && (arguments[0] === undefined || arguments[0] === null)) {
+                this.$node.removeAttribute(name);
+              }
             }
           }
           this[prop] = arguments.length === 1 ? arguments[0] : Array.from(arguments);
@@ -85,10 +88,11 @@ export default class Router {
       (<any>ELEMENT.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
     }
-    const w: any = window;
-    if (w.__native_load_queue && w.__native_load_queue.length > 0) {
-      w.__native_load_queue.forEach((i: Function) => i());
-    }
+    // const w: any = window;
+    // if (w.__native_load_queue && w.__native_load_queue.length > 0) {
+    //   w.__native_load_queue.forEach((i: Function) => i());
+    //   w.__native_load_queue = [];
+    // }
 
     this.loadRoute();
     history.pushState({}, '', location.href);
@@ -123,10 +127,11 @@ export default class Router {
         }
       }
     }
-    const w: any = window;
-    if (w.__native_load_queue && w.__native_load_queue.length > 0) {
-      w.__native_load_queue.forEach((i: Function) => i());
-    }
+    // const w: any = window;
+    // if (w.__native_load_queue && w.__native_load_queue.length > 0) {
+    //   w.__native_load_queue.forEach((i: Function) => i());
+    //   w.__native_load_queue = [];
+    // }
     if (!loaded) {
       console.error(`Path ${location.pathname} not configured`);
       this.window.UI.unload('#app');

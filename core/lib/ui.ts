@@ -188,8 +188,17 @@ class UI {
       }
     });
     if (this.serving) {
-      this.loadQueue[this.serving].forEach(i => Function.prototype.call.apply(i));
-      this.loadQueue[this.serving] = [];
+      ((<any>window).__native_load_queue || []).forEach(i => this.addLoadQueue(i));
+      Object.keys(this.loadQueue).forEach(serving => {
+        this.loadQueue[serving].forEach(i => Function.prototype.call.apply(i));
+        this.loadQueue[serving] = [];
+      })
+
+      // const w: any = window;
+      // if (w.__native_load_queue && w.__native_load_queue.length > 0) {
+      //   w.__native_load_queue.forEach((i: Function) => i());
+      //   w.__native_load_queue = [];
+      // }
     }
     this.serving = undefined;
     this.components[component.name][nid].served = true;
