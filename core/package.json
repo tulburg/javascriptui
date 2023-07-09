@@ -1,10 +1,11 @@
 {
   "name": "@javascriptui/core",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "JavascriptUI core package",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "start": "tsc -w",
     "build": "tsc",
     "build-standalone": "webpack --config webpack.config.js && echo 'const exports={};' | cat - dist/jui.js > /tmp/out && mv /tmp/out dist/jui.js",
     "dev-standalone": "webpack --watch --config webpack.config.js",

@@ -42,9 +42,12 @@ window.Config = {
 export default class Standalone extends UI {
   standalone = true;
   loadQueue: { [key: string]: Function[] } = {} as any;
-  serving = 'main-component';
+  serving = 'main-component__standalone';
+  served = false;
   constructor(selector: string | Element, root: any, args?: any, theme?: any) {
     super(undefined);
+
+    if (window.Router) this.router = window.Router;
 
     if (theme) this.writeGlobals(theme);
 
@@ -59,13 +62,13 @@ export default class Standalone extends UI {
         configurable: true
       });
       const fns = function () {
-        if ((<any>UI).serving) return this;
+        if (this.serving) return this;
         const value = arguments.length === 1 ? arguments[0] : Array.from(arguments);
         if (arguments.length > 0) {
           this.$rules = this.$rules || [];
           if (this.$rules.length > 0) {
             try {
-              const parsedValue = (<any>window).UI.parseStyleValue(value);
+              const parsedValue = window.UI.parseStyleValue(value);
               this.$rules[this.$rules.length - 1].style.setProperty(
                 key,
                 parsedValue.indexOf('!') > -1 ? parsedValue.replace(/\!important/g, '') : parsedValue,
@@ -84,7 +87,7 @@ export default class Standalone extends UI {
       (<any>Style.prototype)[prop] = fns;
       propIndex++;
     }
-    if (window.UI.sheet.cssRules.length === 1) window.UI.writeGlobals(Config.theme || {});
+    if (this.sheet.cssRules.length === 1) this.writeGlobals(Config.theme || {});
     const props = Object.getOwnPropertyNames(Props.props);
     for (let i = 0; i < props.length; i++) {
       const prop = props[i], caller = Props.props[prop]; let fn: Function;
@@ -96,7 +99,7 @@ export default class Standalone extends UI {
         configurable: true
       });
       fn = function () {
-        if ((<any>UI).serving) return this;
+        if (this.serving) return this;
         if (arguments.length > 0) {
           if (key === 'attr') {
             if (this.$node) {
@@ -110,21 +113,34 @@ export default class Standalone extends UI {
       (<any>ELEMENT.prototype)[prop.slice(1)] = fn;
       (<any>Component.prototype)[prop.slice(1)] = fn;
     }
+
+
+    this.loadQueue[this.serving] = [];
+    const oldUI = window.UI;
+    window.UI = this;
+    const oldNative = window.__native_load_queue;
+    window.__native_load_queue = [];
+    const component = new root(args);
+    ((<any>(typeof selector === 'string' ? document.querySelector(selector) : selector)).appendChild(this.createElement(component)));
     const w: any = window;
     if (w.__native_load_queue && w.__native_load_queue.length > 0) {
       w.__native_load_queue.forEach((i: Function) => i());
     }
-
-    this.loadQueue[this.serving] = [];
-
-    ((<any>(typeof selector === 'string' ? document.querySelector(selector) : selector)).appendChild(this.createElement(new root(args))));
+    w.__native_load_queue = oldNative;
+    console.log(this.sheet, this.loadQueue);
     if (this.serving) {
       queueMicrotask(() => {
         this.loadQueue[this.serving].forEach((i: any) => Function.prototype.call.apply(i));
         this.loadQueue[this.serving] = [];
-        this.served = true;
       });
     }
+    setTimeout(() => {
+      this.loadQueue[this.serving].forEach((i: any) => Function.prototype.call.apply(i));
+      this.loadQueue[this.serving] = [];
+    }, 500);
+    // this.served = true;
+
+    window.UI = oldUI;
   }
 }
 
